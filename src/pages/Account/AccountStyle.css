@@ -1,0 +1,28 @@
+.bio-textarea {
+  resize: none;
+}
+
+.bio-textarea:disabled {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
+.field-title {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.password-input {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
+.mashmateStuff-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  flex-direction: row;
+}

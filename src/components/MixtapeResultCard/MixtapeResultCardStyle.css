@@ -1,0 +1,36 @@
+.mixtape-result {
+  color: black !important;
+  background-color: var(--primary-color) !important;
+  padding: 5px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.mixtape-result + .mixtape-result {
+  margin-top: 10px;
+}
+
+.mixtape-result-image {
+  width: 10%;
+}
+
+.mixtape-result-body {
+  width: 70%;
+}
+
+.mixtape-result-title {
+  font-size: larger;
+  font-weight: light;
+}
+
+.mixtape-result-user {
+}
+
+.mixtape-result-description {
+  font-size: smaller;
+}
+
+.mixtape-result-stats {
+  width: 20%;
+}

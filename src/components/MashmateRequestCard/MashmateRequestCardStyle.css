@@ -1,0 +1,5 @@
+.mashmate-request-card {
+  background-color: var(--primary-color) !important;
+  flex-direction: row;
+  justify-content: space-between;
+}

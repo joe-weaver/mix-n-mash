@@ -1,0 +1,157 @@
+:root {
+  --primary-color: rgb(35, 212, 235);
+  --primary-color-transparent: rgba(35, 212, 235, 0.3);
+  --primary-color-transparent-more: rgba(35, 212, 235, 0.15);
+  --primary-color-transparent-even-more: rgba(35, 212, 235, 0.08);
+  --primary-color-lighter: rgb(94, 236, 255);
+  --primary-color-darker: rgb(48, 159, 173);
+
+  --accent-color: rgb(235, 94, 40);
+
+  --warning-color: rgb(235, 40, 40);
+  --warning-color-lighter: rgb(241, 79, 79);
+  --warning-color-transparent: rgba(235, 40, 40, 0.3);
+  --warning-color-transparent-more: rgba(235, 40, 40, 0.15);
+
+  --background-color: rgb(1, 8, 27);
+
+  --secondary-color: rgb(49, 52, 59);
+  --secondary-color-transparent: rgba(49, 52, 59, 0.7);
+  --secondary-color-darker: rgb(2, 16, 41);
+  --secondary-color-lighter: rgb(7, 46, 119);
+
+  --gray-color: rgb(61, 66, 75);
+  --black: rgb(2, 4, 34);
+}
+/* rgb(4, 30, 78); */
+body {
+  color: white !important;
+}
+
+/* ##################################################################### */
+/* Color Utils */
+.primary-color {
+  background-color: var(--primary-color) !important;
+}
+
+.accent-color {
+  background-color: var(--accent-color) !important;
+}
+
+.secondary-color {
+  background-color: var(--secondary-color) !important;
+}
+
+.secondary-color-transparent {
+  background-color: var(--secondary-color-transparent) !important;
+}
+
+.secondary-color-transparent-border {
+  border-color: var(--secondary-color-transparent) !important;
+}
+
+/* ##################################################################### */
+/* Spacing Utils */
+.space-above {
+  margin-top: 1vh;
+}
+
+.space-below {
+  margin-bottom: 1vh;
+}
+
+/* ##################################################################### */
+/* Button Style */
+.mm-btn {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: white;
+}
+
+.mm-btn:hover {
+  background-color: var(--primary-color-lighter) !important;
+  border-color: var(--primary-color-lighter) !important;
+  color: white;
+}
+
+.mm-btn:active {
+  background-color: var(--primary-color-lighter) !important;
+  border-color: var(--primary-color-lighter) !important;
+  color: white;
+}
+
+.mm-btn:focus {
+  background-color: var(--primary-color-lighter) !important;
+  border-color: var(--primary-color-lighter) !important;
+  color: white !important;
+}
+
+.mm-btn-alt {
+  background-color: var(--primary-color-transparent-more) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.mm-btn-alt:hover {
+  background-color: var(--primary-color-transparent) !important;
+  border-color: var(--primary-color-lighter) !important;
+  color: white !important;
+}
+
+.mm-btn-alt:active {
+  background-color: var(--primary-color-transparent) !important;
+  border-color: var(--primary-color-lighter) !important;
+  color: white;
+}
+
+.mm-btn-alt:focus {
+  background-color: var(--primary-color-transparent) !important;
+  border-color: var(--primary-color-lighter) !important;
+  color: white !important;
+}
+
+.mm-btn-warning {
+  background-color: var(--warning-color-transparent-more) !important;
+  border-color: var(--warning-color) !important;
+  color: white !important;
+}
+
+.mm-btn-warning:hover {
+  background-color: var(--warning-color-transparent) !important;
+  border-color: var(--warning-color-lighter) !important;
+  color: white !important;
+}
+
+.mm-btn-warning:active {
+  background-color: var(--warning-color-transparent) !important;
+  border-color: var(--warning-color-lighter) !important;
+  color: white;
+}
+
+.mm-btn-warning:focus {
+  background-color: var(--warning-color-transparent) !important;
+  border-color: var(--warning-color-lighter) !important;
+  color: white !important;
+}
+/* ##################################################################### */
+/* Link Style */
+.mm-link-light {
+  color: white !important;
+}
+
+.mm-link-dark {
+  color: var(--primary-color) !important;
+}
+
+.mm-link-dark:hover {
+  color: var(--primary-color-darker) !important;
+}
+
+.mm-link-dark:active {
+  color: var(--primary-color-darker) !important;
+}
+
+.mm-link-dark:visited {
+  color: var(--primary-color-lighter) !important;
+}
+/* ##################################################################### */

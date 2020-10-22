@@ -1,0 +1,24 @@
+.icon-button {
+  border-width: 0px !important;
+  transform: rotate(0deg);
+}
+
+.icon-button:hover {
+  background-color: transparent !important;
+}
+
+.icon-button:focus {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  /* transform: rotate(360deg);
+  transition: transform 0.3s; */
+}
+
+.icon-button:active {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.icon-button:hover {
+  background-color: transparent !important;
+}

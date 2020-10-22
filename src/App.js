@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 
-function App() {
+import HottestMixtapes from "./pages/HottestMixtapes/HottestMixtapes";
+import MyMixtapes from "./pages/MyMixtapes/MyMixtapes";
+import Account from "./pages/Account/Account";
+import SignIn from "./pages/SignIn/SignIn";
+import MixtapePage from "./pages/MixtapePage/MixtapePage";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Route path="/" exact component={SignIn} />
+      <Route path="/HottestMixtapes" component={HottestMixtapes} />
+      <Route exact path="/MyMixtapes" component={MyMixtapes} />
+      <Route exact path="/MyMixtapes/:mixtapeId" component={MixtapePage} />
+      <Route path="/Account" component={Account} />
+    </BrowserRouter>
   );
 }
-
-export default App;

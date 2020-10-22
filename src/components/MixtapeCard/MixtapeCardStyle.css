@@ -1,0 +1,39 @@
+.mixtape-link .mixtape-link {
+  margin-top: 10px;
+}
+
+.mixtape-card {
+  color: black !important;
+  background-color: var(--primary-color) !important;
+  padding: 5px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.mixtape-card-image {
+  width: 10%;
+}
+
+.mixtape-card-body {
+  width: 80%;
+}
+
+.mixtape-card-title {
+  font-size: larger;
+  font-weight: light;
+}
+
+.mixtape-card-user {
+}
+
+.mixtape-card-description {
+  font-size: smaller;
+}
+
+.mixtape-card-delete {
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

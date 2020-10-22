@@ -1,0 +1,47 @@
+.navbar-style {
+  background-color: var(--secondary-color) !important;
+}
+
+.navbar-style * {
+  color: white !important;
+}
+
+.selected {
+  background-color: var(--primary-color-transparent-more) !important;
+  margin-top: -0.5rem !important;
+  margin-bottom: -0.5rem !important;
+  padding-top: 1rem !important;
+  border-width: 0px 0px 0.2rem 0px;
+  border-style: solid;
+  border-color: var(--primary-color) !important;
+  transition: padding-top 0.2s, padding-bottom 0.2s, background-color 0.2s;
+}
+
+.selected:hover {
+  padding-top: 0.8rem !important;
+  padding-bottom: 0.7rem !important;
+  background-color: var(--primary-color-transparent) !important;
+  transition: padding-top 0.2s, padding-bottom 0.2s, background-color 0.2s;
+}
+
+.nav-link {
+  margin-top: -0.5rem !important;
+  margin-bottom: -0.5rem !important;
+  padding-top: 1rem !important;
+  padding-bottom: 0.5rem !important;
+  background-color: transparent !important;
+  transition: padding-top 0.2s, padding-bottom 0.2s, background-color 0.2s;
+}
+
+.nav-link:hover {
+  margin-top: -0.5rem !important;
+  margin-bottom: -0.5rem !important;
+  padding-top: 0.8rem !important;
+  padding-bottom: 0.7rem !important;
+  background-color: var(--primary-color-transparent-even-more) !important;
+  transition: padding-top 0.2s, padding-bottom 0.2s, background-color 0.2s;
+}
+
+.mm-search {
+  color: black !important;
+}
