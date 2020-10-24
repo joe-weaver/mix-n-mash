@@ -1,0 +1,17 @@
+.user-page-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+.user-page-title {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+.song-container {
+    display: flex;
+    justify-content: center;
+  }
+  
