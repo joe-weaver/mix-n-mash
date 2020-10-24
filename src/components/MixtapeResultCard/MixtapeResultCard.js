@@ -1,10 +1,12 @@
 import React from "react";
 import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import "./MixtapeResultCardStyle.css";
 
 const MixtapeResultCard = (props) => {
   return (
+    <Link to={"MyMixtapes/" + props.mixtape._id}>
     <Card className="mixtape-result" key={props.mixtape._id}>
       <div className="mixtape-result-image"></div>
 
@@ -27,6 +29,7 @@ const MixtapeResultCard = (props) => {
         </div>
       </div>
     </Card>
+    </Link>
   );
 };
 

@@ -6,7 +6,7 @@ import MyMixtapes from "./pages/MyMixtapes/MyMixtapes";
 import Account from "./pages/Account/Account";
 import SignIn from "./pages/SignIn/SignIn";
 import MixtapePage from "./pages/MixtapePage/MixtapePage";
-
+import SearchResults from "./pages/SearchResults/SearchResults";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
@@ -17,6 +17,7 @@ export default function App() {
       <Route exact path="/MyMixtapes" component={MyMixtapes} />
       <Route exact path="/MyMixtapes/:mixtapeId" component={MixtapePage} />
       <Route path="/Account" component={Account} />
+      <Route path="/SearchResults" component={SearchResults} />
     </BrowserRouter>
   );
 }
