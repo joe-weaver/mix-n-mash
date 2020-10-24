@@ -1,0 +1,51 @@
+.modal-dialog{
+    width: 70vw !important;
+    max-width: 1000px !important;
+    min-width: 500px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.modal-content{
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    color: white !important;
+    height: 70vh !important;
+}
+
+.modal-header .close {
+    color: white !important;
+}
+
+.modal-header .close:hover {
+    color: white !important;
+}
+
+.modal-header .close:active {
+    color: white !important;
+}
+
+.modal-search-bar {
+    width: 100% !important;
+}
+
+.add-song-content {
+    display: flex;
+    flex-direction: row;
+}
+
+.song-preview {
+    width: 50% !important;
+}
+
+.song-preview-frame {
+    width: 100% !important;
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+}
