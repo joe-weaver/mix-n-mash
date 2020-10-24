@@ -14,3 +14,22 @@
   display: flex;
   justify-content: center;
 }
+
+.mixtape_title {
+  resize: none;
+}
+
+.mixtape_title:disabled {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
+.form-check-input {
+  transform: scale(2);
+  -webkit-transform: scale(2);
+}
+
+.video-preview {
+  
+}

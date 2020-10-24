@@ -10,12 +10,29 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import IconButton from "../../components/IconButton/IconButton";
 
+import SongCard from "../../components/SongCard/SongCard";
+
 import "../Page.css";
 import "./MixtapePageStyle.css";
+
+const songs = [
+  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
+  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
+  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
+  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
+  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
+  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
+  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
+  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"}
+];
 
 export default class MixtapePage extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      songs: []
+    };
 
     // Extract the id from the url
     let url = window.location.pathname.split("/");
@@ -47,7 +64,7 @@ export default class MixtapePage extends React.Component {
           {!this.state.loading &&
           <Card.Header className="mixtape-page-header">
             <Form.Group controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Public " defaultValue="" />
+              <Form.Check type="checkbox" label="Public" defaultValue="" />
             </Form.Group>
             {!this.state.editingMixtapeTitle && (
               <IconButton
@@ -64,6 +81,7 @@ export default class MixtapePage extends React.Component {
             <div className="mixtape-page-title">
               <Form.Control
                 type="email"
+                className="mixtape_title"
                 defaultValue={this.state.mixtape.title}
                 disabled={!this.state.editingMixtapeTitle}
                 maxLength="50"
@@ -74,8 +92,21 @@ export default class MixtapePage extends React.Component {
             <IconButton component={<CallSplitIcon />} />
             <IconButton component={<GroupAddIcon />} />
           </Card.Header>}
-          <div className="song-container"></div>
-          <Card.Body></Card.Body>
+          <Card.Body>
+            <div className="song-container">
+              <div className="video-preview">
+                <img src={"https://img.youtube.com/vi/"+songs[0].youtubeId+"/0.jpg"} style={{height: "180pt"}} />
+              </div>
+              <div>
+                Songs
+                <div className="scroll-content" style={{maxHeight: "124pt"}}>
+                  {songs.map((song) => (
+                    <SongCard song={song} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Card.Body>
           <Card.Footer></Card.Footer>
         </Card>
       </div>
