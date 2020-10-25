@@ -9,13 +9,16 @@ import "./MixtapeCardStyle.css";
 
 const MixtapeCard = (props) => {
   return (
-    <Link to={"MyMixtapes/" + props.mixtape._id}>
       <Card className="mixtape-card" key={props.mixtape._id}>
         <div className="mixtape-card-image"></div>
 
         <div className="mixtape-card-body">
+        <Link to={"MyMixtapes/" + props.mixtape._id}>
           <div>{props.mixtape.title}</div>
+        </Link>
+        <Link to={"User/" + props.mixtape.ownerId}>
           <div>{props.mixtape.owner.username}</div>
+        </Link>
           <div>{props.mixtape.description}</div>
         </div>
 
@@ -25,7 +28,7 @@ const MixtapeCard = (props) => {
           </div>
         </div>
       </Card>
-    </Link>
+   
   );
 };
 

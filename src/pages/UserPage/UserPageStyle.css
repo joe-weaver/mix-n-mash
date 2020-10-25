@@ -10,8 +10,17 @@
     flex-direction: column;
   }
   
-.song-container {
-    display: flex;
-    justify-content: center;
-  }
+.user_top_body{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 50%
+}
+.users_mixtapes-container{
+  height: 50%
+}
+
+.user_page_buttons{
+
+}
   
