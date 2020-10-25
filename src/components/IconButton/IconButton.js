@@ -8,7 +8,7 @@ const IconButton = (props) => {
     <Button
       variant="outline-secondary"
       className="icon-button"
-      onClick={props.callback}
+      onClick={props.callback || props.onClick}
     >
       {props.component}
     </Button>

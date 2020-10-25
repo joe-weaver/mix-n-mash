@@ -12,7 +12,8 @@
 
 .song-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .mixtape_title {
@@ -31,5 +32,20 @@
 }
 
 .video-preview {
-  
+
+}
+
+.comment-section-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: space-between;
+}
+
+.comment-section-header div+div {
+  margin-left:20px
+}
+
+.comment-section-container {
+
 }

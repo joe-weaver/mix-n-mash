@@ -35,10 +35,11 @@
 .add-song-content {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
 }
 
 .song-preview {
-    width: 50% !important;
+    width: 40% !important;
 }
 
 .song-preview-frame {
@@ -55,4 +56,5 @@
     flex-direction: column;
     padding-left: 10vw !important;
     padding-right: 10vw !important;
+    justify-content: center;
 }

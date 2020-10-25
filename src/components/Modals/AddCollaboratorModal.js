@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Modal, Form, FormControl } from "react-bootstrap";
 import EditPermissionsCard from "./Components/EditPermissionsCard";
 import AddCollaboratorCard from "./Components/AddCollaboratorCard";
+import IconButton from "../../components/IconButton/IconButton"
+import GroupAddIcon from "@material-ui/icons/GroupAdd"
 
 import "./ModalStyle.css";
 import "../../pages/Page.css";
@@ -65,9 +67,7 @@ const AddCollaboratorModal = (props) => {
 
     return (
         <>
-        <Button variant="primary" onClick={handleShow}>
-            Edit Sharing Privileges
-        </Button>
+        <IconButton component={<GroupAddIcon />} onClick={handleShow} />
 
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

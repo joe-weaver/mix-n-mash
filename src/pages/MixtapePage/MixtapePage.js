@@ -5,12 +5,16 @@ import SaveIcon from "@material-ui/icons/Save";
 import CallMergeIcon from "@material-ui/icons/CallMerge";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { Link } from "react-router-dom";
 
 import Navbar from "../../components/Navbar/Navbar";
 import IconButton from "../../components/IconButton/IconButton";
 
 import SongCard from "../../components/SongCard/SongCard";
+import AddSongModal from "../../components/Modals/AddSongModal"
+import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -90,23 +94,45 @@ export default class MixtapePage extends React.Component {
             </div>
             <IconButton component={<CallMergeIcon />} />
             <IconButton component={<CallSplitIcon />} />
-            <IconButton component={<GroupAddIcon />} />
+            <AddCollaboratorModal />
           </Card.Header>}
           <Card.Body>
             <div className="song-container">
               <div className="video-preview">
                 <img src={"https://img.youtube.com/vi/"+songs[0].youtubeId+"/0.jpg"} style={{height: "180pt"}} />
               </div>
-              <div>
+              <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
                 Songs
                 <div className="scroll-content" style={{maxHeight: "124pt"}}>
                   {songs.map((song) => (
                     <SongCard song={song} />
                   ))}
                 </div>
+                <AddSongModal />
               </div>
             </div>
           </Card.Body>
+          {!this.state.loading &&
+          <Card.Body>
+            <div className="comment-section-container">
+              <div className="comment-section-header">
+                <div>
+                  <IconButton component={<ThumbUpIcon />} />
+                  <IconButton component={<ThumbDownIcon />} />
+                </div>
+                <div>
+                  Likes: {this.state.mixtape.likes}
+                </div>
+                <div>
+                  Listens: {this.state.mixtape.listens}
+                </div>
+              </div>
+              <div>
+
+              </div>
+            </div>
+          </Card.Body>
+          }
           <Card.Footer></Card.Footer>
         </Card>
       </div>
