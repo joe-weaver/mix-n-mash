@@ -5,7 +5,7 @@ import { DropdownButton, Dropdown, ButtonGroup } from "react-bootstrap";
 const CustomDropdown = (props) => {
   let variant = "secondary";
 
-  let [selected, setSelected] = React.useState(props.items[0]);
+  let [selected, setSelected] = React.useState(props.defaultIndex ? props.items[props.defaultIndex] : props.items[0]);
 
   return (
     <DropdownButton
