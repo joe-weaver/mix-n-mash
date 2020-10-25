@@ -1,10 +1,5 @@
 import React from "react";
 import { Card, Button, FormControl, Form } from "react-bootstrap";
-import EditIcon from "@material-ui/icons/Edit";
-import SaveIcon from "@material-ui/icons/Save";
-import CallMergeIcon from "@material-ui/icons/CallMerge";
-import CallSplitIcon from "@material-ui/icons/CallSplit";
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import { Link } from "react-router-dom";
 import { NavbarLinks } from "../../data/NavbarLinks";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";

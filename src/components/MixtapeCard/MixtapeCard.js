@@ -16,7 +16,7 @@ const MixtapeCard = (props) => {
         <Link to={"MyMixtapes/" + props.mixtape._id}>
           <div>{props.mixtape.title}</div>
         </Link>
-        <Link to={"User/" + props.mixtape.ownerId}>
+        <Link to={"/User/" + props.mixtape.ownerId}>
           <div>{props.mixtape.owner.username}</div>
         </Link>
           <div>{props.mixtape.description}</div>
