@@ -147,6 +147,9 @@ body {
 
 .mm-link-dark {
   color: var(--primary-color) !important;
+  text-decoration: underline;
+  cursor: pointer;
+  user-select: none;
 }
 
 .mm-link-dark:hover {
