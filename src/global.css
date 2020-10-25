@@ -61,6 +61,12 @@ body {
 }
 
 /* ##################################################################### */
+/* Sizing Utils */
+.height50 {
+  height: 50% !important; 
+}
+
+/* ##################################################################### */
 /* Button Style */
 .mm-btn {
   background-color: var(--primary-color) !important;

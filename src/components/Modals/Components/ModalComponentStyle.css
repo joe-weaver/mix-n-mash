@@ -1,0 +1,11 @@
+.edit-permissions-card {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background-color: var(--primary-color) !important;
+}
+
+.edit-permissions-card + .edit-permissions-card {
+    margin-top: 10px;
+}

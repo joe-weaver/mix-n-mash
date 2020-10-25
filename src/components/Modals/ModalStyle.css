@@ -49,3 +49,10 @@
     display: flex;
     flex-direction: column;
 }
+
+.add-collaborator-body {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10vw !important;
+    padding-right: 10vw !important;
+}
