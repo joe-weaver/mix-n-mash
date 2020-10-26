@@ -3,3 +3,7 @@
   flex-direction: row !important;
   justify-content: space-between;
 }
+
+.mashmate-request-card + .mashmate-request-card {
+  margin-top: 5px;
+}

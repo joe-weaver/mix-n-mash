@@ -114,7 +114,7 @@ export default class Account extends React.Component {
                 </Link>
               </div>
             </Card.Header>
-            <Card.Body>
+            <Card.Body className="scroll-content">
               {/*Bio stuff  */}
               <div className="field-title">
                 {!this.state.editingBio && (

@@ -11,6 +11,10 @@
   background-color: var(--primary-color) !important;
 }
 
+.mashmate-card + .mashmate-card {
+  margin-top: 5px;
+}
+
 .mashmate-title {
   display: flex;
   justify-content: space-between;
