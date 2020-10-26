@@ -1,0 +1,22 @@
+.add-song-result {
+    color: black !important;
+    background-color: var(--primary-color) !important;
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .add-song-card {
+    background-color: var(--primary-color) !important;
+  }
+  
+  .add-song-title {
+    width: 30rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    flex-direction: row;
+    font-size: larger;
+    font-weight: light;
+  }

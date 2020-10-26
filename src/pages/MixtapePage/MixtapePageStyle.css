@@ -49,3 +49,20 @@
 .comment-section-container {
 
 }
+
+.comments-card {
+  background-color: var(--secondary-color-comment-bg) !important;
+  height: 32vh !important;
+  display: flex;
+  flex-direction: row;
+}
+
+.comments-section {
+  background-color: var(--secondary-color-comment-bg) !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.reply{
+  margin-left: 8%;
+}

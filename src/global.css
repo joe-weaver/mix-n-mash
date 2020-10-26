@@ -19,6 +19,7 @@
   --secondary-color-transparent: rgba(49, 52, 59, 0.7);
   --secondary-color-darker: rgb(2, 16, 41);
   --secondary-color-lighter: rgb(7, 46, 119);
+  --secondary-color-comment-bg: rgb(28, 29, 32);
 
   --gray-color: rgb(61, 66, 75);
   --black: rgb(2, 4, 34);

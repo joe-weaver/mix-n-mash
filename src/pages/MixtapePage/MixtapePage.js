@@ -128,7 +128,45 @@ export default class MixtapePage extends React.Component {
                 </div>
               </div>
               <div>
-
+                <Card className="comments-card">
+                  <Card.Header>
+                    <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>Comments:</div>
+                    <div className="space-above" style={{display:"flex", flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
+                      <div>Leave a Comment: </div>
+                      <input class="form-control" type="text" placeholder="Write your comment here..." style={{width:"80%"}}/>
+                    </div>
+                  </Card.Header>
+                  <Card.Body className="scroll-content comments-section">
+                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                      <div><Link to={"/User/0"}>RyzonX:</Link> This Mixtape is AWESOME!! I would have liked if there was just a little bit more "Land Down Under" though.</div>
+                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/25 9:37am</div>
+                    </div>
+                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                      <div><Link to={"/User/0"}>Reinbex:</Link> This Mixtape is pretty fantastic. I loved the track "Land Down Under" in particular.</div>
+                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/26 12:14pm</div>
+                    </div>
+                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> I always like my own playlists :)</div>
+                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:14pm</div>
+                    </div>
+                    <div className="space-below reply" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> And reply to my own comments :)</div>
+                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:15pm</div>
+                    </div>
+                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> SPAM SPAM SPAM</div>
+                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:16pm</div>
+                    </div>
+                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> MORE SPAM MORE SPAM</div>
+                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:17pm</div>
+                    </div>
+                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> EVEN MORE SPAM</div>
+                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:17pm</div>
+                    </div>
+                  </Card.Body>
+                </Card>
               </div>
             </div>
           </Card.Body>

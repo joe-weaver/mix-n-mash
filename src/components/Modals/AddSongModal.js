@@ -1,20 +1,21 @@
 import React from "react";
 import { Button, Modal, Form, FormControl } from "react-bootstrap";
+import AddSongCard from "../../components/AddSongCard/AddSongCard"
 
 import "./ModalStyle.css";
 
 let results = [
     {
         name: "Land Down Under",
-        id: "XfR9iY5y94s"
+        youtubeId: "XfR9iY5y94s"
     },
     {
         name: "Land Down Under",
-        id: "XfR9iY5y94s"
+        youtubeId: "XfR9iY5y94s"
     },
     {
         name: "Land Down Under",
-        id: "XfR9iY5y94s"
+        youtubeId: "XfR9iY5y94s"
     },
 ]
 
@@ -54,7 +55,7 @@ const AddSongModal = (props) => {
                         <img className="song-preview-frame" src="https://img.youtube.com/vi/XfR9iY5y94s/0.jpg"></img>
                     </div>
                     <div className="search-results">
-                        {results.map(song => <div>{song.name}</div>)}
+                        {results.map(song => <AddSongCard song={song} />)}
                     </div>
                 </div>
             </Modal.Body>
