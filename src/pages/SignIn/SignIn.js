@@ -15,8 +15,7 @@ export default class SignIn extends React.Component {
     return (
       <div className="splash-container">
         <Card className="text-center signin-card secondary-color-transparent">
-          <h1>Mix n' Mash</h1>
-          {!this.state.forgotCredential && !this.state.signup && <h2>Log In</h2>}
+          {!this.state.forgotCredential && !this.state.signup && <><h1>Mix n' Mash</h1><h2>Log In</h2></>}
           {this.state.forgotCredential && <h2>Forgot Password</h2>}
           {this.state.signup && <h2>Sign Up</h2>}
 
@@ -74,10 +73,9 @@ export default class SignIn extends React.Component {
                 <Form.Group controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
                   <Form.Control type="password" placeholder="Password" />
-                  <Form.Label>Confirm Password</Form.Label>
                   <Form.Control type="password" placeholder="Confirm Password" />
                 </Form.Group>
-                <Button variant="primary" className="mm-btn-alt">
+                <Button variant="primary" className="mm-btn-alt" onClick={() => this.setState({forgotCredential: false, signup: false})}>
                   Create Account
                 </Button>
               </Form>
