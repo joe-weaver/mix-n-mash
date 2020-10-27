@@ -3,6 +3,8 @@ import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./MixtapeResultCardStyle.css";
 
+
+
 const MixtapeResultCard = (props) => {
   return (
     <Card className="mixtape-result" key={props.mixtape._id}>
@@ -12,11 +14,11 @@ const MixtapeResultCard = (props) => {
       </div>
 
       <div className="mixtape-result-body">
-        <Link to={"MyMixtapes/" + props.mixtape._id}>
+        <Link to={"/MyMixtapes/" + props.mixtape._id}>
           <div className="mixtape-result-title">{props.mixtape.title}</div>
         </Link>
 
-        <Link to={"User/" + props.mixtape.ownerId}>
+        <Link to={"/User/" + props.mixtape.ownerId}>
           <div className="mixtape-result-user">
             {props.mixtape.owner.username}
           </div>

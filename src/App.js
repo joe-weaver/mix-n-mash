@@ -10,6 +10,7 @@ import SearchResults from "./pages/SearchResults/SearchResults";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserPage from "./pages/UserPage/UserPage";
 
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -22,4 +23,5 @@ export default function App() {
       <Route exact path="/User/:userId" component={UserPage} />
     </BrowserRouter>
   );
+
 }
