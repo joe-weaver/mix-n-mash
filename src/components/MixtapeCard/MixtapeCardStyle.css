@@ -1,7 +1,3 @@
-.mixtape-link .mixtape-link {
-  margin-top: 10px;
-}
-
 .mixtape-card {
   color: black !important;
   background-color: var(--primary-color) !important;
@@ -9,6 +5,10 @@
   border-radius: 10px;
   display: flex;
   flex-direction: row !important;
+}
+
+.mixtape-card + .mixtape-card {
+  margin-top: 10px;
 }
 
 .mixtape-card-image {

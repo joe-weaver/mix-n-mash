@@ -19,13 +19,15 @@ const items = [
 export default class MyMixtapes extends React.Component {
   constructor() {
     super();
-    this.state = { mixtapes: [] };
+    this.state = { mixtapes: [], loading: false };
+
+    this.loadData();
   }
 
-  mockSearch = () => {
+  loadData = () => {
     fetch("/TestData.json")
       .then(response => {return response.json();})
-      .then(jsonResponse => this.setState({ mixtapes: jsonResponse.data }));
+      .then(jsonResponse => this.setState({ mixtapes: jsonResponse.data, loading: false }));
   };
 
   render() {
@@ -44,12 +46,12 @@ export default class MyMixtapes extends React.Component {
                 />
                 <IconButton
                   component={<RefreshIcon />}
-                  callback={this.mockSearch}
+                  callback={() => {console.log("Refresh")}}
                 ></IconButton>
               </div>
             </Card.Header>
             <Card.Body className="scroll-content">
-              {this.state.mixtapes.map((mixtape) => (
+              {!this.state.loading && this.state.mixtapes.map((mixtape) => (
                 <MixtapeCard mixtape={mixtape} />
               ))}
             </Card.Body>

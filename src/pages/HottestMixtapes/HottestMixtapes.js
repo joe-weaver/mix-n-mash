@@ -19,13 +19,15 @@ const items = [
 export default class HottestMixtapes extends React.Component {
   constructor() {
     super();
-    this.state = { mixtapes: [] };
+    this.state = { mixtapes: [], loading: true };
+
+    this.loadData();
   }
 
-  mockSearch = () => {
+  loadData = () => {
     fetch("/TestData.json")
       .then(response => {return response.json();})
-      .then(jsonResponse => this.setState({ mixtapes: jsonResponse.data }));
+      .then(jsonResponse => this.setState({ mixtapes: jsonResponse.data, loading: false }));
   };
 
   render() {
@@ -44,7 +46,7 @@ export default class HottestMixtapes extends React.Component {
                 />
                 <IconButton
                   component={<RefreshIcon />}
-                  callback={this.mockSearch}
+                  callback={() => console.log("Refresh")}
                 ></IconButton>
                 {/*May need another smaller dropdown for sorting
                 and Filter Hyperlink that opens up a modal with checkboxes 
@@ -53,7 +55,7 @@ export default class HottestMixtapes extends React.Component {
               </div>
             </Card.Header>
             <Card.Body className="scroll-content">
-              {this.state.mixtapes.map((mixtape) => (
+              {!this.state.loading && this.state.mixtapes.map((mixtape) => (
                 <MixtapeResultCard mixtape={mixtape} />
               ))}
             </Card.Body>

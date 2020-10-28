@@ -14,80 +14,6 @@ import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRe
 import "./AccountStyle.css";
 import "../Page.css";
 
-const mashmates = [
-  { mashmateId: 10558001, username: "The McKillaGorilla" },
-  { mashmateId: 10614770, username: "TheRealKevinMcDonnell" },
-  { mashmateId: 10111736, username: "Dat one T.A." },
-  { mashmateId: 10001235, username: "Filler Friend 1" },
-  { mashmateId: 10001236, username: "Filler Friend 2" },
-  { mashmateId: 10001237, username: "Loooooooong Friend Name" }
-];
-const mashmateRequests = [
-  {
-    senderId: 10558963,
-    reciepientId: 10023581,
-    username: "Joe",
-    timeSent: 1234698172634,
-    seen: false
-  },
-  {
-    senderId: 10590963,
-    reciepientId: 10023581,
-    username: "Bernie",
-    timeSent: 1901698172634,
-    seen: true
-  },
-  {
-    senderId: 17568964,
-    reciepientId: 10023581,
-    username: "LoooongName",
-    timeSent: 1534698172634,
-    seen: true
-  },
-  {
-    senderId: 10001234,
-    reciepientId: 10023581,
-    username: "Filler Request 1",
-    timeSent: 1594698172634,
-    seen: false
-  },
-  {
-    senderId: 10001234,
-    reciepientId: 10023581,
-    username: "Filler Request 2",
-    timeSent: 1594698172634,
-    seen: false
-  },
-  {
-    senderId: 10001234,
-    reciepientId: 10023581,
-    username: "Filler Request 3",
-    timeSent: 1594698172630,
-    seen: false
-  },
-  {
-    senderId: 10001234,
-    reciepientId: 10023581,
-    username: "Filler Request 4",
-    timeSent: 1594698172634,
-    seen: false
-  },
-  {
-    senderId: 10001234,
-    reciepientId: 10023581,
-    username: "Filler Request 5",
-    timeSent: 1594698172634,
-    seen: false
-  },
-  {
-    senderId: 10001234,
-    reciepientId: 10023581,
-    username: "Filler Request 6",
-    timeSent: 1594698172634,
-    seen: false
-  }
-];
-
 export default class Account extends React.Component {
   constructor(props) {
     super(props);
@@ -95,9 +21,26 @@ export default class Account extends React.Component {
     this.state = {
       editingBio: false,
       editingPassword: false,
-      mashmates: [],
-      mashmateRequests: []
+      loading: true
     };
+
+    this.loadData();
+  }
+
+  loadData(){
+    fetch("/TestData.json")
+      .then(response => {return response.json();})
+      .then(jsonResponse => {
+        let user = null;
+
+        for(let u of jsonResponse.users){
+          if(u._id === 1){
+            user = u;
+          }
+        }
+        console.log(user);
+        this.setState({ user: user, loading: false })
+      });
   }
 
   render() {
@@ -134,7 +77,7 @@ export default class Account extends React.Component {
               <FormControl
                 as="textarea"
                 className="bio-textarea"
-                defaultValue="This is your user-page's description. Max amount of characters are 255."
+                defaultValue={this.state.loading ? "" : this.state.user.bio}
                 disabled={!this.state.editingBio}
                 maxLength="255"
               />
@@ -180,7 +123,7 @@ export default class Account extends React.Component {
                   Mashmates
                   <IconButton component={<RefreshIcon />} />
                   <div className="scroll-content" style={{maxHeight: "275px"}}>
-                    {mashmates.map((mashmate) => (
+                    {!this.state.loading && this.state.user.mashmates.map((mashmate) => (
                       <MashmateCard mashmate={mashmate} />
                     ))}
                   </div>
@@ -190,7 +133,7 @@ export default class Account extends React.Component {
                   Mashmate Requests
                   <IconButton component={<RefreshIcon />} />
                   <div className="scroll-content" style={{maxHeight: "275px"}}>
-                    {mashmateRequests.map((mashmateRequest) => (
+                    {!this.state.loading && this.state.user.receivedMashmateRequests.map((mashmateRequest) => (
                       <MashmateRequestCard mashmateRequest={mashmateRequest} />
                     ))}
                   </div>
