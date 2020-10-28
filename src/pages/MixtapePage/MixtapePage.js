@@ -4,43 +4,31 @@ import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CallMergeIcon from "@material-ui/icons/CallMerge";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { Link } from "react-router-dom";
 
 import Navbar from "../../components/Navbar/Navbar";
 import IconButton from "../../components/IconButton/IconButton";
-
 import SongCard from "../../components/SongCard/SongCard";
 import AddSongModal from "../../components/Modals/AddSongModal"
 import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
+import Comment from "../../components/Comments/Comment";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
-
-const songs = [
-  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
-  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
-  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
-  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
-  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
-  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
-  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"},
-  {name: "Land Down Under", youtubeId: "XfR9iY5y94s"}
-];
 
 export default class MixtapePage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      songs: []
-    };
+    this.state = {loading: true};
 
     // Extract the id from the url
     let url = window.location.pathname.split("/");
     let id = parseInt(url[url.length - 1]);
+
+    console.log(id);
     this.state = { id: id, loading: true, mixtape: null, editingMixtapeTitle: false };
 
     this.getMixtape();
@@ -99,12 +87,12 @@ export default class MixtapePage extends React.Component {
           <Card.Body>
             <div className="song-container">
               <div className="video-preview">
-                <img src={"https://img.youtube.com/vi/"+songs[0].youtubeId+"/0.jpg"} style={{height: "180pt"}} />
+                <img src={"https://img.youtube.com/vi/"+(this.state.loading ? "" : this.state.mixtape.songs[0]).youtubeId+"/0.jpg"} style={{height: "180pt"}} />
               </div>
               <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
                 Songs
                 <div className="scroll-content" style={{maxHeight: "124pt"}}>
-                  {songs.map((song) => (
+                  {!this.state.loading && this.state.mixtape.songs.map((song) => (
                     <SongCard song={song} />
                   ))}
                 </div>
@@ -137,34 +125,7 @@ export default class MixtapePage extends React.Component {
                     </div>
                   </Card.Header>
                   <Card.Body className="scroll-content comments-section">
-                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                      <div><Link to={"/User/0"}>RyzonX:</Link> This Mixtape is AWESOME!! I would have liked if there was just a little bit more "Land Down Under" though.</div>
-                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/25 9:37am</div>
-                    </div>
-                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                      <div><Link to={"/User/0"}>Reinbex:</Link> This Mixtape is pretty fantastic. I loved the track "Land Down Under" in particular.</div>
-                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/26 12:14pm</div>
-                    </div>
-                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> I always like my own playlists :)</div>
-                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:14pm</div>
-                    </div>
-                    <div className="space-below reply" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> And reply to my own comments :)</div>
-                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:15pm</div>
-                    </div>
-                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> SPAM SPAM SPAM</div>
-                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:16pm</div>
-                    </div>
-                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> MORE SPAM MORE SPAM</div>
-                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:17pm</div>
-                    </div>
-                    <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                      <div><Link to={"/User/0"}>Thunderbolt67:</Link> EVEN MORE SPAM</div>
-                      <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>10/27 4:17pm</div>
-                    </div>
+                    {!this.state.loading && this.state.mixtape.comments.map(comment => <Comment comment={comment}/>)}
                   </Card.Body>
                 </Card>
               </div>
