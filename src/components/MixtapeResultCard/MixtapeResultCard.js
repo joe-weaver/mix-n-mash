@@ -28,7 +28,7 @@ const MixtapeResultCard = (props) => {
           Listens: {props.mixtape.listens}
           <br /> Likes: {props.mixtape.likes}
           <br /> Genres:{" "}
-          {props.mixtape.genres.reduce((acc, genre) => acc + ", " + genre, "")}
+          {props.mixtape.genres.reduce((acc, genre) => acc + ", " + genre, "").substring(2)}
         </div>
       </div>
     </Card>

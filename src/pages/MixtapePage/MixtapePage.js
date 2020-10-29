@@ -7,6 +7,7 @@ import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { Link } from "react-router-dom";
+import Multiselect from "react-bootstrap-multiselect"
 
 import Navbar from "../../components/Navbar/Navbar";
 import IconButton from "../../components/IconButton/IconButton";
@@ -92,17 +93,18 @@ export default class MixtapePage extends React.Component {
               <div className="video-container">
                 <img className="video-preview" src={"https://img.youtube.com/vi/"+(this.state.loading ? "" : this.state.mixtape.songs[0]).youtubeId+"/0.jpg"} />
                 <div className="likes-listens">
-                <div>
-                  <IconButton component={<ThumbUpIcon />} />
-                  <IconButton component={<ThumbDownIcon />} />
+                  <div>
+                    <IconButton component={<ThumbUpIcon />} />
+                    <IconButton component={<ThumbDownIcon />} />
+                  </div>
+                  <div>
+                    Likes: {!this.state.loading && this.state.mixtape.likes}
+                  </div>
+                  <div>
+                    Listens: {!this.state.loading && this.state.mixtape.listens}
+                  </div>
                 </div>
-                <div>
-                  Likes: {!this.state.loading && this.state.mixtape.likes}
-                </div>
-                <div>
-                  Listens: {!this.state.loading && this.state.mixtape.listens}
-                </div>
-              </div>
+                <div>Genres: <Multiselect multiple data={[{value: "Jazz"}, {value: "Rock"}, {value: "Ska"}, {value: "Pop"}, {value: "Classical"}]}/></div>
               </div>
               <div className="song-container">
                 <div className="space-below">Songs</div>
