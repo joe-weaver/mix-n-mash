@@ -119,7 +119,7 @@ export default class Account extends React.Component {
               <br />
               {/*Mashmate stuff  */}
               <div className="mashmateStuff-container">
-                <div>
+                <div className="mashmatesList-container">
                   Mashmates
                   <IconButton component={<RefreshIcon />} />
                   <div className="scroll-content" style={{maxHeight: "275px"}}>
@@ -128,8 +128,10 @@ export default class Account extends React.Component {
                     ))}
                   </div>
                 </div>
-
-                <div>
+                <div className="filler">
+                  
+                </div>
+                <div className="mashmateRequests-container">
                   Mashmate Requests
                   <IconButton component={<RefreshIcon />} />
                   <div className="scroll-content" style={{maxHeight: "275px"}}>
