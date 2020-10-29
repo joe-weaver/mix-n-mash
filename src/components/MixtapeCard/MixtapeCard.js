@@ -14,7 +14,7 @@ const MixtapeCard = (props) => {
 
         <div className="mixtape-card-body">
         <Link to={"/MyMixtapes/" + props.mixtape._id}>
-          <div>{props.mixtape.title}</div>
+          <div><h4>{props.mixtape.title}</h4></div>
         </Link>
         <Link to={"/User/" + props.mixtape.ownerId}>
           <div>{props.mixtape.owner.username}</div>
@@ -25,6 +25,7 @@ const MixtapeCard = (props) => {
         <div className="mixtape-card-delete">
           <div>
             <IconButton component={<HighlightOffIcon />} />
+            
           </div>
         </div>
       </Card>

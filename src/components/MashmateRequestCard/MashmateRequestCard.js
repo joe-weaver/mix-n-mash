@@ -13,7 +13,7 @@ const MashmateRequestCard = (props) => {
     <Card className="mashmate-request-card" key={props.mashmateRequest.senderId}>
       <div className="mashmate-request-body">
         <div className="mashmate-request-title">
-          {props.mashmateRequest.username}
+          <b>{props.mashmateRequest.username}</b>
         </div>
         <div className="mashmate-request-timeSent">
           {" Time Sent: " +

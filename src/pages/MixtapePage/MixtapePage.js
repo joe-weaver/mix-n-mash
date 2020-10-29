@@ -14,6 +14,7 @@ import SongCard from "../../components/SongCard/SongCard";
 import AddSongModal from "../../components/Modals/AddSongModal"
 import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
 import Comment from "../../components/Comments/Comment";
+import ReplyIcon from '@material-ui/icons/Reply';
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -55,34 +56,50 @@ export default class MixtapePage extends React.Component {
         <Card className="page-content">
           {!this.state.loading &&
           <Card.Header className="mixtape-page-header">
+            <div className="publicCheckbox-container">
             <Form.Group controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Public" defaultValue="" />
             </Form.Group>
-            {!this.state.editingMixtapeTitle && (
-              <IconButton
-                component={<EditIcon />}
-                callback={() => this.setState({ editingMixtapeTitle: true })}
-              />
-            )}
-            {this.state.editingMixtapeTitle && (
-              <IconButton
-                component={<SaveIcon />}
-                callback={() => this.setState({ editingMixtapeTitle: false })}
-              />
-            )}
-            <div className="mixtape-page-title">
-              <Form.Control
-                type="email"
-                className="mixtape_title"
-                defaultValue={this.state.mixtape.title}
-                disabled={!this.state.editingMixtapeTitle}
-                maxLength="50"
-              />
-              <Link>{this.state.mixtape.owner.username}</Link>
             </div>
-            <IconButton component={<CallMergeIcon />} />
-            <IconButton component={<CallSplitIcon />} />
-            <AddCollaboratorModal />
+
+            <div className="mixtapeTitleAuthor-container">
+              {!this.state.editingMixtapeTitle && (
+                <IconButton
+                  component={<EditIcon />}
+                  callback={() => this.setState({ editingMixtapeTitle: true })}
+                  //size = "medium"
+                />
+              )}
+
+              {this.state.editingMixtapeTitle && (
+                <IconButton
+                  component={<SaveIcon />}
+                  callback={() => this.setState({ editingMixtapeTitle: false })}
+                  //size = "large"
+                />
+              )}
+
+              <div className="mixtape-page-title">
+                <Form.Control
+                  type="email"
+                  className="mixtape_title"
+                  size = "lg"
+                  defaultValue={this.state.mixtape.title}
+                  disabled={!this.state.editingMixtapeTitle}
+                  maxLength="100"
+                />
+                <Link to={"/User/" + this.state.mixtape.ownerId}>
+                  {this.state.mixtape.owner.username}
+                </Link>
+              </div>
+            </div>
+
+            <div className="mixtapeShare-container">
+              <IconButton component={<CallMergeIcon />} />
+              <IconButton component={<CallSplitIcon />} />
+              <AddCollaboratorModal />
+            </div>
+
           </Card.Header>}
           <Card.Body>
             <div className="song-container">
@@ -104,7 +121,7 @@ export default class MixtapePage extends React.Component {
           <Card.Body>
             <div className="comment-section-container">
               <div className="comment-section-header">
-                <div>
+                <div className="likes_and_listens-container">
                   <IconButton component={<ThumbUpIcon />} />
                   <IconButton component={<ThumbDownIcon />} />
                 </div>
@@ -118,14 +135,15 @@ export default class MixtapePage extends React.Component {
               <div>
                 <Card className="comments-card">
                   <Card.Header>
-                    <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>Comments:</div>
+                    <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}><h3>Comments:</h3></div>
                     <div className="space-above" style={{display:"flex", flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
                       <div>Leave a Comment: </div>
                       <input class="form-control" type="text" placeholder="Write your comment here..." style={{width:"80%"}}/>
                     </div>
                   </Card.Header>
                   <Card.Body className="scroll-content comments-section">
-                    {!this.state.loading && this.state.mixtape.comments.map(comment => <Comment comment={comment}/>)}
+                    {!this.state.loading && this.state.mixtape.comments.map(comment => <Comment comment={comment} />)}
+                    
                   </Card.Body>
                 </Card>
               </div>
