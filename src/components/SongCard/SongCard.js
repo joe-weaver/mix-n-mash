@@ -8,14 +8,10 @@ import "./SongCardStyle.css";
 
 const SongCard = (props) => {
   return (
-    <Card className="song-card" key={props.song.name}>
-      <div className="song-body">
-        <div className="song-title">
-          <img src={"https://img.youtube.com/vi/"+props.song.youtubeId+"/0.jpg"} style={{height:"30pt"}}/>
-          <div>{props.song.name}</div>
-          <IconButton component={<CancelIcon />} />
-        </div>
-      </div>
+    <Card className="song-card mm-card" key={props.song.name}>
+      <img src={"https://img.youtube.com/vi/"+props.song.youtubeId+"/0.jpg"} className="thumbnail-image"/>
+      <div className="song-title">{props.song.name}</div>
+      <IconButton component={<CancelIcon />} />
     </Card>
   );
 };

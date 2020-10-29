@@ -2,6 +2,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+}
+
+.mixtape-title-container {
+  display: flex;
+  align-items: top;
+  flex-direction: row;
 }
 
 .mixtape-page-title {
@@ -26,11 +33,12 @@
   justify-content: space-between;
 }
 
-.mixtape_title {
-  resize: none;
+.mixtape-title {
+  font-size: 1.5rem !important;
+  text-align: center;
 }
 
-.mixtape_title:disabled {
+.mixtape-title:disabled {
   background-color: transparent !important;
   border-color: transparent !important;
   color: white !important;
@@ -45,24 +53,39 @@
   -webkit-transform: scale(2);
 }
 
-
-.video-preview {
-
+.song-and-video {
+  display: flex;
+  flex-direction: row;
+  max-height: 60vh;
 }
 
-.comment-section-header {
+.video-container {
+  width: 50%;
+  max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-preview {
+  max-height: 50vh;
+}
+
+.song-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.likes-listens {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: space-between;
+  align-items: center;
 }
 
-.comment-section-header div+div {
+.likes-listens div+div {
   margin-left:20px
-}
-
-.comment-section-container {
-
 }
 
 .likes_and_listens-container {

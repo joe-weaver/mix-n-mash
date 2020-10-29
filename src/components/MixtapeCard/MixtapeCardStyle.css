@@ -1,6 +1,4 @@
 .mixtape-card {
-  color: black !important;
-  background-color: var(--primary-color) !important;
   padding: 5px;
   border-radius: 10px;
   display: flex;
@@ -22,9 +20,6 @@
 .mixtape-card-title {
   font-size: larger;
   font-weight: light;
-}
-
-.mixtape-card-user {
 }
 
 .mixtape-card-description {

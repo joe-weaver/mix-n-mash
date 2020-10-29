@@ -19,15 +19,23 @@ const items = [
 export default class MyMixtapes extends React.Component {
   constructor() {
     super();
-    this.state = { mixtapes: [], loading: false };
+    this.state = { userId: 1, mixtapes: [], loading: false };
 
     this.loadData();
   }
 
   loadData = () => {
     fetch("/TestData.json")
-      .then(response => {return response.json();})
-      .then(jsonResponse => this.setState({ mixtapes: jsonResponse.data, loading: false }));
+      .then(response => response.json())
+      .then(jsonResponse => {
+        let mixtapes = null;
+        for(let u of jsonResponse.users){
+          if(parseInt(u._id) === this.state.userId){
+            mixtapes = u.mixtapes;
+          }
+        }
+        this.setState({ mixtapes: mixtapes, loading: false })
+      });
   };
 
   render() {

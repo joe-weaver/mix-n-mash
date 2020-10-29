@@ -10,12 +10,13 @@
     flex-direction: column;
   }
   
-.user_top_body{
+.user-top-body{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 50%
+  height: 30%
 }
-.users_mixtapes-container{
-  height: 50%
+
+.users-mixtapes-container{
+  height: 70%
 }

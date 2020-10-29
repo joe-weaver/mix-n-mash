@@ -45,6 +45,24 @@
             "content": "And reply to my own comments :)",
             "timeSent": "10/27 4:14pm"
           }]
+        },
+        {
+          "userId": 1,
+          "username": "RyzonX",
+          "content": "I'm commenting on this again.",
+          "timeSent": "10/27 4:14pm",
+          "replies": [{
+            "userId": 0,
+            "username": "thunderbolt67",
+            "content": "Why though",
+            "timeSent": "10/27 4:14pm"
+          },
+          {
+            "userId": 1,
+            "username": "RyzonX",
+            "content": "I dunno, because I can?",
+            "timeSent": "10/27 4:14pm"
+          }]
         }
       ],
       "private": false,

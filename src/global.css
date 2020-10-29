@@ -30,6 +30,10 @@ body {
   overflow: hidden;
 }
 
+* {
+  font-size: 2vh;
+}
+
 /* ##################################################################### */
 /* Color Utils */
 .primary-color {
@@ -145,24 +149,48 @@ body {
 /* Link Style */
 .mm-link-light {
   color: white !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mm-link-light:hover {
+  color: rgb(207, 207, 207) !important;
+  text-decoration: underline;
+}
+
+.mm-link-light:active {
+  color: rgb(207, 207, 207) !important;
+  text-decoration: underline;
+}
+
+.mm-link-light:visited {
+  color: rgb(226, 226, 226) !important;
 }
 
 .mm-link-dark {
   color: var(--primary-color) !important;
-  text-decoration: underline;
   cursor: pointer;
   user-select: none;
 }
 
 .mm-link-dark:hover {
   color: var(--primary-color-darker) !important;
+  text-decoration: underline;
 }
 
 .mm-link-dark:active {
   color: var(--primary-color-darker) !important;
+  text-decoration: underline;
 }
 
 .mm-link-dark:visited {
   color: var(--primary-color-lighter) !important;
 }
 /* ##################################################################### */
+/* Card Style */
+
+.mm-card {
+  background-color: var(--primary-color-transparent-more) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
+}

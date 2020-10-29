@@ -2,6 +2,8 @@ import React from "react";
 
 import { DropdownButton, Dropdown, ButtonGroup } from "react-bootstrap";
 
+import "./DropdownStyle.css"
+
 const CustomDropdown = (props) => {
   let variant = "secondary";
 
