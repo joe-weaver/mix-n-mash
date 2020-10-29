@@ -9,15 +9,15 @@ import "./MixtapeCardStyle.css";
 
 const MixtapeCard = (props) => {
   return (
-      <Card className="mixtape-card" key={props.mixtape._id}>
+      <Card className="mixtape-card mm-card" key={props.mixtape._id}>
         <div className="mixtape-card-image"></div>
 
         <div className="mixtape-card-body">
         <Link to={"/MyMixtapes/" + props.mixtape._id}>
-          <div>{props.mixtape.title}</div>
+          <h4 className="mm-link-light">{props.mixtape.title}</h4>
         </Link>
         <Link to={"/User/" + props.mixtape.ownerId}>
-          <div>{props.mixtape.owner.username}</div>
+          <div className="mm-link-dark">{props.mixtape.owner.username}</div>
         </Link>
           <div>{props.mixtape.description}</div>
         </div>
@@ -25,6 +25,7 @@ const MixtapeCard = (props) => {
         <div className="mixtape-card-delete">
           <div>
             <IconButton component={<HighlightOffIcon />} />
+            
           </div>
         </div>
       </Card>

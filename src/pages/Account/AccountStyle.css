@@ -25,4 +25,15 @@
   justify-content: space-between;
   align-items: top;
   flex-direction: row;
+  
+}
+
+.mashmatesList-container{
+  width: 35%;
+}
+.filler{
+  width: 10%;
+}
+.mashmateRequests-container{
+  width: 45%;
 }

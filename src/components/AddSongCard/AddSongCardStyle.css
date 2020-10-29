@@ -1,22 +1,19 @@
-.add-song-result {
-    color: black !important;
-    background-color: var(--primary-color) !important;
-    padding: 5px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .add-song-card {
-    background-color: var(--primary-color) !important;
-  }
-  
-  .add-song-title {
-    width: 30rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: top;
-    flex-direction: row;
-    font-size: larger;
-    font-weight: light;
-  }
+.add-song-card {
+  width: 30vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row !important;
+  font-size: larger;
+  font-weight: light;
+  padding: 5px 10px;
+}
+
+.add-song-card + .add-song-card {
+  margin-top: 10px;
+}
+
+.thumbnail-image{
+  width: 4vw;
+  border-radius: 5px;
+}

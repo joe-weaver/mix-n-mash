@@ -76,7 +76,7 @@ export default class MixtapePage extends React.Component {
                   disabled={!this.state.editingMixtapeTitle}
                   maxLength="50"
                 />
-                <Link>{this.state.mixtape.owner.username}</Link>
+                <Link><div className="mm-link-dark">{this.state.mixtape.owner.username}</div></Link>
               </div>
             </div>
             <div>
@@ -105,8 +105,8 @@ export default class MixtapePage extends React.Component {
               </div>
               </div>
               <div className="song-container">
-                Songs
-                <div className="scroll-content song-list">
+                <div className="space-below">Songs</div>
+                <div className="scroll-content song-list space-below">
                   {!this.state.loading && this.state.mixtape.songs.map((song) => (
                     <SongCard song={song} />
                   ))}
@@ -114,7 +114,7 @@ export default class MixtapePage extends React.Component {
                 <AddSongModal />
               </div>
             </div>
-            <div className="comment-section-container">
+            <div className="comment-section-container space-above">
               <div>
                 <Card className="comments-card">
                   <Card.Header>
@@ -124,7 +124,8 @@ export default class MixtapePage extends React.Component {
                     </div>
                   </Card.Header>
                   <Card.Body className="scroll-content comments-section">
-                    {!this.state.loading && this.state.mixtape.comments.map(comment => <Comment comment={comment}/>)}
+                    {!this.state.loading && this.state.mixtape.comments.map(comment => <Comment comment={comment} />)}
+                    
                   </Card.Body>
                 </Card>
               </div>

@@ -8,7 +8,7 @@ import "./MashmateCardStyle.css";
 
 const MashmateCard = (props) => {
   return (
-    <Card className="mashmate-card" key={props.mashmate.mashmateId}>
+    <Card className="mashmate-card mm-card" key={props.mashmate.mashmateId}>
       <div className="mashmate-body">
         <div className="mashmate-title">
           {props.mashmate.username}

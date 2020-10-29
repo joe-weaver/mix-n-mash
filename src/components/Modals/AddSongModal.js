@@ -33,7 +33,7 @@ const AddSongModal = (props) => {
 
     return (
         <>
-        <Button variant="primary" onClick={handleShow}>
+        <Button variant="primary" className="mm-btn-alt" onClick={handleShow}>
             Add Song
         </Button>
 

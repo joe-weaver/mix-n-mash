@@ -10,10 +10,10 @@ import "./MashmateRequestCardStyle.css";
 
 const MashmateRequestCard = (props) => {
   return (
-    <Card className="mashmate-request-card" key={props.mashmateRequest.senderId}>
+    <Card className="mashmate-request-card mm-card" key={props.mashmateRequest.senderId}>
       <div className="mashmate-request-body">
         <div className="mashmate-request-title">
-          {props.mashmateRequest.username}
+          <b>{props.mashmateRequest.username}</b>
         </div>
         <div className="mashmate-request-timeSent">
           {" Time Sent: " +

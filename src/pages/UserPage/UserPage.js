@@ -56,19 +56,19 @@ export default class MixtapePage extends React.Component {
             <Card.Body>
 
               {/*Bio stuff  */}
-              <div className="user_top_body">
+              <div className="user-top-body">
                 {!this.state.loading && this.state.user.bio}
-                <div className= "user_page_buttons">
+                <div className= "user-page-buttons">
                 <Button className="mm-btn-alt">Send Mashmate Request</Button>
                 <Button className="mm-btn-alt">Follow</Button>
                 </div>
               </div>
 
               {/*List of their public mixtapes  */}
-              <div className="users_mixtapes-container">
+              <div className="users-mixtapes-container">
                 <h4>{!this.state.loading && this.state.user.username}'s Mixtapes</h4>
                   
-                <div className="scroll-content" style={{maxHeight: "275px"}}>
+                <div className="scroll-content" style={{height: "90%"}}>
                 {!this.state.loading && this.state.mixtapes.map((mixtape) => (
                 <MixtapeResultCard mixtape={mixtape} />
               ))}

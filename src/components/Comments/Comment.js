@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import IconButton from "../../components/IconButton/IconButton"
+import ReplyIcon from '@material-ui/icons/Reply';
 import "./CommentStyle.css";
 
 const Comment = (props) => {
@@ -8,7 +10,13 @@ const Comment = (props) => {
     return (
         <>
             <div className="space-below" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
-                <div><Link to={"/User/" + props.comment.userId}>{props.comment.username}:</Link>{props.comment.content}</div>
+                <div>
+                    <Link to={"/User/" + props.comment.userId}>
+                        {props.comment.username}:
+                    </Link>
+                    {props.comment.content} 
+                    <IconButton component={<ReplyIcon />} edge="end"/>Reply
+                </div>
                 <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>{props.comment.timeSent}</div>
             </div>
             {props.comment.replies.map(reply =>
