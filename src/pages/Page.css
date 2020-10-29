@@ -5,9 +5,9 @@
 }
 
 .page-content {
-  width: 90vw;
-  height: 83vh;
-  margin: 5vh 5vw;
+  width: 96vw;
+  height: 89vh;
+  margin: 2vh 2vw;
   background-color: var(--secondary-color) !important;
 }
 
