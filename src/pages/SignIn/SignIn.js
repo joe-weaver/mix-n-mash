@@ -77,6 +77,9 @@ export default class SignIn extends React.Component {
                 </Form.Group>
                 <Button variant="primary" className="mm-btn-alt" onClick={() => this.setState({forgotCredential: false, signup: false})}>
                   Create Account
+                </Button>        
+                <Button variant="primary" className="mm-btn-alt" onClick={() => this.setState({forgotCredential: false, signup: false})}> 
+                  Cancel
                 </Button>
               </Form>
             </Card.Body>}

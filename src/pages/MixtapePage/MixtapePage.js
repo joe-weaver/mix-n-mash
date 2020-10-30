@@ -77,7 +77,7 @@ export default class MixtapePage extends React.Component {
                   disabled={!this.state.editingMixtapeTitle}
                   maxLength="50"
                 />
-                <Link><div className="mm-link-dark">{this.state.mixtape.owner.username}</div></Link>
+                <Link to={"/User/" + this.state.mixtape.ownerId}><div className="mm-link-dark">{this.state.mixtape.owner.username}</div></Link>
               </div>
             </div>
             <div>
