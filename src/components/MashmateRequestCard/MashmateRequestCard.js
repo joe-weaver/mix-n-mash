@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CancelIcon from "@material-ui/icons/Cancel";
-
+import { Link } from "react-router-dom";
 import IconButton from "../IconButton/IconButton";
 import { formatDate } from "../../utils/DateUtils";
 
@@ -13,7 +13,11 @@ const MashmateRequestCard = (props) => {
     <Card className="mashmate-request-card mm-card" key={props.mashmateRequest.senderId}>
       <div className="mashmate-request-body">
         <div className="mashmate-request-title">
-          <b>{props.mashmateRequest.username}</b>
+        
+        {/*NEED TO CHANGE USER/0 FOR RESPECTIVE IDS*/}
+        <Link to={"/User/0"}>
+        <div className="mixtape-result-user mm-link-dark"><b>{props.mashmateRequest.username}</b></div>
+        </Link>
         </div>
         <div className="mashmate-request-timeSent">
           {" Time Sent: " +
