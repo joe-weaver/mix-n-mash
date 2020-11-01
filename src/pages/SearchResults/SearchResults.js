@@ -15,59 +15,42 @@ const items = [
   "Any"
 ];
 
-export default class SearchResults extends React.Component {
-  constructor(props) {
-    super(props);
+const SearchResults = (props) => {
+  // Extract the id from the url
+  let url = window.location.pathname.split("/results?search_query=");
+  console.log(url);
+  let {loading, error, data} = {loading: false, error: null, data: {username: "Test", bio: "", mixtapes: []}}//useQuery();
 
-    // Extract the id from the url
-    let url = window.location.pathname.split("/results?search_query=");
-    let id = parseInt(url[url.length - 1]);
-    this.state = { id: id, loading: true };
-
-    this.loadData();
-  }
-
-  loadData = () => {
-    fetch("/TestData.json")
-      .then(response => {return response.json();})
-      .then(jsonResponse => this.setState({ mixtapes: jsonResponse.data, loading: false }));
-  };
-
-  render() {
-    return (
-      <div>
-        <div className="page-container">
-          <Navbar currentPage={NavbarLinks} />
-          <Card className="page-content">
-            <Card.Header className="content-header">
-              <div><h1>Search Results</h1>
-              Searching for: </div>
-              <div>
-                <Dropdown
-                  title="MyDropdown"
-                  items={items}
-                  selectionCallback={(key) => console.log(key)}
-                />
-                <IconButton
-                  component={<RefreshIcon />}
-                  callback={() => console.log("Refresh")}
-                ></IconButton>
-
-                {/*May need another smaller dropdown for sorting
-                and Filter Hyperlink that opens up a modal with checkboxes 
-                
-                Both located below Hottest Dropdown and Refresh-button*/}
-              </div>
-            </Card.Header>
-            <Card.Body className="scroll-content">
-              {!this.state.loading && this.state.mixtapes.map((mixtape) => (
-                <MixtapeResultCard mixtape={mixtape} />
-              ))}
-            </Card.Body>
-          </Card>
-        </div>
+  return (
+    <div>
+      <div className="page-container">
+        <Navbar currentPage={NavbarLinks} />
+        <Card className="page-content">
+          <Card.Header className="content-header">
+            <div><h1>Search Results</h1>
+            Searching for: </div>
+            <div>
+              <Dropdown
+                title="MyDropdown"
+                items={items}
+                selectionCallback={(key) => console.log(key)}
+              />
+              <IconButton
+                component={<RefreshIcon />}
+                callback={() => console.log("Refresh")}
+              ></IconButton>
+            </div>
+          </Card.Header>
+          <Card.Body className="scroll-content">
+            {!loading && data.mixtapes.map((mixtape) => (
+              <MixtapeResultCard mixtape={mixtape} />
+            ))}
+          </Card.Body>
+        </Card>
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+export default SearchResults;
 

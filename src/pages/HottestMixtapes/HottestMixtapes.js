@@ -16,52 +16,41 @@ const items = [
   "Hottest Mixtapes of All Time"
 ];
 
-export default class HottestMixtapes extends React.Component {
-  constructor() {
-    super();
-    this.state = { mixtapes: [], loading: true };
+const HottestMixtapes  = (props) => {
+  let {loading, error, data} = {loading: false, error: null, data: {mixtapes: []}}//useQuery();
 
-    this.loadData();
-  }
-
-  loadData = () => {
-    fetch("/TestData.json")
-      .then(response => {return response.json();})
-      .then(jsonResponse => this.setState({ mixtapes: jsonResponse.data, loading: false }));
-  };
-
-  render() {
-    return (
-      <div>
-        <div className="page-container">
-          <Navbar currentPage={NavbarLinks.HOTTEST_MIXTAPES} />
-          <Card className="page-content">
-            <Card.Header className="content-header">
-              <h1>Hottest Mixtapes</h1>
-              <div>
-                <Dropdown
-                  title="MyDropdown"
-                  items={items}
-                  selectionCallback={(key) => console.log(key)}
-                />
-                <IconButton
-                  component={<RefreshIcon />}
-                  callback={() => console.log("Refresh")}
-                ></IconButton>
-                {/*May need another smaller dropdown for sorting
-                and Filter Hyperlink that opens up a modal with checkboxes 
-                
-                Both located below Hottest Dropdown and Refresh-button*/}
-              </div>
-            </Card.Header>
-            <Card.Body className="scroll-content">
-              {!this.state.loading && this.state.mixtapes.map((mixtape) => (
-                <MixtapeResultCard mixtape={mixtape} />
-              ))}
-            </Card.Body>
-          </Card>
-        </div>
+  return (
+    <div>
+      <div className="page-container">
+        <Navbar currentPage={NavbarLinks.HOTTEST_MIXTAPES} />
+        <Card className="page-content">
+          <Card.Header className="content-header">
+            <h1>Hottest Mixtapes</h1>
+            <div>
+              <Dropdown
+                title="MyDropdown"
+                items={items}
+                selectionCallback={(key) => console.log(key)}
+              />
+              <IconButton
+                component={<RefreshIcon />}
+                callback={() => console.log("Refresh")}
+              ></IconButton>
+              {/*May need another smaller dropdown for sorting
+              and Filter Hyperlink that opens up a modal with checkboxes 
+              
+              Both located below Hottest Dropdown and Refresh-button*/}
+            </div>
+          </Card.Header>
+          <Card.Body className="scroll-content">
+            {!loading && data.mixtapes.map((mixtape) => (
+              <MixtapeResultCard mixtape={mixtape} />
+            ))}
+          </Card.Body>
+        </Card>
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+export default HottestMixtapes;

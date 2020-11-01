@@ -2,82 +2,55 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { NavbarLinks } from "../../data/NavbarLinks";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
+import { useQuery } from "@apollo/client";
 
 import Navbar from "../../components/Navbar/Navbar";
+import { userClient, getUsers } from "../../services/userService";
 
 import "../Page.css";
 import "./UserPageStyle.css";
 
-export default class MixtapePage extends React.Component {
-  constructor(props) {
-    super(props);
+const UserPage  = (props) => {
+  let url = window.location.pathname.split("/");
+  let idFromUrl = parseInt(url[url.length - 1]);
+  let [id, setId] = React.useState(idFromUrl);
 
-    // Extract the id from the url
-    let url = window.location.pathname.split("/");
-    let id = parseInt(url[url.length - 1]);
-    this.state = { id: id, loading: true };
+  let {loading, error, data} = useQuery(getUsers, {client: userClient, onCompleted: (data) => console.log(data)});
 
-    this.loadData();
-  }
+  return (
+    <div>
+      <div className="page-container">
+        <Navbar currentPage={NavbarLinks} />
+        <Card className="page-content">
+          <Card.Header className="content-header">
+            <h1>{!loading && data.username}</h1>
+          </Card.Header>
+          <Card.Body>
 
-  loadData() {
-    fetch("/TestData.json")
-      .then(response => response.json())
-      .then(jsonResponse => {
-        let mixtapes = [];
-        for(let m of jsonResponse.data){
-          if(parseInt(m.ownerId) === this.state.id){
-            mixtapes.push(m);
-          }
-        }
-
-        let user = null;
-        for(let u of jsonResponse.users){
-          if(u._id === this.state.id){
-            user = u;
-          }
-        }
-
-        console.log(user);
-
-        this.setState({loading: false, mixtapes: mixtapes, user: user})
-      });
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="page-container">
-          <Navbar currentPage={NavbarLinks} />
-          <Card className="page-content">
-            <Card.Header className="content-header">
-              <h1>{!this.state.loading && this.state.user.username}</h1>
-            </Card.Header>
-            <Card.Body>
-
-              {/*Bio stuff  */}
-              <div className="user-top-body">
-                {!this.state.loading && this.state.user.bio}
-                <div className= "user-page-buttons">
-                <Button className="mm-btn-alt">Send Mashmate Request</Button>
-                <Button className="mm-btn-alt">Follow</Button>
-                </div>
+            {/*Bio stuff */}
+            <div className="user-top-body">
+              {!loading && data.bio}
+              <div className= "user-page-buttons">
+              <Button className="mm-btn-alt">Send Mashmate Request</Button>
+              <Button className="mm-btn-alt">Follow</Button>
               </div>
+            </div>
 
-              {/*List of their public mixtapes  */}
-              <div className="users-mixtapes-container">
-                <h4>{!this.state.loading && this.state.user.username}'s Mixtapes</h4>
-                  
-                <div className="scroll-content" style={{height: "90%"}}>
-                {!this.state.loading && this.state.mixtapes.map((mixtape) => (
-                <MixtapeResultCard mixtape={mixtape} />
-              ))}
-                </div>
+            {/*List of their public mixtapes  */}
+            <div className="users-mixtapes-container">
+              <h4>{!loading && data.username}'s Mixtapes</h4>
+                
+              <div className="scroll-content" style={{height: "90%"}}>
+              {!true && data.mixtapes.map((mixtape) => (
+              <MixtapeResultCard mixtape={mixtape} />
+            ))}
               </div>
-            </Card.Body>
-          </Card>
-        </div>
+            </div>
+          </Card.Body>
+        </Card>
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+export default UserPage;

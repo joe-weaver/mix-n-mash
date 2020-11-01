@@ -23,7 +23,7 @@ export default function App() {
         <Route path="/" exact component={SignIn} />
         <Route path="/HottestMixtapes" component={HottestMixtapes} />
         <Route exact path="/MyMixtapes" component={MyMixtapes} />
-        <Route exact path="/MyMixtapes/:mixtapeId" component={MixtapePage} />
+        <Route exact path="/Mixtape/:mixtapeId" component={MixtapePage} />
         <Route path="/Account" component={Account} />
         <Route path="/SearchResults" component={SearchResults} />
         <Route exact path="/User/:userId" component={UserPage} />

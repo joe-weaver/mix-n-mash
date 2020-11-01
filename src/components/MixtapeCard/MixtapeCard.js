@@ -13,7 +13,7 @@ const MixtapeCard = (props) => {
         <div className="mixtape-card-image"></div>
 
         <div className="mixtape-card-body">
-        <Link to={"/MyMixtapes/" + props.mixtape._id}>
+        <Link to={"/Mixtape/" + props.mixtape._id}>
           <h4 className="mm-link-light">{props.mixtape.title}</h4>
         </Link>
         <Link to={"/User/" + props.mixtape.ownerId}>

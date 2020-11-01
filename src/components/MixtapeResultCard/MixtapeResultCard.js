@@ -10,7 +10,7 @@ const MixtapeResultCard = (props) => {
       <div className="mixtape-result-image"></div>
 
       <div className="mixtape-result-body">
-        <Link to={"/MyMixtapes/" + props.mixtape._id}>
+        <Link to={"/Mixtape/" + props.mixtape._id}>
           <div className="mixtape-result-title mm-link-light"><h4>{props.mixtape.title}</h4></div>
         </Link>
 
