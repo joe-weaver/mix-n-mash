@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Form } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
-import CallMergeIcon from "@material-ui/icons/CallMerge";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
@@ -14,6 +13,7 @@ import IconButton from "../../components/IconButton/IconButton";
 import SongCard from "../../components/SongCard/SongCard";
 import AddSongModal from "../../components/Modals/AddSongModal"
 import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
+import MashMixtapeModal from "../../components/Modals/MashMixtapeModal";
 import Comment from "../../components/Comments/Comment";
 
 import "../Page.css";
@@ -58,7 +58,7 @@ const MixtapePage = (props) => {
             </div>
           </div>
           <div>
-            <IconButton component={<CallMergeIcon />} />
+            <MashMixtapeModal />
             <IconButton component={<CallSplitIcon />} />
             <AddCollaboratorModal />
           </div>
