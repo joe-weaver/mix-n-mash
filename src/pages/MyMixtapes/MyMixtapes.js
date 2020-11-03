@@ -18,7 +18,12 @@ const items = [
 
 const MyMixtapes = (props) => {
   let userId = "SomeString";  // We will eventually have to get this from some user object
-  let {loading, error, data} = {loading: false, error: null, data: {mixtapes: []}}//useQuery();
+
+  let user = JSON.parse(window.sessionStorage.getItem("user"));
+
+  const mixtapes = user.mixtapes;
+
+  console.log(mixtapes);
 
   return (
     <div>
@@ -40,7 +45,7 @@ const MyMixtapes = (props) => {
             </div>
           </Card.Header>
           <Card.Body className="scroll-content">
-            {!loading && data.mixtapes.map((mixtape) => (
+            {mixtapes.map((mixtape) => (
               <MixtapeCard mixtape={mixtape} />
             ))}
           </Card.Body>

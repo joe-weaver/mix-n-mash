@@ -1,9 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Card, Button, FormControl, Form } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import { useHistory } from "react-router-dom";
 
 import { NavbarLinks } from "../../data/NavbarLinks";
 import Navbar from "../../components/Navbar/Navbar";
@@ -17,7 +17,16 @@ import "../Page.css";
 const Account = (props) => {
   let [editingBio, setEditingBio] = React.useState(false);
   let [editingPassword, setEditingPassword] = React.useState(false);
-  let {loading, error, data} = {loading: false, error: null, data: {username: "Test", bio: "Test bio", mixtapes: [], mashmates: [], receivedMashmateRequests: []}}//useQuery();
+  //let {loading, error, data} = {loading: false, error: null, data: {username: "Test", bio: "Test bio", mixtapes: [], mashmates: [], receivedMashmateRequests: []}}//useQuery();
+
+  const user = JSON.parse(window.sessionStorage.getItem("user"));
+
+  const history = useHistory();
+
+  const logOut = () => {
+    window.sessionStorage.clear();
+    history.push("/");
+  }
 
   return (
     <div>
@@ -27,9 +36,7 @@ const Account = (props) => {
           <Card.Header className="content-header">
             <h1>My Account</h1>
             <div>
-              <Link to="/">
-                <Button className="mm-btn-alt">Log Out</Button>
-              </Link>
+              <Button className="mm-btn-alt" onClick={logOut}>Log Out</Button>
             </div>
           </Card.Header>
           <Card.Body className="scroll-content">
@@ -52,7 +59,7 @@ const Account = (props) => {
             <FormControl
               as="textarea"
               className="bio-textarea"
-              defaultValue={loading ? "" : data.bio}
+              defaultValue={user.bio}
               disabled={!editingBio}
               maxLength="255"
             />
@@ -96,7 +103,7 @@ const Account = (props) => {
                 Mashmates
                 <IconButton component={<RefreshIcon />} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
-                  {!loading && data.mashmates.map((mashmate) => (
+                  {user.mashmates.map((mashmate) => (
                     <MashmateCard mashmate={mashmate} />
                   ))}
                 </div>
@@ -108,7 +115,7 @@ const Account = (props) => {
                 Mashmate Requests
                 <IconButton component={<RefreshIcon />} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
-                  {!loading && data.receivedMashmateRequests.map((mashmateRequest) => (
+                  {user.receivedMashmateRequests.map((mashmateRequest) => (
                     <MashmateRequestCard mashmateRequest={mashmateRequest} />
                   ))}
                 </div>
