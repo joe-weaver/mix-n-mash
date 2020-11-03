@@ -8,6 +8,9 @@ import Dropdown from "../../components/Dropdown/Dropdown";
 import IconButton from "../../components/IconButton/IconButton";
 import MixtapeCard from "../../components/MixtapeCard/MixtapeCard";
 
+import { useQuery } from "@apollo/client";
+import { mixtapesClient, getUserMixtapes } from "../../services/mixtapesService";
+
 const items = [
   "All Mixtapes",
   "Owner",
@@ -17,13 +20,12 @@ const items = [
 ];
 
 const MyMixtapes = (props) => {
-  let userId = "SomeString";  // We will eventually have to get this from some user object
 
   let user = JSON.parse(window.sessionStorage.getItem("user"));
 
-  const mixtapes = user.mixtapes;
+  let userId = user._id;
 
-  console.log(mixtapes);
+  let {loading, error, data} = useQuery(getUserMixtapes,{client: mixtapesClient, variables:{userId}});
 
   return (
     <div>
@@ -45,7 +47,7 @@ const MyMixtapes = (props) => {
             </div>
           </Card.Header>
           <Card.Body className="scroll-content">
-            {mixtapes.map((mixtape) => (
+            {!loading && data.getUserMixtapes.map((mixtape) => (
               <MixtapeCard mixtape={mixtape} />
             ))}
           </Card.Body>

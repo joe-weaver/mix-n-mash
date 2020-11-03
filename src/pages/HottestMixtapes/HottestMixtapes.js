@@ -8,7 +8,7 @@ import Dropdown from "../../components/Dropdown/Dropdown";
 import IconButton from "../../components/IconButton/IconButton";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
 import { useQuery } from "@apollo/client";
-import { hottestMixtapesClient, getHottestMixtapes } from "../../services/hottestMixtapesService";
+import { mixtapesClient, getHottestMixtapes } from "../../services/mixtapesService";
 
 import "../Page.css";
 
@@ -21,7 +21,7 @@ const items = [
 
 const HottestMixtapes  = (props) => {
   //let {loading, error, data} = {loading: false, error: null, data: {mixtapes: []}}//useQuery();
-  let {loading, error, data} = useQuery(getHottestMixtapes, {client: hottestMixtapesClient});
+  let {loading, error, data} = useQuery(getHottestMixtapes, {client: mixtapesClient});
   if(!loading){
     console.log("HEY!");
     console.log(data.hottestMixtapes[0]);    
