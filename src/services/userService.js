@@ -8,13 +8,22 @@ export const userClient = new ApolloClient({
 export const getUsers = gql`
 {
     users {
-    _id,
-    username,
-    email,
-    hashedPassword,
-    bio,
-    numFollowers,
-    active
+        _id,
+        username,
+        email,
+        hashedPassword,
+        bio,
+        numFollowers,
+        active,
+        mixtapes,
+        receivedMashmateRequests {
+            senderId,
+            recipientId,
+            username,
+            timeSent,
+            seen
+        },
+        mashmates
     }
 }`;
 
@@ -40,6 +49,15 @@ query User($usernameOrEmail: String!){
         hashedPassword,
         bio,
         numFollowers,
-        active
+        active,
+        mixtapes,
+        receivedMashmateRequests {
+            senderId,
+            recipientId,
+            username,
+            timeSent,
+            seen
+        },
+        mashmates
     }
 }`
