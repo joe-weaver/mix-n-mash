@@ -2,8 +2,8 @@ import React from "react";
 import { Card, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { testClient, getTests } from "../../services/testService";
-import { useQuery } from "@apollo/client";
-import { getUsers } from "../../services/userService";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { getUsers, getUser, userClient } from "../../services/userService";
 
 import "./SignInStyle.css";
 
@@ -11,7 +11,14 @@ const SignIn = (props) => {
   let [forgotPassword, setForgotPassword] = React.useState(false);
   let [signup, setSignup] = React.useState(false);
 
-  let {loading, error, data} = useQuery(getTests, {client: testClient});
+  // let {loading, error, data} = useQuery(getTests, {client: testClient});
+
+  const [get_user, {loading, data}] = useLazyQuery(getUser, {client: userClient});
+
+  let test_func = () => {
+    get_user({variables: {id: "5fa07b0648c48023941d9e43"}});
+  };
+  
 
   if(loading){
     return <div>Loading</div>
@@ -21,7 +28,7 @@ const SignIn = (props) => {
 
   return (
     <div className="splash-container">
-      <Button onClick={getUsers}>testCall</Button>
+      <Button onClick={ test_func }>testCall</Button>
       <Card className="text-center signin-card secondary-color-transparent">
         {!forgotPassword && !signup && <><h1>Mix n' Mash</h1><h2>Log In</h2></>}
         {forgotPassword && <h2>Forgot Password</h2>}
