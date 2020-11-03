@@ -25,7 +25,20 @@ export const getUsers = gql`
         },
         mashmates
     }
-}`
+}`;
+
+export const getUser = gql`
+    query User($id: String!){
+        user(id: $id){
+            username,
+            email,
+            hashedPassword,
+            bio,
+            numFollowers,
+            active
+        }
+    }
+`;
 
 export const getUserByUsernameOrEmail = gql`
 query User($usernameOrEmail: String!){
