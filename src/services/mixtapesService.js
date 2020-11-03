@@ -55,4 +55,31 @@ export const getUserMixtapes = gql`
   }
 `
 
+export const queryMixtapes = gql`
+query qMixtapes($searchTerm: String!){
+  queryMixtapes(searchTerm: $searchTerm){
+    _id,
+    title,
+    description,
+    genres,
+    image,
+    songs {
+      name
+      youtubeId
+    },
+    ownerId,
+    ownerName,
+    private,
+    listens,
+    likes,
+    likesPerDay,
+    listensPerDay,
+    collaborators {
+      userId,
+      username,
+      privilegeLevel
+    }
+  }
+}`
+
 

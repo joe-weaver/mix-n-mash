@@ -1,35 +1,36 @@
-.mixtape-result {
+.user-result {
   padding: 5px;
   border-radius: 10px;
   display: flex;
   flex-direction: row !important;
 }
 
-.mixtape-result + .mixtape-result {
+.user-result + .user-result {
   margin-top: 10px;
 }
 
-.mixtape-result + .user-result {
+.user-result + .mixtape-result {
   margin-top: 10px;
 }
 
-.mixtape-result-image {
+
+.user-result-image {
   width: 10%;
 }
 
-.mixtape-result-body {
+.user-result-body {
   width: 70%;
 }
 
-.mixtape-result-title {
+.user-result-title {
   font-size: larger;
   font-weight: light;
 }
 
-.mixtape-result-description {
+.user-result-description {
   font-size: smaller;
 }
 
-.mixtape-result-stats {
+.user-result-stats {
   width: 20%;
 }
