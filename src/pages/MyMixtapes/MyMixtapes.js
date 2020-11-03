@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
@@ -10,6 +10,7 @@ import MixtapeCard from "../../components/MixtapeCard/MixtapeCard";
 
 import { useQuery } from "@apollo/client";
 import { mixtapesClient, getUserMixtapes } from "../../services/mixtapesService";
+import { userClient } from "../../services/userService";
 
 const items = [
   "All Mixtapes",
@@ -27,6 +28,16 @@ const MyMixtapes = (props) => {
 
   let {loading, error, data} = useQuery(getUserMixtapes,{client: mixtapesClient, variables:{userId}});
 
+  let [filterKey, setFilterKey] = useState("All Mixtapes");
+
+  const filterFunctions = {
+    "All Mixtapes": (mixtape) => true,
+    "Owner": (mixtape) => mixtape.ownerId == userId,
+    "Shared With Me": (mixtape) => mixtape.collaborators.reduce((acc, x) => x.userId === userId || acc, false),
+    "Can Edit": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === userId && x.privilegeLevel === "edit") || acc, false),
+    "Can View": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === userId && x.privilegeLevel === "view") || acc, false)
+  }
+
   return (
     <div>
       <div className="page-container">
@@ -38,7 +49,7 @@ const MyMixtapes = (props) => {
               <Dropdown
                 title="MyDropdown"
                 items={items}
-                selectionCallback={(key) => console.log(key)}
+                selectionCallback={(key) => setFilterKey(key)}
               />
               <IconButton
                 component={<RefreshIcon />}
@@ -47,7 +58,7 @@ const MyMixtapes = (props) => {
             </div>
           </Card.Header>
           <Card.Body className="scroll-content">
-            {!loading && data.getUserMixtapes.map((mixtape) => (
+            {!loading && data.getUserMixtapes.filter(filterFunctions[filterKey]).map((mixtape) => (
               <MixtapeCard mixtape={mixtape} />
             ))}
           </Card.Body>
