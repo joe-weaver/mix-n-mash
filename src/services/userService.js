@@ -30,3 +30,16 @@ export const getUser = gql`
         }
     }
 `;
+
+export const getUserByUsernameOrEmail = gql`
+query User($usernameOrEmail: String!){
+    getUserByUsernameOrEmail(usernameOrEmail: $usernameOrEmail){
+        _id,
+        username,
+        email,
+        hashedPassword,
+        bio,
+        numFollowers,
+        active
+    }
+}`

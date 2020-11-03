@@ -1,34 +1,40 @@
 import React from "react";
 import { Card, Button, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { testClient, getTests } from "../../services/testService";
-import { useQuery, useLazyQuery } from "@apollo/client";
-import { getUsers, getUser, userClient } from "../../services/userService";
+import { useLazyQuery } from "@apollo/client";
+import { userClient, getUserByUsernameOrEmail } from "../../services/userService";
+import { useHistory } from "react-router-dom";
 
 import "./SignInStyle.css";
 
 const SignIn = (props) => {
   let [forgotPassword, setForgotPassword] = React.useState(false);
   let [signup, setSignup] = React.useState(false);
+  let [checkingLogin, setCheckingLogin] = React.useState(false);
 
-  // let {loading, error, data} = useQuery(getTests, {client: testClient});
+  let [username, setUsername] = React.useState("");
 
-  const [get_user, {loading, data}] = useLazyQuery(getUser, {client: userClient});
+  const history = useHistory();
 
-  let test_func = () => {
-    get_user({variables: {id: "5fa07b0648c48023941d9e43"}});
-  };
-  
+  const retrievedUser = () => {
+    let user = data.getUserByUsernameOrEmail;
+    if(user){
+      console.log(user);
+      window.sessionStorage.setItem("user", JSON.stringify(user));
+      history.push("/HottestMixtapes");
+    } else {
+      console.log("No such user")
+    }
+  }
 
-  if(loading){
-    return <div>Loading</div>
-  } else {
-    console.log(data);
+  const [getUser, { loading, data }] = useLazyQuery(getUserByUsernameOrEmail, {client: userClient, onCompleted: retrievedUser});
+
+  const tryLogIn = () => {
+    console.log("Trying Log in");
+    getUser({variables: {usernameOrEmail: username}});
   }
 
   return (
     <div className="splash-container">
-      <Button onClick={ test_func }>testCall</Button>
       <Card className="text-center signin-card secondary-color-transparent">
         {!forgotPassword && !signup && <><h1>Mix n' Mash</h1><h2>Log In</h2></>}
         {forgotPassword && <h2>Forgot Password</h2>}
@@ -41,6 +47,8 @@ const SignIn = (props) => {
               <Form.Control
                 type="email"
                 placeholder="Enter username or email"
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
               />
             </Form.Group>
 
@@ -49,11 +57,9 @@ const SignIn = (props) => {
             </Form.Label>
               <Form.Control type="password" placeholder="Password" />
             </Form.Group>
-            <Link to="/HottestMixtapes" className="space-above">
-              <Button variant="primary" className="mm-btn-alt">
-                Get Mashing!
-              </Button>{" "}
-            </Link>
+            <Button variant="primary" className="mm-btn-alt" onClick={tryLogIn}>
+              Get Mashing!
+            </Button>{" "}
             <Button variant="primary" className="mm-btn-alt" onClick={() => setSignup(true)}>
               No Account? Sign Up!
             </Button>

@@ -7,8 +7,11 @@ import Navbar from "../../components/Navbar/Navbar";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import IconButton from "../../components/IconButton/IconButton";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
+import { useQuery } from "@apollo/client";
+import { hottestMixtapesClient, getHottestMixtapes } from "../../services/hottestMixtapesService";
 
 import "../Page.css";
+
 
 const items = [
   "Hottest Mixtapes Today",
@@ -17,8 +20,13 @@ const items = [
 ];
 
 const HottestMixtapes  = (props) => {
-  let {loading, error, data} = {loading: false, error: null, data: {mixtapes: []}}//useQuery();
-
+  //let {loading, error, data} = {loading: false, error: null, data: {mixtapes: []}}//useQuery();
+  let {loading, error, data} = useQuery(getHottestMixtapes, {client: hottestMixtapesClient});
+  if(!loading){
+    console.log("HEY!");
+    console.log(data.hottestMixtapes[0]);    
+  }
+  
   return (
     <div>
       <div className="page-container">
@@ -43,8 +51,8 @@ const HottestMixtapes  = (props) => {
             </div>
           </Card.Header>
           <Card.Body className="scroll-content">
-            {!loading && data.mixtapes.map((mixtape) => (
-              <MixtapeResultCard mixtape={mixtape} />
+            {!loading && data.hottestMixtapes.map((hottestMixtape) => (
+              <MixtapeResultCard mixtape={hottestMixtape} />
             ))}
           </Card.Body>
         </Card>
