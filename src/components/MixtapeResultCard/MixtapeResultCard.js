@@ -15,7 +15,8 @@ const MixtapeResultCard = (props) => {
         </Link>
 
         <Link to={"/User/" + props.mixtape.ownerId}>
-          <div className="mixtape-result-user mm-link-dark">{props.mixtape.owner.username}</div>
+          <div className="mixtape-result-user mm-link-dark">{props.mixtape.userName}</div>
+          {/*<div className="mixtape-result-user mm-link-dark">{props.mixtape.owner.username}</div>*/}
         </Link>
 
         <div className="mixtape-result-description">
