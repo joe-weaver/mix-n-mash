@@ -44,7 +44,14 @@ const HottestMixtapes  = (props) => {
     console.log("TEMPDATA: \n" + tempData);
     console.log("\nDropdown State initial value: " + dropdownState);
   }
-  
+
+  function updateDropdown(e) {
+    const item = e;
+    console.log("\nITEM: "+ item);
+    setDropdownState(dropdownState => item);
+  }
+
+
   return (
     <div>
       <div className="page-container">
@@ -57,9 +64,14 @@ const HottestMixtapes  = (props) => {
                 title="MyDropdown"
                 items={items}
                 selectionCallback={
-                  (key) => console.log("Dropdown Key: " + key)
+                  (key) => {
+                    console.log("Dropdown Key: " + key); 
+                    setDropdownState(key);
+                    console.log("Dropdown State: " + dropdownState);}
                 }
-                callback={() => dropdownState.setDropdownState(items)}
+                //callback={() => dropdownState.setDropdownState(items)}
+                //onSelect={() => setDropdownState(items)}
+                //callback={() => this.setState({ dropdownState: items })}
                 
               />
               <IconButton
@@ -73,17 +85,15 @@ const HottestMixtapes  = (props) => {
             </div>
           </Card.Header>
           <Card.Body className="scroll-content">
-
-            {/*Hottest of today*/}
-            {!loading && tempData.sort(function(a, b) {return b.listensPerDay[0] - a.listensPerDay[0];}).map((hottestMixtape) => (
+            {/*******************Hottest of today*******************/}
+            {!loading && (dropdownState == "Hottest Mixtapes Today") && tempData.sort(function(a, b) {return b.listensPerDay[0] - a.listensPerDay[0];}).map((hottestMixtape) => (
               <MixtapeResultCard mixtape={hottestMixtape} />
             ))}
 
-            {/*Hottest of last 7 days */}
-            {!loading && tempData.sort(function(a, b) {
+            {/*******************Hottest of last 7 days *******************/}
+            {!loading && (dropdownState == "Hottest Mixtapes This Week") && tempData.sort(function(a, b) {
               var aListens = 0;
               var bListens = 0;
-
              {/*If both mixtapes have less than 7 listensPerDay values*/}
              if(b.listensPerDay.length < 7 && a.listensPerDay.length < 7){
               for(var i = 0; i < b.listensPerDay.length; i++){
@@ -94,7 +104,6 @@ const HottestMixtapes  = (props) => {
               }
               return bListens-aListens;
              }
-
              {/*If only b_mixtape has less than 7 listensPerDay values*/}
              if(b.listensPerDay.length < 7 && a.listensPerDay.length >= 7){
               for(var i = 0; i < b.listensPerDay.length; i++){
@@ -105,7 +114,6 @@ const HottestMixtapes  = (props) => {
               }
               return bListens-aListens;
              }
-            
              {/*If only a_mixtape has less than 7 listensPerDay values*/}
              if(b.listensPerDay.length >= 7 && a.listensPerDay.length < 7){
               for(var i = 0; i < 7; i++){
@@ -116,7 +124,6 @@ const HottestMixtapes  = (props) => {
               }
               return bListens-aListens;
              }
-
              {/*If BOTH mixtapes have at least 7 listensPerDay values*/} 
               for(var i = 0; i < 7; i++){
                 var bListens = bListens + b.listensPerDay[i];
@@ -128,12 +135,10 @@ const HottestMixtapes  = (props) => {
             
             }).map((hottestMixtape) => (<MixtapeResultCard mixtape={hottestMixtape} />))}
             
-
-            {/*Hottest of all time */}
-            {!loading && tempData.sort(function(a, b) {return b.listens - a.listens;}).map((hottestMixtape) => (
+            {/*******************Hottest of all time *******************/}
+            {!loading && (dropdownState == "Hottest Mixtapes of All Time") && tempData.sort(function(a, b) {return b.listens - a.listens;}).map((hottestMixtape) => (
               <MixtapeResultCard mixtape={hottestMixtape} />
             ))}
-
           </Card.Body>
         </Card>
       </div>
