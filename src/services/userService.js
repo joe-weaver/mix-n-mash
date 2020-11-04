@@ -30,12 +30,22 @@ export const getUsers = gql`
 export const getUser = gql`
     query User($id: String!){
         user(id: $id){
+            _id,
             username,
             email,
             hashedPassword,
             bio,
             numFollowers,
-            active
+            active,
+            mixtapes,
+            receivedMashmateRequests {
+                senderId,
+                recipientId,
+                username,
+                timeSent,
+                seen
+            },
+            mashmates
         }
     }
 `;

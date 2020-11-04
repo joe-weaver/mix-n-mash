@@ -10,6 +10,8 @@ import Navbar from "../../components/Navbar/Navbar";
 import IconButton from "../../components/IconButton/IconButton";
 import MashmateCard from "../../components/MashmateCard/MashmateCard";
 import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRequestCard";
+import { useQuery } from "@apollo/client"
+import { userClient, getUser } from "../../services/userService";
 
 import "./AccountStyle.css";
 import "../Page.css";
@@ -17,9 +19,14 @@ import "../Page.css";
 const Account = (props) => {
   let [editingBio, setEditingBio] = React.useState(false);
   let [editingPassword, setEditingPassword] = React.useState(false);
-  //let {loading, error, data} = {loading: false, error: null, data: {username: "Test", bio: "Test bio", mixtapes: [], mashmates: [], receivedMashmateRequests: []}}//useQuery();
 
-  const user = JSON.parse(window.sessionStorage.getItem("user"));
+  const [user, setUser] = React.useState(JSON.parse(window.sessionStorage.getItem("user")));
+
+  const refreshUser = (data) => {
+    setUser(data.user);
+  }
+
+  const {loading, error, data, refetch} = useQuery(getUser, { client: userClient, variables: {id: user._id}, onCompleted: refreshUser});
 
   const history = useHistory();
 
@@ -101,7 +108,7 @@ const Account = (props) => {
             <div className="mashmateStuff-container">
               <div className="mashmatesList-container">
                 Mashmates
-                <IconButton component={<RefreshIcon />} />
+                <IconButton component={<RefreshIcon />} callback={() => refetch()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
                   {user.mashmates.map((mashmate) => (
                     <MashmateCard mashmate={mashmate} />
@@ -113,7 +120,7 @@ const Account = (props) => {
               </div>
               <div className="mashmateRequests-container">
                 Mashmate Requests
-                <IconButton component={<RefreshIcon />} />
+                <IconButton component={<RefreshIcon />} callback={() => refetch()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
                   {user.receivedMashmateRequests.map((mashmateRequest) => (
                     <MashmateRequestCard mashmateRequest={mashmateRequest} />

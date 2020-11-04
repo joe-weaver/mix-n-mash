@@ -19,8 +19,7 @@ const items = [
 ];
 
 const HottestMixtapes  = (props) => {
-  //let {loading, error, data} = {loading: false, error: null, data: {mixtapes: []}}//useQuery();
-  let {loading, error, data} = useQuery(getHottestMixtapes, {client: mixtapesClient});
+  let {loading, error, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient});
   const [dropdownState, setDropdownState] = React.useState("Hottest Mixtapes Today");
   if(!loading){
     console.log("HEY!");
@@ -49,18 +48,14 @@ const HottestMixtapes  = (props) => {
                 items={items}
                 selectionCallback={
                   (key) => {
-                    console.log("Dropdown Key: " + key); 
                     setDropdownState(key);
-                    console.log("Dropdown State: " + dropdownState);}
+                  }
                 }
-                //callback={() => dropdownState.setDropdownState(items)}
-                //onSelect={() => setDropdownState(items)}
-                //callback={() => this.setState({ dropdownState: items })}
                 
               />
               <IconButton
                 component={<RefreshIcon />}
-                callback={() => console.log("Refresh")}
+                callback={() => refetch()}
               ></IconButton>
               {/*May need another smaller dropdown for sorting
               and Filter Hyperlink that opens up a modal with checkboxes 

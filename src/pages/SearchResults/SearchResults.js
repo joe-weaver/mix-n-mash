@@ -33,8 +33,8 @@ const SearchResults = (props) => {
   const searchTerm = query.get("search");
 
   // Objects to catch search results
-  let userObj = {loading: null, error: null, data: null};
-  let mixtapeObj = {loading: null, error: null, data: null};
+  let userObj = {loading: null, error: null, data: null, refetch: null};
+  let mixtapeObj = {loading: null, error: null, data: null, refetch: null};
 
   // Query on page load the the params in the url
   userObj = useQuery(queryUsers, {client: userClient, variables: {searchTerm}});
@@ -45,8 +45,8 @@ const SearchResults = (props) => {
   const [refreshMixtapeObj, {}] = useLazyQuery(queryMixtapes, {client: mixtapesClient, variables: {searchTerm}});
 
   const refreshResults = () => {
-    refreshUserObj({onComplete: (data) => userObj.data = data});
-    refreshMixtapeObj({onComplete: (data) => mixtapeObj.data = data});
+    userObj.refetch();
+    mixtapeObj.refetch();
   }
 
   const [filterKey, setFilterKey] = React.useState("Any");

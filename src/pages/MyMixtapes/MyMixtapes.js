@@ -10,7 +10,6 @@ import MixtapeCard from "../../components/MixtapeCard/MixtapeCard";
 
 import { useQuery } from "@apollo/client";
 import { mixtapesClient, getUserMixtapes } from "../../services/mixtapesService";
-import { userClient } from "../../services/userService";
 
 const items = [
   "All Mixtapes",
@@ -26,7 +25,7 @@ const MyMixtapes = (props) => {
 
   let userId = user._id;
 
-  let {loading, error, data} = useQuery(getUserMixtapes,{client: mixtapesClient, variables:{userId}});
+  let {loading, error, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId}});
 
   let [filterKey, setFilterKey] = useState("All Mixtapes");
 
@@ -53,7 +52,7 @@ const MyMixtapes = (props) => {
               />
               <IconButton
                 component={<RefreshIcon />}
-                callback={() => {console.log("Refresh")}}
+                callback={() => refetch()}
               ></IconButton>
             </div>
           </Card.Header>
