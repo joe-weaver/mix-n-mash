@@ -19,6 +19,9 @@ import Comment from "../../components/Comments/Comment";
 import "../Page.css";
 import "./MixtapePageStyle.css";
 
+
+var dropdownState = "Today";
+
 const MixtapePage = (props) => {
     // Extract the id from the url
     let url = window.location.pathname.split("/");
