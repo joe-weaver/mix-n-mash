@@ -61,3 +61,25 @@ query User($usernameOrEmail: String!){
         mashmates
     }
 }`
+
+export const queryUsers = gql`
+query qUsers($searchTerm: String!){
+    queryUsers(searchTerm: $searchTerm){
+        _id,
+        username,
+        email,
+        hashedPassword,
+        bio,
+        numFollowers,
+        active,
+        mixtapes,
+        receivedMashmateRequests {
+            senderId,
+            recipientId,
+            username,
+            timeSent,
+            seen
+        },
+        mashmates
+    }
+}`
