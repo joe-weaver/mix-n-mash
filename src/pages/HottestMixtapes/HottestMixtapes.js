@@ -12,21 +12,6 @@ import { mixtapesClient, getHottestMixtapes } from "../../services/mixtapesServi
 
 import "../Page.css";
 
-
-// var dropdownState = "Hottest Mixtapes Today";
-
-// function byToday(a){
-//   if (a instanceof Array){
-//     var b = new mixtape;
-//     for (var i = 0; i < a.length; i++){
-
-//     }
-//   }
-//   else{
-//     return a;
-//   }
-// }
-
 const items = [
   "Hottest Mixtapes Today",
   "Hottest Mixtapes This Week",
@@ -50,7 +35,6 @@ const HottestMixtapes  = (props) => {
     console.log("\nITEM: "+ item);
     setDropdownState(dropdownState => item);
   }
-
 
   return (
     <div>
