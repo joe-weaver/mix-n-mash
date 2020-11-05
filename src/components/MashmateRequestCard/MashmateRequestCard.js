@@ -15,7 +15,7 @@ const MashmateRequestCard = (props) => {
         <div className="mashmate-request-title">
         
         {/*NEED TO CHANGE USER/0 FOR RESPECTIVE IDS*/}
-        <Link to={"/User/0"}>
+        <Link to={"/User/" + props.mashmateRequest.senderId}>
         <div className="mixtape-result-user mm-link-dark"><b>{props.mashmateRequest.username}</b></div>
         </Link>
         </div>

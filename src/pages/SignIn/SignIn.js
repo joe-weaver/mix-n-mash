@@ -3,6 +3,7 @@ import { Card, Button, Form } from "react-bootstrap";
 import { useLazyQuery } from "@apollo/client";
 import { userClient, getUserByUsernameOrEmail } from "../../services/userService";
 import { useHistory } from "react-router-dom";
+import GeneratorButton from "../../utils/GeneratorButton"
 
 import "./SignInStyle.css";
 
@@ -35,6 +36,7 @@ const SignIn = (props) => {
 
   return (
     <div className="splash-container">
+      <GeneratorButton/>
       <Card className="text-center signin-card secondary-color-transparent">
         {!forgotPassword && !signup && <><h1>Mix n' Mash</h1><h2>Log In</h2></>}
         {forgotPassword && <h2>Forgot Password</h2>}

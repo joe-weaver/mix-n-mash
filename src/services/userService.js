@@ -45,7 +45,10 @@ export const getUser = gql`
                 timeSent,
                 seen
             },
-            mashmates
+            mashmates {
+                id,
+                username
+            }
         }
     }
 `;
@@ -68,7 +71,10 @@ query User($usernameOrEmail: String!){
             timeSent,
             seen
         },
-        mashmates
+        mashmates {
+            id,
+            username
+        }
     }
 }`
 
@@ -90,6 +96,43 @@ query qUsers($searchTerm: String!){
             timeSent,
             seen
         },
-        mashmates
+        mashmates {
+            id,
+            username
+        }
     }
 }`
+
+export const addUser = gql`
+mutation AddUser(
+        $username: String!
+        $email: String!
+        $hashedPassword: String!
+        $bio: String!
+        $numFollowers: Int!
+        $following: [String]!
+        $mashmates: [mashmateInput]!
+        $mixtapes: [String]!
+        $genrePreferences: [genrePreferencesInput]!
+        $sentMashmateRequests: [mashmateRequestInput]!
+        $receivedMashmateRequests: [mashmateRequestInput]!
+        $active: Boolean!
+    ){
+    addUser(
+        username: $username
+        email: $email
+        hashedPassword: $hashedPassword
+        bio: $bio
+        numFollowers: $numFollowers
+        following: $following
+        mashmates: $mashmates
+        mixtapes: $mixtapes
+        genrePreferences: $genrePreferences
+        sentMashmateRequests: $sentMashmateRequests
+        receivedMashmateRequests: $receivedMashmateRequests
+        active: $active
+    ){
+        _id
+        username
+    }
+}`;

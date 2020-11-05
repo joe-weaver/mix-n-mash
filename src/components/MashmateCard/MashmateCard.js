@@ -7,13 +7,14 @@ import IconButton from "../IconButton/IconButton";
 import "./MashmateCardStyle.css";
 
 const MashmateCard = (props) => {
+  console.log(props.mashmate)
+
   return (
-    <Card className="mashmate-card mm-card" key={props.mashmate.mashmateId}>
+    <Card className="mashmate-card mm-card" key={props.mashmate.id}>
       <div className="mashmate-body">
         <div className="mashmate-title">
 
-          {/*NEED TO CHANGE USER/0 FOR RESPECTIVE IDS*/}
-        <Link to={"/User/0"}>
+        <Link to={"/User/" + props.mashmate.id}>
           <div className="mixtape-result-user mm-link-dark">{props.mashmate.username}</div>
         </Link>
           <IconButton component={<CancelIcon />} />

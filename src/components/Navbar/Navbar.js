@@ -68,7 +68,7 @@ const SiteNavbar = (props) => {
               "nav-link" + (page === NavbarLinks.ACCOUNT ? " selected" : "")
             }
           >
-            RyzonX's Account
+            My Account
           </Link>
         </Nav>
       </Navbar.Collapse>
