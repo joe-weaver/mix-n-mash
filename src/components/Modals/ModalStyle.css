@@ -1,5 +1,5 @@
 .modal-dialog{
-    width: 70vw !important;
+    width: 60vw !important;
     max-width: 1000px !important;
     min-width: 500px;
     height: 100vh;
@@ -13,7 +13,7 @@
 .modal-content{
     background-color: rgba(0, 0, 0, 0.7) !important;
     color: white !important;
-    height: 70vh !important;
+    height: 80vh !important;
 }
 
 .modal-header .close {
@@ -32,14 +32,29 @@
     width: 100% !important;
 }
 
+.add-song-modal-header {
+    height: 10vh !important;
+}
+
+.add-song-modal-body {
+    height: 70vh !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
 .add-song-content {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    height: 60%;
 }
 
 .song-preview {
     width: 40% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .song-preview-frame {
@@ -49,6 +64,8 @@
 .search-results {
     display: flex;
     flex-direction: column;
+    width: 55%;
+    height: 100%;
 }
 
 .add-collaborator-body {
@@ -57,4 +74,22 @@
     padding-left: 10vw !important;
     padding-right: 10vw !important;
     justify-content: center;
+}
+
+.search-bar {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+}
+
+.confirm-add-song {
+    height: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.confirm-add-song-list {
+    height: 80%;
 }

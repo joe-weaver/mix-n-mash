@@ -3,7 +3,30 @@ import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 export const mixtapesClient = new ApolloClient({
     uri: "http://localhost:3000/Mixtapes",
     cache: new InMemoryCache()
-})
+});
+
+export const getMixtape = gql`
+query getMixtape($id: String!){
+  mixtape(id: $id){
+    _id,
+    title,
+    description,
+    genres,
+    image,
+    songs {
+      name
+      youtubeId
+    },
+    ownerId,
+    ownerName,
+    private,
+    listens,
+    likes,
+    likesPerDay,
+    listensPerDay
+  }
+}
+`
 
 export const getHottestMixtapes = gql`
 {
@@ -123,4 +146,14 @@ mutation AddMixtape(
   }
 `;
 
-
+export const addSongs = gql`
+mutation addSongs($id: String!, $songs: [songInput]!){
+  addSongs(id: $id, songs: $songs){
+    _id
+    songs{
+      youtubeId,
+      name
+    }
+  }
+}
+`

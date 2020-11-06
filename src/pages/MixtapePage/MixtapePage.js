@@ -7,6 +7,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { Link } from "react-router-dom";
 import Multiselect from "react-bootstrap-multiselect"
+import { useQuery, useMutation } from "@apollo/client";
 
 import Navbar from "../../components/Navbar/Navbar";
 import IconButton from "../../components/IconButton/IconButton";
@@ -15,6 +16,7 @@ import AddSongModal from "../../components/Modals/AddSongModal"
 import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
 import MashMixtapeModal from "../../components/Modals/MashMixtapeModal";
 import Comment from "../../components/Comments/Comment";
+import { mixtapesClient, getMixtape, addSongs as addSongsMut } from "../../services/mixtapesService"; 
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -25,9 +27,18 @@ var dropdownState = "Today";
 const MixtapePage = (props) => {
     // Extract the id from the url
     let url = window.location.pathname.split("/");
-    const id = parseInt(url[url.length - 1]);
+    const id = url[url.length - 1];
+
     let [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
-    let {loading, error, data} = {loading: false, error: null, data: {mixtape: {title: "Test", description: "test", songs: [{name: "Song 1", youtubeId: ""}], comments: [], ownerId: "0", owner: {username: "TestOwner"}}}}//useQuery();
+    let {loading, error, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+    const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
+      console.log(cache);
+      console.log(mutationResult);
+    }})
+
+    const addSongs = (songs) => {
+      addSongsMutation({variables: {id: id, songs: songs}});
+    }
 
   return (
     <div className="page-container">
@@ -53,11 +64,11 @@ const MixtapePage = (props) => {
               <Form.Control
                 type="input"
                 className="mixtape-title"
-                defaultValue={data.mixtape.title}
+                defaultValue={!loading && data.mixtape.title}
                 disabled={!editingMixtapeTitle}
                 maxLength="50"
               />
-              <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-dark">{data.mixtape.owner.username}</div></Link>
+              {!loading && <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-dark">{data.mixtape.ownerName}</div></Link>}
             </div>
           </div>
           <div>
@@ -93,7 +104,7 @@ const MixtapePage = (props) => {
                   <SongCard song={song} />
                 ))}
               </div>
-              <AddSongModal />
+              <AddSongModal addSongsCallback={addSongs} />
             </div>
           </div>
           <div className="comment-section-container space-above">
@@ -106,7 +117,7 @@ const MixtapePage = (props) => {
                   </div>
                 </Card.Header>
                 <Card.Body className="scroll-content comments-section">
-                  {!loading && data.mixtape.comments.map(comment => <Comment comment={comment} />)}
+                  {/* {!loading && data.mixtape.comments.map(comment => <Comment comment={comment} />)} */}
                   
                 </Card.Body>
               </Card>

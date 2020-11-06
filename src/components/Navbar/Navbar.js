@@ -41,9 +41,9 @@ const SiteNavbar = (props) => {
             />
           </Form>
           <IconButton
-                  component={<SearchIcon />}
-                  callback={doSearch}
-                />
+            component={<SearchIcon />}
+            callback={doSearch}
+          />
           <Link
             to="/HottestMixtapes"
             className={
