@@ -117,6 +117,7 @@ mutation AddMixtape(
   $listens: Int!
   $likes: Int!
   $dislikes: Int!
+  $comments: [commentsInput]!
   $private: Boolean!
   $collaborators: [collaboratorsInput]!
   $timeCreated: Int!
@@ -134,6 +135,7 @@ mutation AddMixtape(
       listens: $listens
       likes: $likes
       dislikes: $dislikes
+      comments: $comments
       private: $private
       collaborators: $collaborators
       timeCreated: $timeCreated
@@ -156,4 +158,33 @@ mutation addSongs($id: String!, $songs: [songInput]!){
     }
   }
 }
-`
+`;
+
+// export const addComments = gql`
+// mutation AddComments($id: String!, comments: [commentsInput]!){
+//     addComment(id: $id, comments: $comments){
+//       _id
+//       comments{
+//         userId
+//         username
+//         content
+//         publishingTime
+//         replies
+//       }
+//     }
+//   }
+// `;
+
+// export const addReplies = gql`
+// mutation AddReplies($id: String!, replies: [repliesInput]!){
+//     addReply(id: $id, replies: $replies){
+//       _id
+//       replies{
+//         userId
+//         username
+//         content
+//         publishingTime
+//       }
+//     }
+//   }
+// `;

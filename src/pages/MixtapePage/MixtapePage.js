@@ -40,6 +40,15 @@ const MixtapePage = (props) => {
       addSongsMutation({variables: {id: id, songs: songs}});
     }
 
+    // const [addCommentsMutation] = useMutation(addCommentsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
+    //   console.log(cache);
+    //   console.log(mutationResult);
+    // }})
+
+    // const addComments = (comments) => {
+    //   addCommentsMutation({variables: {id: id, comments: comments}});
+    // }
+
   return (
     <div className="page-container">
       <Navbar />
