@@ -117,6 +117,7 @@ mutation AddMixtape(
   $listens: Int!
   $likes: Int!
   $dislikes: Int!
+  $comments: [commentInput]!
   $private: Boolean!
   $collaborators: [collaboratorsInput]!
   $timeCreated: Int!
@@ -134,6 +135,7 @@ mutation AddMixtape(
       listens: $listens
       likes: $likes
       dislikes: $dislikes
+      comments: $comments
       private: $private
       collaborators: $collaborators
       timeCreated: $timeCreated
