@@ -97,12 +97,24 @@ function generateMixtapeName(username){
     return name;
 }
 
+const songChoices = [
+    {name: "Men At Work - Down Under (Video)", youtubeId: "XfR9iY5y94s"},
+    {name: "Michael Jackson - Billie Jean (Official Video)", youtubeId: "Zi_XLOBDo_Y"},
+    {name: "Bon Jovi - Livin' On A Prayer (Official Music Video)", youtubeId: "lDK9QqIzhwk"},
+    {name: "Toto - Africa (Official Music Video)", youtubeId: "FTQbiNvZqaY"},
+    {name: "The Police - Every Breath You Take", youtubeId: "OMOGaugKpzs"},
+    {name: "George Michael - Careless Whisper (Official Video)", youtubeId: "izGwDsrQ1eQ"},
+    {name: "Daryl Hall & John Oates - Maneater (Official Video)", youtubeId: "yRYFKcMa_Ek"},
+    {name: "Toto - Rosanna (Official Music Video)", youtubeId: "qmOLtTGvsbM"},
+    {name: "Phil Collins - In The Air Tonight (Official Music Video)", youtubeId: "YkADj0TPrJA"},
+]
+
 function generateSongs(){
-    let r = randomFromRangeInt(3, 30);
+    let r = randomFromRangeInt(3, 9);
     let songs = [];
 
     for(let i = 0; i < r; i++){
-        songs.push({name: "Men At Work - Down Under (Video)", youtubeId: "XfR9iY5y94s"});
+        songs.push(randomFrom(songChoices));
     }
 
     return songs;

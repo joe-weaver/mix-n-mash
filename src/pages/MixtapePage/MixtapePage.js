@@ -8,6 +8,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { Link } from "react-router-dom";
 import Multiselect from "react-bootstrap-multiselect"
 import { useQuery, useMutation } from "@apollo/client";
+import YouTube from "react-youtube";
 
 import Navbar from "../../components/Navbar/Navbar";
 import IconButton from "../../components/IconButton/IconButton";
@@ -21,24 +22,49 @@ import { mixtapesClient, getMixtape, addSongs as addSongsMut } from "../../servi
 import "../Page.css";
 import "./MixtapePageStyle.css";
 
-
-var dropdownState = "Today";
-
 const MixtapePage = (props) => {
-    // Extract the id from the url
-    let url = window.location.pathname.split("/");
-    const id = url[url.length - 1];
+  // Extract the id from the url
+  let url = window.location.pathname.split("/");
+  const id = url[url.length - 1];
 
-    let [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
-    let {loading, error, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
-    const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
-      console.log(cache);
-      console.log(mutationResult);
-    }})
+  let [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
+  let {loading, error, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+  const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
+    console.log(cache);
+    console.log(mutationResult);
+  }})
 
-    const addSongs = (songs) => {
-      addSongsMutation({variables: {id: id, songs: songs}});
+  const addSongs = (songs) => {
+    addSongsMutation({variables: {id: id, songs: songs}});
+  }
+
+  const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
+  const [autoplay, setAutoplay] = React.useState(false);
+
+  // const playerReady = (event) => {
+  //   // Pauses the song when the player loads
+  //   // Effectively, this pauses ONLY the first song of the playlist
+  //   event.target.pauseVideo();
+  // }
+
+  const changeToNextSong = (event) => {
+    if(!loading){
+      let index = (currentSongIndex + 1) % data.mixtape.songs.length;
+      console.log("Setting index to..." + index)
+      setCurrentSongIndex(index);
+
+      if(index !== 0){
+        setAutoplay(true);
+      } else {
+        setAutoplay(false);
+      }
+
+      // Player state won't update if we play the same song twice in a row. Handle this:
+      if(index !== 0 && data.mixtape.songs[index].youtubeId === data.mixtape.songs[index-1].youtubeId){
+        event.target.seekTo(0);
+      }
     }
+  }
 
   return (
     <div className="page-container">
@@ -82,7 +108,10 @@ const MixtapePage = (props) => {
         <Card.Body className="scroll-content">
           <div className="song-and-video">
             <div className="video-container">
-              <img className="video-preview" src={"https://img.youtube.com/vi/"+(loading ? "" : data.mixtape.songs[0].youtubeId)+"/0.jpg"} />
+              {!loading && <YouTube className="video-preview" 
+                videoId={data.mixtape.songs.length > 0 ? data.mixtape.songs[currentSongIndex].youtubeId : ""}
+                onEnd={changeToNextSong} opts={{playerVars: { autoplay: autoplay}}}
+              />}
               <div className="likes-listens">
                 <div>
                   <IconButton component={<ThumbUpIcon />} />
