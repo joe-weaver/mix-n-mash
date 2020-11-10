@@ -17,3 +17,7 @@
   width: 4vw;
   border-radius: 2px;
 }
+
+.previewable:hover {
+  cursor: pointer;
+}
