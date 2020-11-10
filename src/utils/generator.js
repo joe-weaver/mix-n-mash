@@ -32,6 +32,7 @@ export const generateMixtape = (user) => {
     mixtape.listens = randomFromRangeInt(0, 10000);
     mixtape.likes = randomFromRangeInt(0, 1000);
     mixtape.dislikes = randomFromRangeInt(0, 100);
+    mixtape.comments = [];
     mixtape.private = false;
     mixtape.collaborators = [];
     mixtape.timeCreated = 0;
