@@ -28,24 +28,15 @@ const MixtapePage = (props) => {
   const id = url[url.length - 1];
 
   let [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
-  let {loading, error, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
-  const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
-    console.log(cache);
-    console.log(mutationResult);
-  }})
+  let {loading, error, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+  const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient});
 
   const addSongs = (songs) => {
     addSongsMutation({variables: {id: id, songs: songs}});
   }
 
   const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
-  const [autoplay, setAutoplay] = React.useState(false);
-
-  // const playerReady = (event) => {
-  //   // Pauses the song when the player loads
-  //   // Effectively, this pauses ONLY the first song of the playlist
-  //   event.target.pauseVideo();
-  // }
+  const [autoplay, setAutoplay] = React.useState(0);
 
   const [editView, setEditView] = React.useState(null)
 
@@ -58,9 +49,9 @@ const MixtapePage = (props) => {
       setCurrentSongIndex(index);
 
       if(index !== 0){
-        setAutoplay(true);
+        setAutoplay(1);
       } else {
-        setAutoplay(false);
+        setAutoplay(0);
       }
 
       // Player state won't update if we play the same song twice in a row. Handle this:
