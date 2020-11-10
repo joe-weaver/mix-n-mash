@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Form } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
@@ -47,6 +47,10 @@ const MixtapePage = (props) => {
   //   event.target.pauseVideo();
   // }
 
+  const [editView, setEditView] = React.useState(null)
+
+  const user = JSON.parse(window.sessionStorage.getItem("user"));
+
   const changeToNextSong = (event) => {
     if(!loading){
       let index = (currentSongIndex + 1) % data.mixtape.songs.length;
@@ -66,19 +70,40 @@ const MixtapePage = (props) => {
     }
   }
 
+  const userCanEdit = () => {
+    if (!loading){
+      if (data.mixtape.ownerId == user._id){ return true; }
+      if (data.mixtape.collaborators.reduce((acc, x) => (x.userId === user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
+      return false;
+    }
+  }
+
+  if (!loading && editView==null){
+    setEditView(userCanEdit())
+  }
+
+  
+
   return (
     <div className="page-container">
       <Navbar />
       <Card className="page-content">
-
         {/* The Mixtape Header */}
         {!loading &&
         <Card.Header className="mixtape-page-header">
+          {editView ? (
           <Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row"}}>
             <Form.Check type="checkbox" defaultValue="" />
             <Form.Label style={{paddingLeft: "1vw"}}>Public</Form.Label>
           </Form.Group>
+          ):
+          (<Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row", alignItems:"center"}}>
+            <div> </div>
+          </Form.Group>)
+          }  
           <div className="mixtape-title-container">
+            {editView &&
+            <div>
             {!editingMixtapeTitle ? (
               <IconButton component={<EditIcon />}
                 callback={() => setEditingMixtapeTitle(true)}/>) 
@@ -86,6 +111,8 @@ const MixtapePage = (props) => {
               <IconButton component={<SaveIcon />}
                 callback={() => setEditingMixtapeTitle(false)}/>
             )}
+            </div>
+            }
             <div className="mixtape-page-title">
               <Form.Control
                 type="input"
@@ -100,7 +127,9 @@ const MixtapePage = (props) => {
           <div>
             <MashMixtapeModal />
             <IconButton component={<CallSplitIcon />} />
+            {editView &&
             <AddCollaboratorModal />
+            }
           </div>
         </Card.Header>}
 
@@ -124,7 +153,8 @@ const MixtapePage = (props) => {
                   Listens: {!loading && data.mixtape.listens}
                 </div>
               </div>
-              <div>Genres: <Multiselect multiple data={[{value: "Jazz"}, {value: "Rock"}, {value: "Ska"}, {value: "Pop"}, {value: "Classical"}]}/></div>
+              {editView ? (<div>Genres: <Multiselect multiple data={[{value: "Jazz"}, {value: "Rock"}, {value: "Ska"}, {value: "Pop"}, {value: "Classical"}]}/></div>):
+              (<div>Genres: {!loading && <span>{data.mixtape.genres.join(", ")}</span>}</div>)}
             </div>
             <div className="song-container">
               <div className="space-below">Songs</div>
@@ -133,7 +163,9 @@ const MixtapePage = (props) => {
                   <SongCard song={song} />
                 ))}
               </div>
+              {editView &&
               <AddSongModal addSongsCallback={addSongs} />
+              }
             </div>
           </div>
           <div className="comment-section-container space-above">
