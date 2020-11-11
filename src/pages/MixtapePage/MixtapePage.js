@@ -17,7 +17,7 @@ import AddSongModal from "../../components/Modals/AddSongModal"
 import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
 import MashMixtapeModal from "../../components/Modals/MashMixtapeModal";
 import Comment from "../../components/Comments/Comment";
-import { mixtapesClient, getMixtape, addSongs as addSongsMut } from "../../services/mixtapesService"; 
+import { mixtapesClient, getMixtape, addSongs as addSongsMut, editSongs as editSongsMut } from "../../services/mixtapesService"; 
 import CancelIcon from "@material-ui/icons/Cancel";
 
 import "../Page.css";
@@ -33,7 +33,7 @@ const MixtapePage = (props) => {
   let {loading, error, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
   const [isEditing, setEditing] = React.useState(false);
   const [results, setResults] = React.useState({songs: []});
-  const [removeList, setRemoveList] = React.useState([]);
+  const [editList, setEditList] = React.useState([]);
 
   const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
     console.log(cache);
@@ -46,7 +46,7 @@ const MixtapePage = (props) => {
 
   const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
   const [autoplay, setAutoplay] = React.useState(false);
-
+  
   // const playerReady = (event) => {
   //   // Pauses the song when the player loads
   //   // Effectively, this pauses ONLY the first song of the playlist
@@ -74,15 +74,43 @@ const MixtapePage = (props) => {
 
   const enableEditing = () =>{
     setEditingSongs(true);
+    setEditList(data.mixtape.songs.slice());
     console.log("EDITING SONGS: " + editingSongs);
-    return <SongCard editingSongs={editingSongs}/>
+
   }
 
   const disableEditing = () => {
     console.log("EDITING SONGS: " + editingSongs);
+    confirmRemoveSongs();
     setEditingSongs(false);
-    return <SongCard editingSongs={editingSongs}/>
+
   }
+  const [editSongsMutation, __] = useMutation(editSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
+      console.log(cache);
+      console.log(mutationResult);
+    }})
+
+  const removeSong = (index) => {
+    console.log("REMOVE SONG IS CALLED!")
+    let list = editList.filter((song, i) => i !== index);
+    setEditList(list);
+  }
+
+  const confirmRemoveSongs = () => {
+      console.log(editList);
+        let list = editList.map (song => 
+          (
+            {youtubeId: song.youtubeId,
+            name: song.name,
+            }
+          )
+        ) 
+            
+      editSongsMutation({variables: {id: id, songs: list}});
+      setEditList([]);
+
+    }
+
 
   return (
     <div className="page-container">
@@ -148,8 +176,11 @@ const MixtapePage = (props) => {
             <div className="song-container">
               <div className="space-below">Songs</div>
               <div className="scroll-content song-list space-below">
-                {!loading && data.mixtape.songs.map((song) => (
-                  <SongCard song={song} />
+                {!loading && !editingSongs && data.mixtape.songs.map((song, index) => (
+                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} />
+                ))}
+                {!loading && editingSongs && editList.map((song, index) => (
+                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} />
                 ))}
               </div>
               <div>
