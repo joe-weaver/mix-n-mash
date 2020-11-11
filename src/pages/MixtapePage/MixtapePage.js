@@ -204,7 +204,7 @@ const MixtapePage = (props) => {
                 ))}
               </div>
               <div>
-              {editView && <AddSongModal addSongsCallback={addSongs} />
+              {editView && <AddSongModal addSongsCallback={addSongs} />}
               {!editingSongs ? (
                 <IconButton component={<EditIcon />}
                   callback={enableEditing}/>) 
@@ -212,15 +212,9 @@ const MixtapePage = (props) => {
                 <IconButton component={<SaveIcon />}
                   callback={disableEditing}/>
               )}
-              
-              {/* {!editingSongs ? (
-                <div></div>) 
-                : (
-                    <IconButton component={<CancelIcon />}> </IconButton>            
-              )} */}
 
               </div>
-              }
+              
             </div>
           </div>
           <div className="comment-section-container space-above">
