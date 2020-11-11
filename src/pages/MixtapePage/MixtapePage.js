@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Form } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
@@ -18,6 +18,7 @@ import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
 import MashMixtapeModal from "../../components/Modals/MashMixtapeModal";
 import Comment from "../../components/Comments/Comment";
 import { mixtapesClient, getMixtape, addSongs as addSongsMut } from "../../services/mixtapesService"; 
+import CancelIcon from "@material-ui/icons/Cancel";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -28,7 +29,12 @@ const MixtapePage = (props) => {
   const id = url[url.length - 1];
 
   let [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
+  let [editingSongs, setEditingSongs] = React.useState(false);
   let {loading, error, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+  const [isEditing, setEditing] = React.useState(false);
+  const [results, setResults] = React.useState({songs: []});
+  const [removeList, setRemoveList] = React.useState([]);
+
   const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
     console.log(cache);
     console.log(mutationResult);
@@ -66,6 +72,18 @@ const MixtapePage = (props) => {
     }
   }
 
+  const enableEditing = () =>{
+    setEditingSongs(true);
+    console.log("EDITING SONGS: " + editingSongs);
+    return <SongCard editingSongs={editingSongs}/>
+  }
+
+  const disableEditing = () => {
+    console.log("EDITING SONGS: " + editingSongs);
+    setEditingSongs(false);
+    return <SongCard editingSongs={editingSongs}/>
+  }
+
   return (
     <div className="page-container">
       <Navbar />
@@ -86,6 +104,7 @@ const MixtapePage = (props) => {
               <IconButton component={<SaveIcon />}
                 callback={() => setEditingMixtapeTitle(false)}/>
             )}
+            
             <div className="mixtape-page-title">
               <Form.Control
                 type="input"
@@ -133,7 +152,23 @@ const MixtapePage = (props) => {
                   <SongCard song={song} />
                 ))}
               </div>
+              <div>
               <AddSongModal addSongsCallback={addSongs} />
+              {!editingSongs ? (
+                <IconButton component={<EditIcon />}
+                  callback={enableEditing}/>) 
+                : (
+                <IconButton component={<SaveIcon />}
+                  callback={disableEditing}/>
+              )}
+              
+              {/* {!editingSongs ? (
+                <div></div>) 
+                : (
+                    <IconButton component={<CancelIcon />}> </IconButton>            
+              )} */}
+
+              </div>
             </div>
           </div>
           <div className="comment-section-container space-above">
