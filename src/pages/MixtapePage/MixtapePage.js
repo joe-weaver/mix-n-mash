@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Form } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
@@ -17,7 +17,8 @@ import AddSongModal from "../../components/Modals/AddSongModal"
 import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
 import MashMixtapeModal from "../../components/Modals/MashMixtapeModal";
 import Comment from "../../components/Comments/Comment";
-import { mixtapesClient, getMixtape, addSongs as addSongsMut } from "../../services/mixtapesService"; 
+import { mixtapesClient, getMixtape, addSongs as addSongsMut, editSongs as editSongsMut } from "../../services/mixtapesService"; 
+import CancelIcon from "@material-ui/icons/Cancel";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -28,8 +29,16 @@ const MixtapePage = (props) => {
   const id = url[url.length - 1];
 
   let [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
-  let {loading, error, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
-  const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient});
+  let [editingSongs, setEditingSongs] = React.useState(false);
+  let {loading, error, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+  const [isEditing, setEditing] = React.useState(false);
+  const [results, setResults] = React.useState({songs: []});
+  const [editList, setEditList] = React.useState([]);
+
+  const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
+    console.log(cache);
+    console.log(mutationResult);
+  }})
 
   const addSongs = (songs) => {
     addSongsMutation({variables: {id: id, songs: songs}});
@@ -60,6 +69,45 @@ const MixtapePage = (props) => {
       }
     }
   }
+  
+  const enableEditing = () =>{
+    setEditingSongs(true);
+    setEditList(data.mixtape.songs.slice());
+    console.log("EDITING SONGS: " + editingSongs);
+
+  }
+
+  const disableEditing = () => {
+    console.log("EDITING SONGS: " + editingSongs);
+    confirmRemoveSongs();
+    setEditingSongs(false);
+
+  }
+  const [editSongsMutation, __] = useMutation(editSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
+      console.log(cache);
+      console.log(mutationResult);
+    }})
+
+  const removeSong = (index) => {
+    console.log("REMOVE SONG IS CALLED!")
+    let list = editList.filter((song, i) => i !== index);
+    setEditList(list);
+  }
+
+  const confirmRemoveSongs = () => {
+      console.log(editList);
+        let list = editList.map (song => 
+          (
+            {youtubeId: song.youtubeId,
+            name: song.name,
+            }
+          )
+        ) 
+            
+      editSongsMutation({variables: {id: id, songs: list}});
+      setEditList([]);
+
+    }
 
   const userCanEdit = () => {
     if (!loading){
@@ -72,8 +120,6 @@ const MixtapePage = (props) => {
   if (!loading && editView==null){
     setEditView(userCanEdit())
   }
-
-  
 
   return (
     <div className="page-container">
@@ -150,12 +196,30 @@ const MixtapePage = (props) => {
             <div className="song-container">
               <div className="space-below">Songs</div>
               <div className="scroll-content song-list space-below">
-                {!loading && data.mixtape.songs.map((song) => (
-                  <SongCard song={song} />
+                {!loading && !editingSongs && data.mixtape.songs.map((song, index) => (
+                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} />
+                ))}
+                {!loading && editingSongs && editList.map((song, index) => (
+                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} />
                 ))}
               </div>
-              {editView &&
-              <AddSongModal addSongsCallback={addSongs} />
+              <div>
+              {editView && <AddSongModal addSongsCallback={addSongs} />
+              {!editingSongs ? (
+                <IconButton component={<EditIcon />}
+                  callback={enableEditing}/>) 
+                : (
+                <IconButton component={<SaveIcon />}
+                  callback={disableEditing}/>
+              )}
+              
+              {/* {!editingSongs ? (
+                <div></div>) 
+                : (
+                    <IconButton component={<CancelIcon />}> </IconButton>            
+              )} */}
+
+              </div>
               }
             </div>
           </div>

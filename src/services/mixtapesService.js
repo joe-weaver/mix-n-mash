@@ -170,3 +170,15 @@ mutation addSongs($id: String!, $songs: [songInput]!){
   }
 }
 `
+
+export const editSongs = gql`
+mutation editSongs($id: String!, $songs: [songInput]!){
+  editSongs(id: $id, songs: $songs){
+    _id
+    songs{
+      youtubeId,
+      name
+    }
+  }
+}
+`
