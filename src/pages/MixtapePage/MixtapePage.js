@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
@@ -45,13 +45,11 @@ const MixtapePage = (props) => {
   }
 
   const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
-  const [autoplay, setAutoplay] = React.useState(false);
-  
-  // const playerReady = (event) => {
-  //   // Pauses the song when the player loads
-  //   // Effectively, this pauses ONLY the first song of the playlist
-  //   event.target.pauseVideo();
-  // }
+  const [autoplay, setAutoplay] = React.useState(0);
+
+  const [editView, setEditView] = React.useState(null)
+
+  const user = JSON.parse(window.sessionStorage.getItem("user"));
 
   const changeToNextSong = (event) => {
     if(!loading){
@@ -60,9 +58,9 @@ const MixtapePage = (props) => {
       setCurrentSongIndex(index);
 
       if(index !== 0){
-        setAutoplay(true);
+        setAutoplay(1);
       } else {
-        setAutoplay(false);
+        setAutoplay(0);
       }
 
       // Player state won't update if we play the same song twice in a row. Handle this:
@@ -71,7 +69,7 @@ const MixtapePage = (props) => {
       }
     }
   }
-
+  
   const enableEditing = () =>{
     setEditingSongs(true);
     setEditList(data.mixtape.songs.slice());
@@ -111,20 +109,38 @@ const MixtapePage = (props) => {
 
     }
 
+  const userCanEdit = () => {
+    if (!loading){
+      if (data.mixtape.ownerId == user._id){ return true; }
+      if (data.mixtape.collaborators.reduce((acc, x) => (x.userId === user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
+      return false;
+    }
+  }
+
+  if (!loading && editView==null){
+    setEditView(userCanEdit())
+  }
 
   return (
     <div className="page-container">
       <Navbar />
       <Card className="page-content">
-
         {/* The Mixtape Header */}
         {!loading &&
         <Card.Header className="mixtape-page-header">
+          {editView ? (
           <Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row"}}>
             <Form.Check type="checkbox" defaultValue="" />
             <Form.Label style={{paddingLeft: "1vw"}}>Public</Form.Label>
           </Form.Group>
+          ):
+          (<Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row", alignItems:"center"}}>
+            <div> </div>
+          </Form.Group>)
+          }  
           <div className="mixtape-title-container">
+            {editView &&
+            <div>
             {!editingMixtapeTitle ? (
               <IconButton component={<EditIcon />}
                 callback={() => setEditingMixtapeTitle(true)}/>) 
@@ -132,7 +148,8 @@ const MixtapePage = (props) => {
               <IconButton component={<SaveIcon />}
                 callback={() => setEditingMixtapeTitle(false)}/>
             )}
-            
+            </div>
+            }
             <div className="mixtape-page-title">
               <Form.Control
                 type="input"
@@ -147,7 +164,9 @@ const MixtapePage = (props) => {
           <div>
             <MashMixtapeModal />
             <IconButton component={<CallSplitIcon />} />
+            {editView &&
             <AddCollaboratorModal />
+            }
           </div>
         </Card.Header>}
 
@@ -171,7 +190,8 @@ const MixtapePage = (props) => {
                   Listens: {!loading && data.mixtape.listens}
                 </div>
               </div>
-              <div>Genres: <Multiselect multiple data={[{value: "Jazz"}, {value: "Rock"}, {value: "Ska"}, {value: "Pop"}, {value: "Classical"}]}/></div>
+              {editView ? (<div>Genres: <Multiselect multiple data={[{value: "Jazz"}, {value: "Rock"}, {value: "Ska"}, {value: "Pop"}, {value: "Classical"}]}/></div>):
+              (<div>Genres: {!loading && <span>{data.mixtape.genres.join(", ")}</span>}</div>)}
             </div>
             <div className="song-container">
               <div className="space-below">Songs</div>
@@ -184,7 +204,7 @@ const MixtapePage = (props) => {
                 ))}
               </div>
               <div>
-              <AddSongModal addSongsCallback={addSongs} />
+              {editView && <AddSongModal addSongsCallback={addSongs} />
               {!editingSongs ? (
                 <IconButton component={<EditIcon />}
                   callback={enableEditing}/>) 
@@ -200,6 +220,7 @@ const MixtapePage = (props) => {
               )} */}
 
               </div>
+              }
             </div>
           </div>
           <div className="comment-section-container space-above">

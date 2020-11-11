@@ -4,6 +4,7 @@ import AddSongCard from "../../components/AddSongCard/AddSongCard";
 import { searchSongs } from "../../services/youtubeService";
 import IconButton from "../IconButton/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
+import YouTube from "react-youtube";
 
 import "./ModalStyle.css";
 import "../../pages/Page.css";
@@ -13,6 +14,7 @@ const AddSongModal = (props) => {
     const [searchTerm, setSearchTerm] = React.useState("");
     const [results, setResults] = React.useState({songs: []});
     const [addList, setAddList] = React.useState([]);
+    const [previewId, setPreviewId] = React.useState("");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -40,12 +42,14 @@ const AddSongModal = (props) => {
         setResults({songs: []});
         props.addSongsCallback(addList);
         setAddList([]);
+        setPreviewId("");
     }
 
     const cancelAddSongs = () => {
         handleClose();
         setResults({songs: []});
         setAddList([]);
+        setPreviewId("");
     }
 
     return (
@@ -72,10 +76,10 @@ const AddSongModal = (props) => {
             <Modal.Body className="add-song-modal-body">
                 <div className="add-song-content">
                     <div className="song-preview">
-                        <img className="song-preview-frame" src="https://img.youtube.com/vi/XfR9iY5y94s/0.jpg"></img>
+                        <YouTube videoId={previewId} opts = {{height: '100%', width: '100%'}}/>
                     </div>
                     <div className="search-results scroll-content">
-                        {results.songs.map((song, index) => <AddSongCard song={song} addCallback={() => addSong(index)} />)}
+                        {results.songs.map((song, index) => <AddSongCard song={song} addCallback={() => addSong(index)} previewCallback={(id) => setPreviewId(id)}/>)}
                     </div>
                 </div>
                 <div className="confirm-add-song">

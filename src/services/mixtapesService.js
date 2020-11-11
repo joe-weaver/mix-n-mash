@@ -23,7 +23,12 @@ query getMixtape($id: String!){
     listens,
     likes,
     likesPerDay,
-    listensPerDay
+    listensPerDay,
+    collaborators {
+      userId,
+      username,
+      privilegeLevel
+    }
   }
 }
 `
@@ -46,9 +51,15 @@ export const getHottestMixtapes = gql`
       listens,
       likes,
       likesPerDay,
-      listensPerDay
+      listensPerDay,
+      collaborators {
+        userId,
+        username,
+        privilegeLevel
+      }
+    }
   }
-}`
+`
 
 export const getUserMixtapes = gql`
   query Mixtapes($userId: String!){
