@@ -204,14 +204,14 @@ const MixtapePage = (props) => {
                 ))}
               </div>
               <div>
-              {editView && <AddSongModal addSongsCallback={addSongs} />}
-              {!editingSongs ? (
+              {editView && <AddSongModal addSongsCallback={addSongs} disabledButton={editingSongs} />}
+              {editView && (!editingSongs ? (
                 <IconButton component={<EditIcon />}
                   callback={enableEditing}/>) 
                 : (
                 <IconButton component={<SaveIcon />}
                   callback={disableEditing}/>
-              )}
+              ))}
 
               </div>
               
