@@ -41,7 +41,7 @@ const Account = (props) => {
         <Navbar currentPage={NavbarLinks.ACCOUNT} />
         <Card className="page-content">
           <Card.Header className="content-header">
-            <h1>My Account</h1>
+            <h1>{user.username}</h1>
             <div>
               <Button className="mm-btn-alt" onClick={logOut}>Log Out</Button>
             </div>

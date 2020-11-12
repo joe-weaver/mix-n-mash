@@ -36,6 +36,7 @@
 .mixtape-title {
   font-size: 1.5rem !important;
   text-align: center;
+  max-width: 50vw !important;
 }
 
 .mixtape-title:disabled {
@@ -73,6 +74,7 @@
 
 .song-container {
   width: 50%;
+  max-height: 45vh;
   display: flex;
   flex-direction: column;
 }

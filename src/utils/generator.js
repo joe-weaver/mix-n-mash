@@ -24,7 +24,7 @@ export const generateMixtape = (user) => {
 
     mixtape.title = generateMixtapeName();
     mixtape.description = generateBio();
-    mixtape.genres = [];
+    mixtape.genres = [randomFrom(["Jazz","Ska","Rock","Pop","Classical"])];
     mixtape.image = ["https://img.youtube.com/vi/XfR9iY5y94s/0.jpg"];
     mixtape.songs = generateSongs();
     mixtape.ownerId = user._id;

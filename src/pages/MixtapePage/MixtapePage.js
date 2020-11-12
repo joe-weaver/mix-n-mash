@@ -69,6 +69,50 @@ const MixtapePage = (props) => {
       }
     }
   }
+
+  
+
+  const moveSongEarlier = (index) => {
+    if (!loading){
+      console.log(index);
+      if (index!=0){
+        let tempSongsArr = editList.slice();
+        let tempSong = tempSongsArr[index];
+        tempSongsArr[index] = tempSongsArr[index-1];
+        tempSongsArr[index-1] = tempSong;
+        setEditList(tempSongsArr);
+        let list = editList.map (song => 
+          (
+            {youtubeId: song.youtubeId,
+            name: song.name,
+            }
+          )
+        )
+        editSongsMutation({variables: {id: id, songs: list}});
+      }
+    }
+  }
+
+  const moveSongLater = (index) => {
+    if (!loading){
+      console.log(index);
+      if (index!=data.mixtape.songs.length-1){
+        let tempSongsArr = editList.slice();
+        let tempSong = tempSongsArr[index];
+        tempSongsArr[index] = tempSongsArr[index+1];
+        tempSongsArr[index+1] = tempSong;
+        setEditList(tempSongsArr);
+        let list = editList.map (song => 
+          (
+            {youtubeId: song.youtubeId,
+            name: song.name,
+            }
+          )
+        )
+        editSongsMutation({variables: {id: id, songs: list}});
+      }
+    }
+  }
   
   const enableEditing = () =>{
     setEditingSongs(true);
@@ -119,6 +163,28 @@ const MixtapePage = (props) => {
 
   if (!loading && editView==null){
     setEditView(userCanEdit())
+  }
+
+  const genres=[
+    {value: "Jazz", selected: false}, 
+    {value: "Rock", selected: false}, 
+    {value: "Ska", selected: false}, 
+    {value: "Pop", selected: false}, 
+    {value: "Classical", selected: false}
+  ];
+
+  // const [genres, setGenres] = React.useState(GENRES);
+
+  if (!loading){
+    for (let mixtapeGenre of data.mixtape.genres){
+      for (let genre of genres){
+        if (mixtapeGenre === genre.value){
+          genre.selected = true;
+          break;
+        }
+      }
+    }
+    console.log(genres)
   }
 
   return (
@@ -190,32 +256,36 @@ const MixtapePage = (props) => {
                   Listens: {!loading && data.mixtape.listens}
                 </div>
               </div>
-              {editView ? (<div>Genres: <Multiselect multiple data={[{value: "Jazz"}, {value: "Rock"}, {value: "Ska"}, {value: "Pop"}, {value: "Classical"}]}/></div>):
+              {editView ? (<div>Genres: <Multiselect multiple data={genres}/></div>):
               (<div>Genres: {!loading && <span>{data.mixtape.genres.join(", ")}</span>}</div>)}
             </div>
             <div className="song-container">
-              <div className="space-below">Songs</div>
+              <div style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+                {editView && (!editingSongs ? (
+                  <IconButton component={<EditIcon />}
+                    callback={enableEditing}/>) 
+                  : (
+                  <IconButton component={<SaveIcon />}
+                    callback={disableEditing}/>
+                ))}
+                <div className="space-below">Songs</div>
+              </div>
               <div className="scroll-content song-list space-below">
                 {!loading && !editingSongs && data.mixtape.songs.map((song, index) => (
-                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} />
+                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)}/>
                 ))}
                 {!loading && editingSongs && editList.map((song, index) => (
-                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} />
+                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)} />
                 ))}
               </div>
               <div>
               {editView && <AddSongModal addSongsCallback={addSongs} disabledButton={editingSongs} />}
-              {editView && (!editingSongs ? (
-                <IconButton component={<EditIcon />}
-                  callback={enableEditing}/>) 
-                : (
-                <IconButton component={<SaveIcon />}
-                  callback={disableEditing}/>
-              ))}
-
               </div>
               
             </div>
+          </div>
+          <div>
+            {!loading && <div>{data.mixtape.description}</div>}
           </div>
           <div className="comment-section-container space-above">
             <div>

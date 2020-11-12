@@ -1,6 +1,8 @@
 .icon-button {
   border-width: 0px !important;
   transform: rotate(0deg);
+  margin: 0.2rem !important;
+  padding: 0.1rem !important;
 }
 
 .icon-button:hover {
