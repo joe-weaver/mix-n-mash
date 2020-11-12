@@ -297,8 +297,7 @@ const MixtapePage = (props) => {
                   </div>
                 </Card.Header>
                 <Card.Body className="scroll-content comments-section">
-                  {/* {!loading && data.mixtape.comments.map(comment => <Comment comment={comment} />)} */}
-                  
+                  {!loading && data.mixtape.comments.map(comment => <Comment comment={comment} />)}
                 </Card.Body>
               </Card>
             </div>

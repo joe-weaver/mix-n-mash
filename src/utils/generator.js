@@ -32,7 +32,29 @@ export const generateMixtape = (user) => {
     mixtape.listens = randomFromRangeInt(0, 10000);
     mixtape.likes = randomFromRangeInt(0, 1000);
     mixtape.dislikes = randomFromRangeInt(0, 100);
-    mixtape.comments = [];
+    mixtape.comments = [
+        {
+            commentId: "1",
+            userId: "phony",
+            username: "NotARealUser",
+            content: "Here is some comment content",
+            publishingTime: 1000000,
+            replies: []
+        },
+        {
+            commentId: "2",
+            userId: "phony1",
+            username: "NotReal",
+            content: "Comment",
+            publishingTime: 1000000,
+            replies: [{
+                userId: "phony2",
+                username: "AnotherFakeUser",
+                content: "This is a comment y'all",
+                publishingTime: 10000001,
+              }]
+        }
+    ];
     mixtape.private = false;
     mixtape.collaborators = [];
     mixtape.timeCreated = 0;

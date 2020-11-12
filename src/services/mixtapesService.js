@@ -29,6 +29,19 @@ query getMixtape($id: String!){
       username,
       privilegeLevel
     }
+    comments {
+      commentId
+      userId
+      username
+      content
+      publishingTime
+      replies {
+        userId
+        username
+        content
+        publishingTime
+      }
+    }
   }
 }
 `
@@ -56,6 +69,19 @@ export const getHottestMixtapes = gql`
         userId,
         username,
         privilegeLevel
+      }
+      comments {
+        commentId
+        userId
+        username
+        content
+        publishingTime
+        replies {
+          userId
+          username
+          content
+          publishingTime
+        }
       }
     }
   }
@@ -85,6 +111,19 @@ export const getUserMixtapes = gql`
         username,
         privilegeLevel
       }
+      comments {
+        commentId
+        userId
+        username
+        content
+        publishingTime
+        replies {
+          userId
+          username
+          content
+          publishingTime
+        }
+      }
     }
   }
 `
@@ -112,6 +151,19 @@ query qMixtapes($searchTerm: String!){
       userId,
       username,
       privilegeLevel
+    }
+    comments {
+      commentId
+      userId
+      username
+      content
+      publishingTime
+      replies {
+        userId
+        username
+        content
+        publishingTime
+      }
     }
   }
 }`
