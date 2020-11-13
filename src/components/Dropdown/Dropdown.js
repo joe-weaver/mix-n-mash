@@ -5,16 +5,11 @@ import { DropdownButton, Dropdown, ButtonGroup } from "react-bootstrap";
 import "./DropdownStyle.css"
 
 const CustomDropdown = (props) => {
-  let variant = "secondary";
-
   let [selected, setSelected] = React.useState(props.defaultIndex ? props.items[props.defaultIndex] : props.items[0]);
 
   return (
     <DropdownButton
       as={ButtonGroup}
-      key={variant}
-      id={`dropdown-variants-${variant}`}
-      variant={variant.toLowerCase()}
       title={selected}
     >
       {props.items.map((item) => (
@@ -24,6 +19,7 @@ const CustomDropdown = (props) => {
             props.selectionCallback(item);
           }}
           eventKey={item}
+          key={item}
         >
           {item}
         </Dropdown.Item>

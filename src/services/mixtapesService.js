@@ -29,8 +29,9 @@ query getMixtape($id: String!){
       username,
       privilegeLevel
     }
+    timeCreated
     comments {
-      commentId
+      id
       userId
       username
       content
@@ -54,35 +55,13 @@ export const getHottestMixtapes = gql`
       description,
       genres,
       image,
-      songs {
-        name
-        youtubeId
-      },
       ownerId,
       ownerName,
-      private,
       listens,
       likes,
       likesPerDay,
       listensPerDay,
-      collaborators {
-        userId,
-        username,
-        privilegeLevel
-      }
-      comments {
-        commentId
-        userId
-        username
-        content
-        publishingTime
-        replies {
-          userId
-          username
-          content
-          publishingTime
-        }
-      }
+      timeCreated,
     }
   }
 `
@@ -95,34 +74,16 @@ export const getUserMixtapes = gql`
       description,
       genres,
       image,
-      songs {
-        name
-        youtubeId
-      },
       ownerId,
       ownerName,
       private,
       listens,
       likes,
-      likesPerDay,
-      listensPerDay,
+      timeCreated,
       collaborators {
         userId,
         username,
         privilegeLevel
-      }
-      comments {
-        commentId
-        userId
-        username
-        content
-        publishingTime
-        replies {
-          userId
-          username
-          content
-          publishingTime
-        }
       }
     }
   }
@@ -136,37 +97,41 @@ query qMixtapes($searchTerm: String!){
     description,
     genres,
     image,
-    songs {
-      name
-      youtubeId
-    },
+    ownerId,
+    ownerName,
+    listens,
+    likes,
+    likesPerDay,
+    listensPerDay,
+    timeCreated,
+  }
+}`
+
+export const createMixtape = gql`
+mutation createMixtape{
+  createNewMixtape(
+    ownerId: $ownerId,
+    ownerName: $ownerName,
+  ){
+    _id,
+    title,
+    description,
+    genres,
+    image,
     ownerId,
     ownerName,
     private,
     listens,
     likes,
-    likesPerDay,
-    listensPerDay,
+    timeCreated,
     collaborators {
       userId,
       username,
       privilegeLevel
     }
-    comments {
-      commentId
-      userId
-      username
-      content
-      publishingTime
-      replies {
-        userId
-        username
-        content
-        publishingTime
-      }
-    }
   }
-}`
+}
+`;
 
 export const addMixtape = gql`
 mutation AddMixtape(
@@ -183,7 +148,6 @@ mutation AddMixtape(
   $comments: [commentInput]!
   $private: Boolean!
   $collaborators: [collaboratorsInput]!
-  $timeCreated: Int!
   $likesPerDay: [Int]!
   $listensPerDay: [Int]!
   ){
@@ -201,7 +165,6 @@ mutation AddMixtape(
       comments: $comments
       private: $private
       collaborators: $collaborators
-      timeCreated: $timeCreated
       likesPerDay: $likesPerDay
       listensPerDay: $listensPerDay
     ){
@@ -220,8 +183,7 @@ mutation addSongs($id: String!, $songs: [songInput]!){
       name
     }
   }
-}
-`
+}`
 
 export const editSongs = gql`
 mutation editSongs($id: String!, $songs: [songInput]!){
@@ -232,5 +194,48 @@ mutation editSongs($id: String!, $songs: [songInput]!){
       name
     }
   }
+}`
+
+export const addComment = gql`
+mutation addComment(
+  $id: String!,
+  $comment: commentInput!
+){
+  addComment(
+    id: $id
+    comment: $comment
+    ){
+    _id
+    comments {
+      id
+      userId
+      username
+      content
+      publishingTime
+    }
+  }
+}`;
+
+export const addReply = gql`
+mutation addReply(
+  $id: String!,
+  $commentId: String!,
+  $reply: replyInput!
+){
+  addReply(
+    id: $id,
+    commentId: $commentId,
+    reply: $reply
+    ){
+    _id
+    comments {
+      replies {
+        userId
+        username
+        content
+        publishingTime
+      }
+    }
+  }
 }
-`
+`;

@@ -17,8 +17,11 @@ import AddSongModal from "../../components/Modals/AddSongModal"
 import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
 import MashMixtapeModal from "../../components/Modals/MashMixtapeModal";
 import Comment from "../../components/Comments/Comment";
-import { mixtapesClient, getMixtape, addSongs as addSongsMut, editSongs as editSongsMut } from "../../services/mixtapesService"; 
-import CancelIcon from "@material-ui/icons/Cancel";
+import { mixtapesClient, getMixtape, 
+  addSongs as addSongsMut,
+  editSongs as editSongsMut,
+  addComment as addCommentMut,
+  addReply as addReplyMut} from "../../services/mixtapesService"; 
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -28,33 +31,77 @@ const MixtapePage = (props) => {
   let url = window.location.pathname.split("/");
   const id = url[url.length - 1];
 
-  let [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
-  let [editingSongs, setEditingSongs] = React.useState(false);
-  let {loading, error, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
-  const [isEditing, setEditing] = React.useState(false);
-  const [results, setResults] = React.useState({songs: []});
+  // Extract the user from the session
+  const user = JSON.parse(window.sessionStorage.getItem("user"));
+
+  /* ---------- HOOKS ---------- */
+  // Mixtape editing
+  const [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
+  const [editingSongs, setEditingSongs] = React.useState(false);
   const [editList, setEditList] = React.useState([]);
+  const [editView, setEditView] = React.useState(null);
 
-  const [addSongsMutation, _] = useMutation(addSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
-    console.log(cache);
-    console.log(mutationResult);
-  }})
+  // Song playing
+  const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
+  const [autoplay, setAutoplay] = React.useState(0);
 
+  // Commenting
+  const [commentText, setCommentText] = React.useState("");
+  const [replyIndex, setReplyIndex] = React.useState(-1);
+
+  /* ---------- QUERIES ---------- */
+  let {loading, error, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+
+
+  /* ---------- MUTATIONS ---------- */
+  const [addSongsMutation] = useMutation(addSongsMut, {client: mixtapesClient});
+  const [addCommentMutation] = useMutation(addCommentMut, {client: mixtapesClient});
+  const [addReplyMutation] = useMutation(addReplyMut, {client: mixtapesClient});
+  const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
+
+
+  /* ---------- CALLBACKS ---------- */
+  // Callback for when we add songs to the backend
   const addSongs = (songs) => {
     addSongsMutation({variables: {id: id, songs: songs}});
   }
 
-  const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
-  const [autoplay, setAutoplay] = React.useState(0);
+  // Callback for when we submit a comment
+  const submitComment = (event) => {
+    // Don't reload page
+    event.preventDefault();
 
-  const [editView, setEditView] = React.useState(null)
+    // Add a comment to the backend (and update when it returns)
+    const comment = {
+      userId: user._id,
+      username: user.username,
+      content: commentText
+    };
+    addCommentMutation({variables: {id: data.mixtape._id, comment: comment}});
 
-  const user = JSON.parse(window.sessionStorage.getItem("user"));
+    // Remove comment text
+    setCommentText("");
+  }
 
+  const submitReply = (commentId, replyText) => {
+        // Add a comment to the backend (and update when it returns)
+        const reply = {
+          userId: user._id,
+          username: user.username,
+          content: replyText
+        };
+
+        addReplyMutation({variables: {id: data.mixtape._id, commentId: commentId, reply: reply}});
+    
+        // Remove comment text
+        setReplyIndex(-1);
+  }
+
+  // Callback for when the current song is done playing
   const changeToNextSong = (event) => {
     if(!loading){
       let index = (currentSongIndex + 1) % data.mixtape.songs.length;
-      console.log("Setting index to..." + index)
+
       setCurrentSongIndex(index);
 
       if(index !== 0){
@@ -70,11 +117,8 @@ const MixtapePage = (props) => {
     }
   }
 
-  
-
   const moveSongEarlier = (index) => {
     if (!loading){
-      console.log(index);
       if (index!=0){
         let tempSongsArr = editList.slice();
         let tempSong = tempSongsArr[index];
@@ -95,7 +139,6 @@ const MixtapePage = (props) => {
 
   const moveSongLater = (index) => {
     if (!loading){
-      console.log(index);
       if (index!=data.mixtape.songs.length-1){
         let tempSongsArr = editList.slice();
         let tempSong = tempSongsArr[index];
@@ -117,41 +160,26 @@ const MixtapePage = (props) => {
   const enableEditing = () =>{
     setEditingSongs(true);
     setEditList(data.mixtape.songs.slice());
-    console.log("EDITING SONGS: " + editingSongs);
 
   }
 
   const disableEditing = () => {
-    console.log("EDITING SONGS: " + editingSongs);
     confirmRemoveSongs();
     setEditingSongs(false);
 
   }
-  const [editSongsMutation, __] = useMutation(editSongsMut, {client: mixtapesClient, update: (cache, mutationResult) => {
-      console.log(cache);
-      console.log(mutationResult);
-    }})
 
   const removeSong = (index) => {
-    console.log("REMOVE SONG IS CALLED!")
     let list = editList.filter((song, i) => i !== index);
     setEditList(list);
   }
 
   const confirmRemoveSongs = () => {
-      console.log(editList);
-        let list = editList.map (song => 
-          (
-            {youtubeId: song.youtubeId,
-            name: song.name,
-            }
-          )
-        ) 
-            
-      editSongsMutation({variables: {id: id, songs: list}});
-      setEditList([]);
-
-    }
+    let list = editList.map (song => ({youtubeId: song.youtubeId, name: song.name})); 
+          
+    editSongsMutation({variables: {id: id, songs: list}});
+    setEditList([]);
+  }
 
   const userCanEdit = () => {
     if (!loading){
@@ -184,7 +212,6 @@ const MixtapePage = (props) => {
         }
       }
     }
-    console.log(genres)
   }
 
   return (
@@ -293,11 +320,25 @@ const MixtapePage = (props) => {
                 <Card.Header>
                   <div className="space-above" style={{display:"flex", flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
                     <div>Leave a Comment: </div>
-                    <input class="form-control" type="text" placeholder="Write your comment here..." style={{width:"80%"}}/>
+                    <Form onSubmit={submitComment}>
+                      <Form.Control
+                        type="input"
+                        value={commentText}
+                        placeholder={"Write your comment here..."}
+                        style={{width:"80% !important"}}
+                        onChange={event => setCommentText(event.target.value)}
+                      />
+                    </Form>
                   </div>
                 </Card.Header>
                 <Card.Body className="scroll-content comments-section">
-                  {!loading && data.mixtape.comments.map(comment => <Comment comment={comment} />)}
+                  {!loading && data.mixtape.comments.map((comment, index) =>
+                    <Comment
+                      comment={comment}
+                      startReply={() => setReplyIndex(index)}
+                      replying={index === replyIndex}
+                      submitReply={(replyText) => submitReply(comment.id, replyText)}
+                  />)}
                 </Card.Body>
               </Card>
             </div>

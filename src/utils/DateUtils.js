@@ -1,18 +1,7 @@
-export function formatDate(date) {
-  let dmy =
-    date.getMonth() +
-    1 +
-    "/" +
-    date.getDate() +
-    "/" +
-    shortenYear(date.getFullYear());
-  let time =
-    (date.getHours() % 12) +
-    1 +
-    ":" +
-    date.getMinutes() +
-    getAMPM(date.getHours);
-  return dmy + ", " + time;
+
+const fmt = new Intl.DateTimeFormat('en-US', {dateStyle: "short", timeStyle: "short"});
+export function formatDate(dateString) {
+  return fmt.format(new Date(dateString));
 }
 
 function shortenYear(year) {

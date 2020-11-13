@@ -21,7 +21,7 @@ const MashmateRequestCard = (props) => {
         </div>
         <div className="mashmate-request-timeSent">
           {" Time Sent: " +
-            formatDate(new Date(props.mashmateRequest.timeSent))}
+            formatDate(props.mashmateRequest.timeSent)}
         </div>
       </div>
       <div className="mashmate-request-responses">
