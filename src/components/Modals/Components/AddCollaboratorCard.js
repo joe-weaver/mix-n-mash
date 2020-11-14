@@ -1,6 +1,5 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import Dropdown from "../../Dropdown/Dropdown";
 import IconButton from "../../IconButton/IconButton";
 import AddIcon from '@material-ui/icons/Add';
 

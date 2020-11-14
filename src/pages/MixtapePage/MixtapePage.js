@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Card, Form } from "react-bootstrap";
+import React from "react";
+import { Card, Form } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
@@ -50,7 +50,7 @@ const MixtapePage = (props) => {
   const [replyIndex, setReplyIndex] = React.useState(-1);
 
   /* ---------- QUERIES ---------- */
-  let {loading, error, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+  let {loading, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
 
 
   /* ---------- MUTATIONS ---------- */
@@ -119,7 +119,7 @@ const MixtapePage = (props) => {
 
   const moveSongEarlier = (index) => {
     if (!loading){
-      if (index!=0){
+      if (index !== 0){
         let tempSongsArr = editList.slice();
         let tempSong = tempSongsArr[index];
         tempSongsArr[index] = tempSongsArr[index-1];
@@ -139,7 +139,7 @@ const MixtapePage = (props) => {
 
   const moveSongLater = (index) => {
     if (!loading){
-      if (index!=data.mixtape.songs.length-1){
+      if (index !== data.mixtape.songs.length-1){
         let tempSongsArr = editList.slice();
         let tempSong = tempSongsArr[index];
         tempSongsArr[index] = tempSongsArr[index+1];
@@ -183,7 +183,7 @@ const MixtapePage = (props) => {
 
   const userCanEdit = () => {
     if (!loading){
-      if (data.mixtape.ownerId == user._id){ return true; }
+      if (data.mixtape.ownerId === user._id){ return true; }
       if (data.mixtape.collaborators.reduce((acc, x) => (x.userId === user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
       return false;
     }
@@ -299,10 +299,10 @@ const MixtapePage = (props) => {
               </div>
               <div className="scroll-content song-list space-below">
                 {!loading && !editingSongs && data.mixtape.songs.map((song, index) => (
-                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)}/>
+                  <SongCard song={song} key={index} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)}/>
                 ))}
                 {!loading && editingSongs && editList.map((song, index) => (
-                  <SongCard song={song} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)} />
+                  <SongCard song={song} key={index} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)} />
                 ))}
               </div>
               <div>

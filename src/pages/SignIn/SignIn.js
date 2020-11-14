@@ -10,16 +10,14 @@ import "./SignInStyle.css";
 const SignIn = (props) => {
   let [forgotPassword, setForgotPassword] = React.useState(false);
   let [signup, setSignup] = React.useState(false);
-  let [checkingLogin, setCheckingLogin] = React.useState(false);
 
   let [username, setUsername] = React.useState("");
 
   const history = useHistory();
 
-  const retrievedUser = () => {
+  const retrievedUser = (data) => {
     let user = data.getUserByUsernameOrEmail;
     if(user){
-      console.log(user);
       window.sessionStorage.setItem("user", JSON.stringify(user));
       history.push("/HottestMixtapes");
     } else {
@@ -27,10 +25,9 @@ const SignIn = (props) => {
     }
   }
 
-  const [getUser, { loading, data }] = useLazyQuery(getUserByUsernameOrEmail, {client: userClient, onCompleted: retrievedUser});
+  const [getUser] = useLazyQuery(getUserByUsernameOrEmail, {client: userClient, onCompleted: retrievedUser});
 
   const tryLogIn = () => {
-    console.log("Trying Log in");
     getUser({variables: {usernameOrEmail: username}});
   }
 

@@ -25,13 +25,13 @@ const MyMixtapes = (props) => {
 
   let userId = user._id;
 
-  let {loading, error, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId}});
+  let {loading, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId}});
 
   let [filterKey, setFilterKey] = useState("All Mixtapes");
 
   const filterFunctions = {
     "All Mixtapes": (mixtape) => true,
-    "Owner": (mixtape) => mixtape.ownerId == userId,
+    "Owner": (mixtape) => mixtape.ownerId === userId,
     "Shared With Me": (mixtape) => mixtape.collaborators.reduce((acc, x) => x.userId === userId || acc, false),
     "Can Edit": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === userId && x.privilegeLevel === "edit") || acc, false),
     "Can View": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === userId && x.privilegeLevel === "view") || acc, false)
@@ -58,7 +58,7 @@ const MyMixtapes = (props) => {
           </Card.Header>
           <Card.Body className="scroll-content">
             {!loading && data.getUserMixtapes.filter(filterFunctions[filterKey]).map((mixtape) => (
-              <MixtapeCard mixtape={mixtape} />
+              <MixtapeCard mixtape={mixtape} key={mixtape._id} />
             ))}
           </Card.Body>
         </Card>

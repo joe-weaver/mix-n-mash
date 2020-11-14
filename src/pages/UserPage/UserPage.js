@@ -15,9 +15,9 @@ const UserPage  = (props) => {
   let url = window.location.pathname.split("/");
   let idFromUrl = url[url.length - 1];
 
-  let {loading, error, data} = useQuery(getUser, {variables: {id: idFromUrl}, client: userClient});
+  let {loading, data} = useQuery(getUser, {variables: {id: idFromUrl}, client: userClient});
   let mixtapeObj = {loading: null, error: null, data: null};
-  mixtapeObj = useQuery(getUserMixtapes, {client: mixtapesClient, variables: {userId: idFromUrl}, onCompleted: (data) => console.log(data)});
+  mixtapeObj = useQuery(getUserMixtapes, {client: mixtapesClient, variables: {userId: idFromUrl}});
 
   return (
     <div>
@@ -44,7 +44,7 @@ const UserPage  = (props) => {
                 
               <div className="scroll-content" style={{height: "90%"}}>
               {!mixtapeObj.loading && mixtapeObj.data.getUserMixtapes.map((mixtape) => (
-              <MixtapeResultCard mixtape={mixtape} />
+              <MixtapeResultCard mixtape={mixtape} key={mixtape._id} />
             ))}
               </div>
             </div>

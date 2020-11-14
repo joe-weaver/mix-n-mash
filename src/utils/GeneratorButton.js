@@ -13,7 +13,7 @@ const m = 40;
 
 const GeneratorButton = (props) => {
 
-    const [addMixtapeToDatabase, ms ] = useMutation(addMixtape, {client: mixtapesClient, onCompleted: (data) => {
+    const [addMixtapeToDatabase] = useMutation(addMixtape, {client: mixtapesClient, onCompleted: (data) => {
         mixtapes[index-1]._id = data.addMixtape._id;
 
         if(index >= m){
@@ -58,7 +58,7 @@ const GeneratorButton = (props) => {
         addMixtapeToDatabase({variables: mixtapes[index++]});
     }
 
-    const [addUserToDatabase, us ] = useMutation(addUser, {client: userClient, onCompleted: (data) => {
+    const [addUserToDatabase] = useMutation(addUser, {client: userClient, onCompleted: (data) => {
         users[index-1]._id = data.addUser._id;
         
         if(index >= n){

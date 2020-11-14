@@ -79,14 +79,14 @@ const AddSongModal = (props) => {
                         <YouTube videoId={previewId} opts = {{height: '100%', width: '100%'}}/>
                     </div>
                     <div className="search-results scroll-content">
-                        {results.songs.map((song, index) => <AddSongCard song={song} addCallback={() => addSong(index)} previewCallback={(id) => setPreviewId(id)}/>)}
+                        {results.songs.map((song, index) => <AddSongCard song={song} key={index} addCallback={() => addSong(index)} previewCallback={(id) => setPreviewId(id)}/>)}
                     </div>
                 </div>
                 <div className="confirm-add-song">
                     <div style={{height: "100%"}}>
                         <h5>Songs to Add:</h5>
                         <div className="confirm-add-song-list scroll-content">
-                            {addList.map((song, index) => <AddSongCard song={song} remove={true} addCallback={() => removeSong(index)} />)}
+                            {addList.map((song, index) => <AddSongCard song={song} key={index} remove={true} addCallback={() => removeSong(index)} />)}
                         </div>
                     </div>
                     <div>

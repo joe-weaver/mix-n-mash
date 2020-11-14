@@ -7,7 +7,7 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import IconButton from "../../components/IconButton/IconButton";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
 import { useLocation } from "react-router-dom";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { userClient, queryUsers } from "../../services/userService";
 import { mixtapesClient, queryMixtapes } from "../../services/mixtapesService";
 import UserResultCard from "../../components/UserResultCard/UserResultCard";
@@ -39,10 +39,6 @@ const SearchResults = (props) => {
   // Query on page load the the params in the url
   userObj = useQuery(queryUsers, {client: userClient, variables: {searchTerm}});
   mixtapeObj = useQuery(queryMixtapes, {client: mixtapesClient, variables: {searchTerm}});
-
-  // Functions to refresh search results without page reload
-  const [refreshUserObj, {}] = useLazyQuery(queryUsers, {client: userClient, variables: {searchTerm}});
-  const [refreshMixtapeObj, {}] = useLazyQuery(queryMixtapes, {client: mixtapesClient, variables: {searchTerm}});
 
   const refreshResults = () => {
     userObj.refetch();
@@ -88,9 +84,9 @@ const SearchResults = (props) => {
           <Card.Body className="scroll-content">
             {!mixtapeObj.loading && !userObj.loading && getItems().map(item => {
             if(item.isMixtape){
-              return (<MixtapeResultCard mixtape={item.data} />);
+              return (<MixtapeResultCard mixtape={item.data} key={item.data._id} />);
             } else {
-              return (<UserResultCard user={item.data}/>);
+              return (<UserResultCard user={item.data} key={item.data._id}/>);
             }})}
           </Card.Body>
         </Card>

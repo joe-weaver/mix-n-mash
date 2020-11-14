@@ -7,8 +7,6 @@ import IconButton from "../IconButton/IconButton";
 import "./MashmateCardStyle.css";
 
 const MashmateCard = (props) => {
-  console.log(props.mashmate)
-
   return (
     <Card className="mashmate-card mm-card" key={props.mashmate.id}>
       <div className="mashmate-body">

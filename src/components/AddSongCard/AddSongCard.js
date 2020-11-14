@@ -10,7 +10,7 @@ import "./AddSongCardStyle.css";
 const AddSongCard = (props) => {
   return (
     <Card className="add-song-card mm-card" key={props.song.name}>
-      <img src={"https://img.youtube.com/vi/"+props.song.youtubeId+"/0.jpg"} className="thumbnail-image"/>
+      <img src={"https://img.youtube.com/vi/"+props.song.youtubeId+"/0.jpg"} alt="" className="thumbnail-image"/>
       <div className={props.previewCallback ? "previewable" : ""} onClick={() => props.previewCallback ? props.previewCallback(props.song.youtubeId) : null}>{props.song.name}</div>
       <IconButton component={props.remove ? <ClearIcon/> : <AddIcon />} callback={props.addCallback} />
     </Card>

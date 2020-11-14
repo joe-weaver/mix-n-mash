@@ -41,7 +41,7 @@ const Comment = (props) => {
                 />
             </Form>}
             {props.comment.replies.map(reply =>
-            <div className="space-below reply" style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
+            <div className="space-below reply" key={reply.username + reply.content} style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}}>
                 <div><Link to={"/User/" + reply.userId}>{reply.username}:</Link> {reply.content}</div>
                 <div style={{display:"flex", justifyContent:"right", alignItems:"right"}}>{formatDate(reply.publishingTime)}</div>
             </div>)}

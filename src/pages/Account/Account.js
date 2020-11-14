@@ -26,7 +26,7 @@ const Account = (props) => {
     setUser(data.user);
   }
 
-  const {loading, error, data, refetch} = useQuery(getUser, { client: userClient, variables: {id: user._id}, onCompleted: refreshUser});
+  const {refetch} = useQuery(getUser, { client: userClient, variables: {id: user._id}, onCompleted: refreshUser});
 
   const history = useHistory();
 
@@ -111,7 +111,7 @@ const Account = (props) => {
                 <IconButton component={<RefreshIcon />} callback={() => refetch()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
                   {user.mashmates.map((mashmate) => (
-                    <MashmateCard mashmate={mashmate} />
+                    <MashmateCard mashmate={mashmate} key={mashmate.id} />
                   ))}
                 </div>
               </div>
@@ -123,7 +123,7 @@ const Account = (props) => {
                 <IconButton component={<RefreshIcon />} callback={() => refetch()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
                   {user.receivedMashmateRequests.map((mashmateRequest) => (
-                    <MashmateRequestCard mashmateRequest={mashmateRequest} />
+                    <MashmateRequestCard mashmateRequest={mashmateRequest} key={mashmateRequest.senderId} />
                   ))}
                 </div>
               </div>

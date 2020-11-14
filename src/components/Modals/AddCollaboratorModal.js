@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal, Form, FormControl } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import EditPermissionsCard from "./Components/EditPermissionsCard";
 import AddCollaboratorCard from "./Components/AddCollaboratorCard";
 import IconButton from "../../components/IconButton/IconButton"
@@ -55,15 +55,9 @@ let mashmates = [
 
 const AddCollaboratorModal = (props) => {
     const [show, setShow] = React.useState(false);
-    const [searchTerm, setSearchTerm] = React.useState("");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    const handleSearch = (event) => {
-        event.preventDefault();
-        console.log(searchTerm);
-    }
 
     return (
         <>
@@ -77,13 +71,13 @@ const AddCollaboratorModal = (props) => {
                 <div className="height50">
                     <h5>Edit Permissions</h5>
                     <div className="scroll-content">
-                        {currentCollaborators.map(collaborator => (<EditPermissionsCard collaborator={collaborator}/>))}
+                        {currentCollaborators.map(collaborator => (<EditPermissionsCard key={collaborator.userId} collaborator={collaborator}/>))}
                     </div>
                 </div>
                 <div className="height50">
                     <h5>Add Collaborator</h5>
                     <div className="scroll-content height50">
-                        {mashmates.map(mashmate => (<AddCollaboratorCard mashmate={mashmate}/>))}
+                        {mashmates.map(mashmate => (<AddCollaboratorCard key={mashmate.mashmateId} mashmate={mashmate}/>))}
                     </div>
                 </div>
             </Modal.Body>

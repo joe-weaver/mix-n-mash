@@ -10,7 +10,7 @@ const MashMixtapeModal = (props) => {
     const [show, setShow] = React.useState(false);
 
     // Get list of mixtapes from user
-    const mixtapes = [{title: "Mixtape 1"}, {title: "Mixtape 2"}];
+    const mixtapes = [{title: "Mixtape 1", _id: "1"}, {title: "Mixtape 2", _id: "2"}];
     
     return (<>
         <IconButton component={<CallMergeIcon />} onClick={() => setShow(true)} />
@@ -21,7 +21,7 @@ const MashMixtapeModal = (props) => {
             </Modal.Header>
             <Modal.Body className="scroll-content">
                 {mixtapes.map(mixtape => (
-                    <div>{mixtape.title}</div>
+                    <div key={mixtape._id}>{mixtape.title}</div>
                 ))}
             </Modal.Body>
         </Modal>
