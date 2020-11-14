@@ -85,6 +85,10 @@ export const getUserMixtapes = gql`
         username,
         privilegeLevel
       }
+      songs {
+        youtubeId,
+        name
+      }
     }
   }
 `
@@ -236,6 +240,49 @@ mutation addReply(
         publishingTime
       }
     }
+  }
+}
+`;
+
+export const createMixtapeFromBase = gql`
+mutation createMixtapeFromBase(
+  $ownerId: String!
+  $ownerName: String!
+  $title: String!
+  $description: String!
+  $genres: [String]!
+  $image: [String]!
+  $songs: [songInput]!
+){
+  createMixtapeFromBase(
+    ownerId: $ownerId
+    ownerName: $ownerName
+    title: $title
+    description: $description
+    genres: $genres
+    image: $image
+    songs: $songs
+  ){
+    _id
+  }
+}
+`;
+
+export const mashMixtape = gql`
+mutation mashMixtape(
+  $id: String!,
+  $title: String!,
+  $songs: [songInput]!,
+  $genres: [String]!
+){
+  mashMixtape(id: $id, title: $title, songs: $songs, genres: $genres){
+    _id,
+    title,
+    songs {
+      youtubeId,
+      name
+    },
+    genres
   }
 }
 `;

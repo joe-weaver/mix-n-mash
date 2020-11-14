@@ -86,7 +86,6 @@ const GeneratorButton = (props) => {
                     senderId: users[i]._id,
                     recipientId: "NotYetImplemented",
                     username: users[i].username,
-                    timeSent: 0,
                     seen: false
                 }
                 user.receivedMashmateRequests.push(mmr);

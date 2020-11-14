@@ -255,7 +255,7 @@ const MixtapePage = (props) => {
             </div>
           </div>
           <div>
-            <MashMixtapeModal />
+            <MashMixtapeModal mixtape={!loading ? data.mixtape : null} />
             <IconButton component={<CallSplitIcon />} />
             {editView &&
             <AddCollaboratorModal />

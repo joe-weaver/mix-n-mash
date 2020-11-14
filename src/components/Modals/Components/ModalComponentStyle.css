@@ -3,7 +3,8 @@
     flex-direction: row !important;
     justify-content: space-between !important;
     align-items: center !important;
-    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-color-transparent) !important;
 }
 
 .edit-permissions-card + .edit-permissions-card {
