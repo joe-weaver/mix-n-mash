@@ -58,7 +58,7 @@ const MyMixtapes = (props) => {
           </Card.Header>
           <Card.Body className="scroll-content">
             {!loading && data.getUserMixtapes.filter(filterFunctions[filterKey]).map((mixtape) => (
-              <MixtapeCard mixtape={mixtape} key={mixtape._id} />
+              <MixtapeCard mixtape={mixtape} key={mixtape._id} refetchMyMixtapes={refetch}/>
             ))}
           </Card.Body>
         </Card>

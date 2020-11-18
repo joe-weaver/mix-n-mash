@@ -286,3 +286,10 @@ mutation mashMixtape(
   }
 }
 `;
+
+export const removeMixtape = gql`
+mutation removeMixtape($id: String!){
+  removeMixtape(id: $id){
+    _id
+  }
+}`

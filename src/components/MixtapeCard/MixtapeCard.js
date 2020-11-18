@@ -5,9 +5,15 @@ import { Link } from "react-router-dom";
 
 import IconButton from "../IconButton/IconButton";
 
+import { useMutation } from "@apollo/client";
+import {mixtapesClient, removeMixtape as removeMixtapeMut} from "../../services/mixtapesService"
+
 import "./MixtapeCardStyle.css";
 
 const MixtapeCard = (props) => {
+  const user = JSON.parse(window.sessionStorage.getItem("user"));
+  const [removeMixtape] = useMutation(removeMixtapeMut, {client: mixtapesClient});
+  const doRemoveMixtape = () => {removeMixtape({variables: {id: props.mixtape._id}}); props.refetchMyMixtapes();}
   return (
       <Card className="mixtape-card mm-card" key={props.mixtape._id}>
         <div className="mixtape-card-image"></div>
@@ -24,8 +30,9 @@ const MixtapeCard = (props) => {
 
         <div className="mixtape-card-delete">
           <div>
-            <IconButton component={<HighlightOffIcon />} />
-            
+            {props.mixtape.ownerId === user._id ?
+            (<IconButton component={<HighlightOffIcon />} onClick={() => doRemoveMixtape()}/>):
+            (<div></div>)}  
           </div>
         </div>
       </Card>
