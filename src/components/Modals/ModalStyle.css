@@ -93,3 +93,7 @@
 .confirm-add-song-list {
     height: 80%;
 }
+
+.create-mixtape-modal-body {
+    overflow-y: scroll;
+}
