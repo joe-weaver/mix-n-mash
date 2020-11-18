@@ -112,10 +112,12 @@ query qMixtapes($searchTerm: String!){
 }`
 
 export const createMixtape = gql`
-mutation createMixtape{
+mutation createMixtape(
+  $ownerId: String!
+  $ownerName: String!){
   createNewMixtape(
-    ownerId: $ownerId,
-    ownerName: $ownerName,
+    ownerId: $ownerId
+    ownerName: $ownerName
   ){
     _id,
     title,

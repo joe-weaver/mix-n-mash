@@ -21,7 +21,9 @@ import { mixtapesClient, getMixtape,
   addSongs as addSongsMut,
   editSongs as editSongsMut,
   addComment as addCommentMut,
-  addReply as addReplyMut} from "../../services/mixtapesService"; 
+  addReply as addReplyMut,
+  addMixtape as addMixtapeMut
+  } from "../../services/mixtapesService"; 
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -33,7 +35,6 @@ const MixtapePage = (props) => {
 
   // Extract the user from the session
   const user = JSON.parse(window.sessionStorage.getItem("user"));
-
   /* ---------- HOOKS ---------- */
   // Mixtape editing
   const [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
@@ -49,6 +50,9 @@ const MixtapePage = (props) => {
   const [commentText, setCommentText] = React.useState("");
   const [replyIndex, setReplyIndex] = React.useState(-1);
 
+  // // Forking
+  // const [isPublic, setPublic] = React.useState(false);
+
   /* ---------- QUERIES ---------- */
   let {loading, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
 
@@ -58,6 +62,7 @@ const MixtapePage = (props) => {
   const [addCommentMutation] = useMutation(addCommentMut, {client: mixtapesClient});
   const [addReplyMutation] = useMutation(addReplyMut, {client: mixtapesClient});
   const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
+  const [addMixtapeMutation] = useMutation(addMixtapeMut, {client: mixtapesClient});
 
 
   /* ---------- CALLBACKS ---------- */
@@ -115,6 +120,34 @@ const MixtapePage = (props) => {
         event.target.seekTo(0);
       }
     }
+  }
+
+  //Adding a mixtape
+  const addMixtape = () => {
+    let tempSongs = data.mixtape.songs.map (song => 
+      (
+        {youtubeId: song.youtubeId,
+        name: song.name,
+        }
+      )
+    )
+    addMixtapeMutation({variables: {
+      title: data.mixtape.title, 
+      description: data.mixtape.description, 
+      genres: data.mixtape.genres, 
+      image: data.mixtape.image, 
+      songs: tempSongs, 
+      ownerId: user._id, 
+      ownerName: user.username,
+      listens: 0, 
+      likes: 0, 
+      dislikes: 0, 
+      comments: [], 
+      private: true, 
+      collaborators: [],
+      likesPerDay: [],
+      listensPerDay: []
+      }});
   }
 
   const moveSongEarlier = (index) => {
@@ -193,6 +226,10 @@ const MixtapePage = (props) => {
     setEditView(userCanEdit())
   }
 
+  // const handlePublicState = () => {
+  //   isPublic.setPublic(!isPublic.state);
+  // }
+
   const genres=[
     {value: "Jazz", selected: false}, 
     {value: "Rock", selected: false}, 
@@ -223,7 +260,7 @@ const MixtapePage = (props) => {
         <Card.Header className="mixtape-page-header">
           {editView ? (
           <Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row"}}>
-            <Form.Check type="checkbox" defaultValue="" />
+            <Form.Check type="checkbox" defaultValue=""/>
             <Form.Label style={{paddingLeft: "1vw"}}>Public</Form.Label>
           </Form.Group>
           ):
@@ -256,7 +293,7 @@ const MixtapePage = (props) => {
           </div>
           <div>
             <MashMixtapeModal mixtape={!loading ? data.mixtape : null} />
-            <IconButton component={<CallSplitIcon />} />
+            <IconButton component={<CallSplitIcon onClick={addMixtape}/>} />
             {editView &&
             <AddCollaboratorModal />
             }
