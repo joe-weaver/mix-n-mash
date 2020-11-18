@@ -11,6 +11,7 @@ const CustomDropdown = (props) => {
     <DropdownButton
       as={ButtonGroup}
       title={selected}
+      onClick={(event) => event.stopPropagation()}
     >
       {props.items.map((item) => (
         <Dropdown.Item

@@ -26,7 +26,7 @@ const MyMixtapes = (props) => {
 
   let userId = user._id;
 
-  let {loading, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId}});
+  let {loading, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId}, pollInterval: 1000});
 
   let [filterKey, setFilterKey] = useState("All Mixtapes");
 
@@ -42,6 +42,7 @@ const MyMixtapes = (props) => {
 
   const createMixtape = () => {
     createMixtapeMutation({variables: {ownerId: user._id , ownerName: user.username}});
+    refetch();
   }
   
   return (
