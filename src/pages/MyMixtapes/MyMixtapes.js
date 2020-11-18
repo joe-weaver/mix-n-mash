@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
 import { NavbarLinks } from "../../data/NavbarLinks";
@@ -8,8 +8,9 @@ import Dropdown from "../../components/Dropdown/Dropdown";
 import IconButton from "../../components/IconButton/IconButton";
 import MixtapeCard from "../../components/MixtapeCard/MixtapeCard";
 
-import { useQuery } from "@apollo/client";
-import { mixtapesClient, getUserMixtapes } from "../../services/mixtapesService";
+
+import { useQuery, useMutation } from "@apollo/client";
+import { mixtapesClient, getUserMixtapes, createMixtape as createMixtapeMut} from "../../services/mixtapesService";
 
 const items = [
   "All Mixtapes",
@@ -37,6 +38,12 @@ const MyMixtapes = (props) => {
     "Can View": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === userId && x.privilegeLevel === "view") || acc, false)
   }
 
+  const [createMixtapeMutation] = useMutation(createMixtapeMut, {client: mixtapesClient});
+
+  const createMixtape = () => {
+    createMixtapeMutation({variables: {ownerId: user._id , ownerName: user.username}});
+  }
+  
   return (
     <div>
       <div className="page-container">
@@ -45,6 +52,9 @@ const MyMixtapes = (props) => {
           <Card.Header className="content-header">
             <h1>My Mixtapes</h1>
             <div>
+              <Button variant="primary" className="mm-btn-alt" onClick={createMixtape}>
+                Create Mixtape
+              </Button>
               <Dropdown
                 title="MyDropdown"
                 items={items}
