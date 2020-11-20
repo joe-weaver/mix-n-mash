@@ -295,3 +295,11 @@ mutation removeMixtape($id: String!){
     _id
   }
 }`
+
+export const updateLikes = gql`
+mutation updateLikes($id: String!, $incAmount: Int!){
+  updateLikes(id: $id, incAmount: $incAmount){
+    _id,
+    likes
+  }
+}`

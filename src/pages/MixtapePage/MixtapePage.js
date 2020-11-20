@@ -22,7 +22,9 @@ import { mixtapesClient, getMixtape,
   editSongs as editSongsMut,
   addComment as addCommentMut,
   addReply as addReplyMut,
-  addMixtape as addMixtapeMut
+  addMixtape as addMixtapeMut,
+  updateLikes as updateLikesMut,
+  updateLikes
   } from "../../services/mixtapesService"; 
 
 import "../Page.css";
@@ -63,6 +65,7 @@ const MixtapePage = (props) => {
   const [addReplyMutation] = useMutation(addReplyMut, {client: mixtapesClient});
   const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
   const [addMixtapeMutation] = useMutation(addMixtapeMut, {client: mixtapesClient});
+  const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
 
 
   /* ---------- CALLBACKS ---------- */
@@ -222,6 +225,18 @@ const MixtapePage = (props) => {
     }
   }
 
+  const incrementLikes = () => {
+    if (!loading){
+      updateLikesMutation({variables:{id: id, incAmount: 1}});
+    }
+  }
+
+  const decrementLikes = () => {
+    if (!loading){
+      updateLikesMutation({variables: {id: id, incAmount: -1}});
+    }
+  }
+
   if (!loading && editView==null){
     setEditView(userCanEdit())
   }
@@ -309,10 +324,12 @@ const MixtapePage = (props) => {
                 onEnd={changeToNextSong} opts={{playerVars: { autoplay: autoplay}}}
               />}
               <div className="likes-listens">
+                {!loading &&
                 <div>
-                  <IconButton component={<ThumbUpIcon />} />
-                  <IconButton component={<ThumbDownIcon />} />
+                  <IconButton component={<ThumbUpIcon />} onClick={incrementLikes} />
+                  <IconButton component={<ThumbDownIcon />} onClick={decrementLikes} />
                 </div>
+                }
                 <div>
                   Likes: {!loading && data.mixtape.likes}
                 </div>
