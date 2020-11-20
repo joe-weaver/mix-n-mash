@@ -10,6 +10,7 @@ export const generateUser = () => {
     user.bio = generateBio();
     user.numFollowers = randomFromRangeInt(0, 10);
     user.mashmates = [];
+    user.likedMixtapes = [];
     user.sentMashmateRequests = [];
     user.receivedMashmateRequests = [];
     user.mixtapes = [];

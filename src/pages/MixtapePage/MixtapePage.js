@@ -24,8 +24,8 @@ import { mixtapesClient, getMixtape,
   addReply as addReplyMut,
   addMixtape as addMixtapeMut,
   updateLikes as updateLikesMut,
-  updateLikes
   } from "../../services/mixtapesService"; 
+import {userClient, updateUserLikes as updateUserLikesMut} from "../../services/userService";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -67,6 +67,9 @@ const MixtapePage = (props) => {
   const [addMixtapeMutation] = useMutation(addMixtapeMut, {client: mixtapesClient});
   const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
 
+  const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: () => {
+    console.log("Completed");
+  }});
 
   /* ---------- CALLBACKS ---------- */
   // Callback for when we add songs to the backend
@@ -228,6 +231,7 @@ const MixtapePage = (props) => {
   const incrementLikes = () => {
     if (!loading){
       updateLikesMutation({variables:{id: id, incAmount: 1}});
+      updateUserLikesMutation({variables: {id: user._id, mixtapeId: id, like: true}});
     }
   }
 
