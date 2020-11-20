@@ -22,6 +22,7 @@ query getMixtape($id: String!){
     private,
     listens,
     likes,
+    dislikes,
     likesPerDay,
     listensPerDay,
     collaborators {
@@ -300,6 +301,16 @@ export const updateLikes = gql`
 mutation updateLikes($id: String!, $incAmount: Int!){
   updateLikes(id: $id, incAmount: $incAmount){
     _id,
+    likes,
+    dislikes
+  }
+}`
+
+export const updateDislikes = gql`
+mutation updateDislikes($id: String!, $incAmount: Int!){
+  updateDislikes(id: $id, incAmount: $incAmount){
+    _id,
+    dislikes,
     likes
   }
 }`

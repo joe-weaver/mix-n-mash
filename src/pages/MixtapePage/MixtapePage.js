@@ -24,8 +24,9 @@ import { mixtapesClient, getMixtape,
   addReply as addReplyMut,
   addMixtape as addMixtapeMut,
   updateLikes as updateLikesMut,
+  updateDislikes as updateDislikesMut
   } from "../../services/mixtapesService"; 
-import {userClient, updateUserLikes as updateUserLikesMut} from "../../services/userService";
+import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -36,7 +37,8 @@ const MixtapePage = (props) => {
   const id = url[url.length - 1];
 
   // Extract the user from the session
-  const user = JSON.parse(window.sessionStorage.getItem("user"));
+  const tempUser = JSON.parse(window.sessionStorage.getItem("user"));
+  const [user, setUser] = React.useState(tempUser)
   /* ---------- HOOKS ---------- */
   // Mixtape editing
   const [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
@@ -52,6 +54,9 @@ const MixtapePage = (props) => {
   const [commentText, setCommentText] = React.useState("");
   const [replyIndex, setReplyIndex] = React.useState(-1);
 
+  //request pending
+  const [requestPending, setRequestPending] = React.useState(false);
+
   // // Forking
   // const [isPublic, setPublic] = React.useState(false);
 
@@ -66,9 +71,22 @@ const MixtapePage = (props) => {
   const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
   const [addMixtapeMutation] = useMutation(addMixtapeMut, {client: mixtapesClient});
   const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
+  const [updateDislikesMutation] = useMutation(updateDislikesMut, {client: mixtapesClient});
 
-  const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: () => {
-    console.log("Completed");
+  const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: (data) => {
+    user.likedMixtapes = data.setLikeMixtape.likedMixtapes; 
+    user.dislikedMixtapes = data.setLikeMixtape.dislikedMixtapes;
+    setUser(user);
+    window.sessionStorage.setItem("user", JSON.stringify(user));
+    setRequestPending(false);
+  }});
+
+  const [updateUserDislikesMutation] = useMutation(updateUserDislikesMut, {client: userClient, onCompleted: (data) => {
+    user.likedMixtapes = data.setDislikeMixtape.likedMixtapes; 
+    user.dislikedMixtapes = data.setDislikeMixtape.dislikedMixtapes;
+    setUser(user);
+    window.sessionStorage.setItem("user", JSON.stringify(user));
+    setRequestPending(false);
   }});
 
   /* ---------- CALLBACKS ---------- */
@@ -230,14 +248,39 @@ const MixtapePage = (props) => {
 
   const incrementLikes = () => {
     if (!loading){
-      updateLikesMutation({variables:{id: id, incAmount: 1}});
-      updateUserLikesMutation({variables: {id: user._id, mixtapeId: id, like: true}});
+      if (!requestPending){
+        setRequestPending(true);
+        if (user.dislikedMixtapes.includes(id)){
+          updateDislikesMutation({variables: {id: id, incAmount: -1}});
+        }
+        if (user.likedMixtapes.includes(id)){
+          updateLikesMutation({variables: {id: id, incAmount: -1}});
+          updateUserLikesMutation({variables: {id: user._id, mixtapeId: id, like: false}});
+        }
+        else{
+          updateLikesMutation({variables:{id: id, incAmount: 1}});
+          updateUserLikesMutation({variables: {id: user._id, mixtapeId: id, like: true}});
+        }
+      }
     }
   }
 
-  const decrementLikes = () => {
+  const incrementDislikes = () => {
     if (!loading){
-      updateLikesMutation({variables: {id: id, incAmount: -1}});
+      if (!requestPending){
+        setRequestPending(true);
+        if (user.likedMixtapes.includes(id)){
+          updateLikesMutation({variables: {id: id, incAmount: -1}});
+        }
+        if (user.dislikedMixtapes.includes(id)){
+          updateDislikesMutation({variables: {id: id, incAmount: -1}});
+          updateUserDislikesMutation({variables: {id: user._id, mixtapeId: id, dislike: false}});
+        }
+        else{
+          updateDislikesMutation({variables:{id: id, incAmount: 1}});
+          updateUserDislikesMutation({variables: {id: user._id, mixtapeId: id, dislike: true}});
+        }
+      }
     }
   }
 
@@ -330,12 +373,15 @@ const MixtapePage = (props) => {
               <div className="likes-listens">
                 {!loading &&
                 <div>
-                  <IconButton component={<ThumbUpIcon />} onClick={incrementLikes} />
-                  <IconButton component={<ThumbDownIcon />} onClick={decrementLikes} />
+                  <IconButton component={<ThumbUpIcon style={user.likedMixtapes.includes(id) ? ({color:"var(--primary-color)"}):({})}/>} onClick={incrementLikes} />
+                  <IconButton component={<ThumbDownIcon style={user.dislikedMixtapes.includes(id) ? ({color:"var(--warning-color)"}):({})}/>} onClick={incrementDislikes} />
                 </div>
                 }
                 <div>
                   Likes: {!loading && data.mixtape.likes}
+                </div>
+                <div>
+                  Dislikes: {!loading && data.mixtape.dislikes}
                 </div>
                 <div>
                   Listens: {!loading && data.mixtape.listens}

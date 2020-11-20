@@ -39,6 +39,7 @@ export const getUser = gql`
             active,
             mixtapes,
             likedMixtapes,
+            dislikedMixtapes,
             receivedMashmateRequests {
                 senderId,
                 recipientId,
@@ -65,6 +66,8 @@ query User($usernameOrEmail: String!){
         numFollowers,
         active,
         mixtapes,
+        likedMixtapes,
+        dislikedMixtapes,
         receivedMashmateRequests {
             senderId,
             recipientId,
@@ -115,6 +118,7 @@ mutation AddUser(
         $mashmates: [mashmateInput]!
         $mixtapes: [String]!
         $likedMixtapes: [String]!
+        $dislikedMixtapes: [String]!
         $genrePreferences: [genrePreferencesInput]!
         $sentMashmateRequests: [mashmateRequestInput]!
         $receivedMashmateRequests: [mashmateRequestInput]!
@@ -130,6 +134,7 @@ mutation AddUser(
         mashmates: $mashmates
         mixtapes: $mixtapes
         likedMixtapes: $likedMixtapes
+        dislikedMixtapes: $dislikedMixtapes
         genrePreferences: $genrePreferences
         sentMashmateRequests: $sentMashmateRequests
         receivedMashmateRequests: $receivedMashmateRequests
@@ -153,6 +158,7 @@ mutation like(
     ){
         _id
         likedMixtapes
+        dislikedMixtapes
     }
 }`
   
@@ -169,5 +175,6 @@ export const updateUserDislikes = gql`
     ){
         _id
         dislikedMixtapes
+        likedMixtapes
     }
 }`
