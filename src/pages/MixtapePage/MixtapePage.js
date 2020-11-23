@@ -65,6 +65,7 @@ const MixtapePage = (props) => {
   // const [isPublic, setPublic] = React.useState(false);
 
   const [tempTitle, setTempTitle] = React.useState("");
+  const [tempDescription, setTempDescription] = React.useState("");
 
   /* ---------- QUERIES ---------- */
   let {loading, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
@@ -333,6 +334,16 @@ const MixtapePage = (props) => {
     setTempTitle("");
   }
 
+  const editDescription = () => {
+    setEditingMixtapeDescription(false);
+    console.log("\nTemp Description: " +  tempDescription);
+    if(tempDescription.length != 0){
+      console.log("\nTemp Description: " +  tempDescription);
+      updateMixtapeDescriptionMutation({variables: {id: data.mixtape._id, description: tempDescription}});
+    }
+    setTempDescription("");
+  }
+
   return (
     <div className="page-container">
       <Navbar />
@@ -454,7 +465,9 @@ const MixtapePage = (props) => {
                   callback={() => setEditingMixtapeDescription(true)}/>) 
                 : (
                 <IconButton component={<SaveIcon />}
-                  callback={() => setEditingMixtapeDescription(false) }/>
+                  //callback={() => setEditingMixtapeDescription(false)}
+                  onClick={editDescription}
+                  />
               )}
               </div>
             }
@@ -464,6 +477,7 @@ const MixtapePage = (props) => {
                 className="mixtape-description"
                 defaultValue={data.mixtape.description}
                 disabled={!editingMixtapeDescription}
+                onChange={event => setTempDescription(event.target.value)}
                 maxLength="500"
               />  
             </div>}
