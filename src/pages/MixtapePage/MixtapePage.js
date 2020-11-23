@@ -66,6 +66,7 @@ const MixtapePage = (props) => {
 
   const [tempTitle, setTempTitle] = React.useState("");
   const [tempDescription, setTempDescription] = React.useState("");
+  const [tempGenres, setTempGenres] = React.useState([]);
 
   /* ---------- QUERIES ---------- */
   let {loading, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
@@ -326,9 +327,7 @@ const MixtapePage = (props) => {
 
   const editTitle = () => {
     setEditingMixtapeTitle(false);
-    console.log("\nTemp Title: " +  tempTitle);
     if(tempTitle.length != 0){
-      console.log("\nTemp Title: " +  tempTitle);
       updateMixtapeTitleMutation({variables: {id: data.mixtape._id, title: tempTitle}});
     }
     setTempTitle("");
@@ -336,12 +335,16 @@ const MixtapePage = (props) => {
 
   const editDescription = () => {
     setEditingMixtapeDescription(false);
-    console.log("\nTemp Description: " +  tempDescription);
     if(tempDescription.length != 0){
-      console.log("\nTemp Description: " +  tempDescription);
       updateMixtapeDescriptionMutation({variables: {id: data.mixtape._id, description: tempDescription}});
     }
     setTempDescription("");
+  }
+
+  const editGenres = () => {
+    console.log("GENRE EDIT\n");
+    updateMixtapeGenresMutation({variables: {id: data.mixtape._id, genres: tempGenres}});
+    setTempGenres([]);
   }
 
   return (
@@ -424,9 +427,31 @@ const MixtapePage = (props) => {
                   Listens: {!loading && data.mixtape.listens}
                 </div>
               </div>
-              {editView ? (<div>Genres: <Multiselect multiple data={genres}/></div>):
-              (<div>Genres: {!loading && <span>{data.mixtape.genres.join(", ")}</span>}</div>)}
+
+              {editView ? 
+                (
+                  <div>
+                    Genres: <Multiselect data={genres} 
+                      onSelect={editGenres} 
+                      onRemove={editGenres} 
+                      //onChange={editGenres}
+                      //onChange={console.log("CHANGE GENRE DETECTED!")}
+                      //onChange={() => console.log("HELLO")}
+                      multiple
+                      />
+                  </div>
+                ):
+                (
+                  <div>
+                    Genres: {!loading && <span>{data.mixtape.genres.join(", ")}</span>}
+                  </div>
+                )
+              }
+
+
             </div>
+
+
             <div className="song-container">
               <div style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
                 {editView && (!editingSongs ? (
