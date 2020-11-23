@@ -24,7 +24,10 @@ import { mixtapesClient, getMixtape,
   addReply as addReplyMut,
   addMixtape as addMixtapeMut,
   updateLikes as updateLikesMut,
-  updateDislikes as updateDislikesMut
+  updateDislikes as updateDislikesMut,
+  updateMixtapeTitle as updateMixtapeTitleMut,
+  updateMixtapeDescription as updateMixtapeDescriptionMut,
+  updateMixtapeGenres as updateMixtapeGenresMut
   } from "../../services/mixtapesService"; 
 import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
 
@@ -42,6 +45,7 @@ const MixtapePage = (props) => {
   /* ---------- HOOKS ---------- */
   // Mixtape editing
   const [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
+  const [editingMixtapeDescription, setEditingMixtapeDescription] = React.useState(false);
   const [editingSongs, setEditingSongs] = React.useState(false);
   const [editList, setEditList] = React.useState([]);
   const [editView, setEditView] = React.useState(null);
@@ -60,6 +64,8 @@ const MixtapePage = (props) => {
   // // Forking
   // const [isPublic, setPublic] = React.useState(false);
 
+  const [tempTitle, setTempTitle] = React.useState("");
+
   /* ---------- QUERIES ---------- */
   let {loading, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
 
@@ -72,6 +78,10 @@ const MixtapePage = (props) => {
   const [addMixtapeMutation] = useMutation(addMixtapeMut, {client: mixtapesClient});
   const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
   const [updateDislikesMutation] = useMutation(updateDislikesMut, {client: mixtapesClient});
+  const [updateMixtapeTitleMutation] = useMutation(updateMixtapeTitleMut, {client: mixtapesClient});
+  const [updateMixtapeDescriptionMutation] = useMutation(updateMixtapeDescriptionMut, {client: mixtapesClient});
+  const [updateMixtapeGenresMutation] = useMutation(updateMixtapeGenresMut, {client: mixtapesClient});
+  
 
   const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: (data) => {
     user.likedMixtapes = data.setLikeMixtape.likedMixtapes; 
@@ -313,6 +323,16 @@ const MixtapePage = (props) => {
     }
   }
 
+  const editTitle = () => {
+    setEditingMixtapeTitle(false);
+    console.log("\nTemp Title: " +  tempTitle);
+    if(tempTitle.length != 0){
+      console.log("\nTemp Title: " +  tempTitle);
+      updateMixtapeTitleMutation({variables: {id: data.mixtape._id, title: tempTitle}});
+    }
+    setTempTitle("");
+  }
+
   return (
     <div className="page-container">
       <Navbar />
@@ -329,18 +349,21 @@ const MixtapePage = (props) => {
           (<Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row", alignItems:"center"}}>
             <div> </div>
           </Form.Group>)
-          }  
+          }
+          {/*Mixtape's Title*/}
           <div className="mixtape-title-container">
             {editView &&
-            <div>
-            {!editingMixtapeTitle ? (
-              <IconButton component={<EditIcon />}
-                callback={() => setEditingMixtapeTitle(true)}/>) 
-              : (
-              <IconButton component={<SaveIcon />}
-                callback={() => setEditingMixtapeTitle(false)}/>
-            )}
-            </div>
+              <div>
+              {!editingMixtapeTitle ? (
+                <IconButton component={<EditIcon />}
+                  callback={() => setEditingMixtapeTitle(true)}/>) 
+                : (
+                <IconButton component={<SaveIcon />}
+                  //callback={() => setEditingMixtapeTitle(false)}
+                  onClick={editTitle}
+                  />
+              )}
+              </div>
             }
             <div className="mixtape-page-title">
               <Form.Control
@@ -348,11 +371,14 @@ const MixtapePage = (props) => {
                 className="mixtape-title"
                 defaultValue={!loading && data.mixtape.title}
                 disabled={!editingMixtapeTitle}
+                onChange={event => setTempTitle(event.target.value)}
                 maxLength="50"
               />
+              {/* Mixtape's Owner */}
               {!loading && <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-dark">{data.mixtape.ownerName}</div></Link>}
             </div>
           </div>
+
           <div>
             <MashMixtapeModal mixtape={!loading ? data.mixtape : null} />
             <IconButton component={<CallSplitIcon onClick={addMixtape}/>} />
@@ -415,9 +441,34 @@ const MixtapePage = (props) => {
               
             </div>
           </div>
-          <div>
+
+          {/* Mixtape Description */}
+          {/* <div>
             {!loading && <div>{data.mixtape.description}</div>}
+          </div> */}
+          <div>
+            {editView &&
+              <div>
+              {!editingMixtapeDescription ? (
+                <IconButton component={<EditIcon />}
+                  callback={() => setEditingMixtapeDescription(true)}/>) 
+                : (
+                <IconButton component={<SaveIcon />}
+                  callback={() => setEditingMixtapeDescription(false) }/>
+              )}
+              </div>
+            }
+            {!loading && <div>
+              <Form.Control
+                type="input"
+                className="mixtape-description"
+                defaultValue={data.mixtape.description}
+                disabled={!editingMixtapeDescription}
+                maxLength="500"
+              />  
+            </div>}
           </div>
+
           <div className="comment-section-container space-above">
             <div>
               <Card className="comments-card">
