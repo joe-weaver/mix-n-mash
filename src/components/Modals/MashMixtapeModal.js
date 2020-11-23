@@ -6,16 +6,18 @@ import { useQuery, useMutation } from "@apollo/client";
 import { mixtapesClient, getUserMixtapes, mashMixtape as mashMixtapeMut } from "../../services/mixtapesService";
 import IconButton from "../IconButton/IconButton";
 import MashMixtapeCard from "./Components/MashMixtapeCard";
+import { useAuth } from "../../utils/use-auth";
 
 import "../../pages/Page.css";
 
 const MashMixtapeModal = (props) => {
-    const id = JSON.parse(window.sessionStorage.getItem("user"))._id;
+    // Hook into the auth state
+    const auth = useAuth();
 
     const [show, setShow] = React.useState(false);
 
     // Get list of mixtapes from user
-    const {loading, data} = useQuery(getUserMixtapes, {client: mixtapesClient, variables: {userId: id}});
+    const {loading, data} = useQuery(getUserMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id}});
     const [mashMixtape] = useMutation(mashMixtapeMut, {client: mixtapesClient});
 
     const mergeMixtape = (mixtape) => {
@@ -74,7 +76,7 @@ const MashMixtapeModal = (props) => {
                 <Modal.Title>Merge: <br/>Select a mixtape to recieve the contents of the mixtape you are viewing.</Modal.Title>
             </Modal.Header>
             <Modal.Body className="scroll-content">
-                {!loading && data.getUserMixtapes.filter(mixtape => mixtape.ownerId === id).map(mixtape => (
+                {!loading && data.getUserMixtapes.filter(mixtape => mixtape.ownerId === auth.user._id).map(mixtape => (
                     <MashMixtapeCard key={mixtape._id} mixtape={mixtape} mergeMixtape={() => mergeMixtape(mixtape)}></MashMixtapeCard>
                 ))}
             </Modal.Body>

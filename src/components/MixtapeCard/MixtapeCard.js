@@ -2,16 +2,18 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { Link } from "react-router-dom";
-
 import IconButton from "../IconButton/IconButton";
-
 import { useMutation } from "@apollo/client";
+
 import {mixtapesClient, removeMixtape as removeMixtapeMut} from "../../services/mixtapesService"
+import { useAuth } from "../../utils/use-auth";
 
 import "./MixtapeCardStyle.css";
 
 const MixtapeCard = (props) => {
-  const user = JSON.parse(window.sessionStorage.getItem("user"));
+
+  const auth = useAuth();
+
   const [removeMixtape] = useMutation(removeMixtapeMut, {client: mixtapesClient});
   const doRemoveMixtape = () => {removeMixtape({variables: {id: props.mixtape._id}}); props.refetchMyMixtapes();}
   return (
@@ -30,7 +32,7 @@ const MixtapeCard = (props) => {
 
         <div className="mixtape-card-delete">
           <div>
-            {props.mixtape.ownerId === user._id ?
+            {props.mixtape.ownerId === auth.user._id ?
             (<IconButton component={<HighlightOffIcon />} onClick={() => doRemoveMixtape()}/>):
             (<div></div>)}  
           </div>

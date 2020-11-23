@@ -22,26 +22,28 @@ import { mixtapesClient, getMixtape,
   editSongs as editSongsMut,
   addComment as addCommentMut,
   addReply as addReplyMut,
-  addMixtape as addMixtapeMut,
+  createMixtapeFromBase as createMixtapeFromBaseMut,
   updateLikes as updateLikesMut,
   updateDislikes as updateDislikesMut,
   updateMixtapeTitle as updateMixtapeTitleMut,
   updateMixtapeDescription as updateMixtapeDescriptionMut,
   updateMixtapeGenres as updateMixtapeGenresMut
   } from "../../services/mixtapesService"; 
+
 import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
+import { useAuth } from "../../utils/use-auth";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
 
 const MixtapePage = (props) => {
-  // Extract the id from the url
+  // Extract the mixtape id from the url
   let url = window.location.pathname.split("/");
   const id = url[url.length - 1];
 
-  // Extract the user from the session
-  const tempUser = JSON.parse(window.sessionStorage.getItem("user"));
-  const [user, setUser] = React.useState(tempUser)
+  // Hook into the auth object
+  const auth = useAuth();
+
   /* ---------- HOOKS ---------- */
   // Mixtape editing
   const [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
@@ -76,7 +78,7 @@ const MixtapePage = (props) => {
   const [addCommentMutation] = useMutation(addCommentMut, {client: mixtapesClient});
   const [addReplyMutation] = useMutation(addReplyMut, {client: mixtapesClient});
   const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
-  const [addMixtapeMutation] = useMutation(addMixtapeMut, {client: mixtapesClient});
+  const [createMixtapeFromBase] = useMutation(createMixtapeFromBaseMut, {client: mixtapesClient});
   const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
   const [updateDislikesMutation] = useMutation(updateDislikesMut, {client: mixtapesClient});
   const [updateMixtapeTitleMutation] = useMutation(updateMixtapeTitleMut, {client: mixtapesClient});
@@ -85,18 +87,12 @@ const MixtapePage = (props) => {
   
 
   const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: (data) => {
-    user.likedMixtapes = data.setLikeMixtape.likedMixtapes; 
-    user.dislikedMixtapes = data.setLikeMixtape.dislikedMixtapes;
-    setUser(user);
-    window.sessionStorage.setItem("user", JSON.stringify(user));
+    auth.getUser({likedMixtapes: data.setLikeMixtape.likedMixtapes, dislikedMixtapes: data.setLikeMixtape.dislikedMixtapes});
     setRequestPending(false);
   }});
 
   const [updateUserDislikesMutation] = useMutation(updateUserDislikesMut, {client: userClient, onCompleted: (data) => {
-    user.likedMixtapes = data.setDislikeMixtape.likedMixtapes; 
-    user.dislikedMixtapes = data.setDislikeMixtape.dislikedMixtapes;
-    setUser(user);
-    window.sessionStorage.setItem("user", JSON.stringify(user));
+    auth.getUser({likedMixtapes: data.setDislikeMixtape.likedMixtapes, dislikedMixtapes: data.setDislikeMixtape.dislikedMixtapes});
     setRequestPending(false);
   }});
 
@@ -113,8 +109,8 @@ const MixtapePage = (props) => {
 
     // Add a comment to the backend (and update when it returns)
     const comment = {
-      userId: user._id,
-      username: user.username,
+      userId: auth.user._id,
+      username: auth.user.username,
       content: commentText
     };
     addCommentMutation({variables: {id: data.mixtape._id, comment: comment}});
@@ -126,8 +122,8 @@ const MixtapePage = (props) => {
   const submitReply = (commentId, replyText) => {
         // Add a comment to the backend (and update when it returns)
         const reply = {
-          userId: user._id,
-          username: user.username,
+          userId: auth.user._id,
+          username: auth.user.username,
           content: replyText
         };
 
@@ -159,30 +155,15 @@ const MixtapePage = (props) => {
 
   //Adding a mixtape
   const addMixtape = () => {
-    let tempSongs = data.mixtape.songs.map (song => 
-      (
-        {youtubeId: song.youtubeId,
-        name: song.name,
-        }
-      )
-    )
-    addMixtapeMutation({variables: {
+    createMixtapeFromBase({variables: {
+      ownerId: auth.user._id, 
+      ownerName: auth.user.username,
       title: data.mixtape.title, 
       description: data.mixtape.description, 
       genres: data.mixtape.genres, 
       image: data.mixtape.image, 
-      songs: tempSongs, 
-      ownerId: user._id, 
-      ownerName: user.username,
-      listens: 0, 
-      likes: 0, 
-      dislikes: 0, 
-      comments: [], 
-      private: true, 
-      collaborators: [],
-      likesPerDay: [],
-      listensPerDay: []
-      }});
+      songs: data.mixtape.songs.map(song =>({youtubeId: song.youtubeId, name: song.name}))
+    }});
   }
 
   const moveSongEarlier = (index) => {
@@ -251,8 +232,8 @@ const MixtapePage = (props) => {
 
   const userCanEdit = () => {
     if (!loading){
-      if (data.mixtape.ownerId === user._id){ return true; }
-      if (data.mixtape.collaborators.reduce((acc, x) => (x.userId === user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
+      if (data.mixtape.ownerId === auth.user._id){ return true; }
+      if (data.mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
       return false;
     }
   }
@@ -261,16 +242,16 @@ const MixtapePage = (props) => {
     if (!loading){
       if (!requestPending){
         setRequestPending(true);
-        if (user.dislikedMixtapes.includes(id)){
+        if (auth.user.dislikedMixtapes.includes(id)){
           updateDislikesMutation({variables: {id: id, incAmount: -1}});
         }
-        if (user.likedMixtapes.includes(id)){
+        if (auth.user.likedMixtapes.includes(id)){
           updateLikesMutation({variables: {id: id, incAmount: -1}});
-          updateUserLikesMutation({variables: {id: user._id, mixtapeId: id, like: false}});
+          updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: false}});
         }
         else{
           updateLikesMutation({variables:{id: id, incAmount: 1}});
-          updateUserLikesMutation({variables: {id: user._id, mixtapeId: id, like: true}});
+          updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: true}});
         }
       }
     }
@@ -280,16 +261,16 @@ const MixtapePage = (props) => {
     if (!loading){
       if (!requestPending){
         setRequestPending(true);
-        if (user.likedMixtapes.includes(id)){
+        if (auth.user.likedMixtapes.includes(id)){
           updateLikesMutation({variables: {id: id, incAmount: -1}});
         }
-        if (user.dislikedMixtapes.includes(id)){
+        if (auth.user.dislikedMixtapes.includes(id)){
           updateDislikesMutation({variables: {id: id, incAmount: -1}});
-          updateUserDislikesMutation({variables: {id: user._id, mixtapeId: id, dislike: false}});
+          updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, dislike: false}});
         }
         else{
           updateDislikesMutation({variables:{id: id, incAmount: 1}});
-          updateUserDislikesMutation({variables: {id: user._id, mixtapeId: id, dislike: true}});
+          updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, dislike: true}});
         }
       }
     }
@@ -410,8 +391,8 @@ const MixtapePage = (props) => {
               <div className="likes-listens">
                 {!loading &&
                 <div>
-                  <IconButton component={<ThumbUpIcon style={user.likedMixtapes.includes(id) ? ({color:"var(--primary-color)"}):({})}/>} onClick={incrementLikes} />
-                  <IconButton component={<ThumbDownIcon style={user.dislikedMixtapes.includes(id) ? ({color:"var(--warning-color)"}):({})}/>} onClick={incrementDislikes} />
+                  <IconButton component={<ThumbUpIcon style={auth.user.likedMixtapes.includes(id) ? ({color:"var(--primary-color)"}):({})}/>} onClick={incrementLikes} />
+                  <IconButton component={<ThumbDownIcon style={auth.user.dislikedMixtapes.includes(id) ? ({color:"var(--warning-color)"}):({})}/>} onClick={incrementDislikes} />
                 </div>
                 }
                 <div>

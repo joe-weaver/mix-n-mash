@@ -1,9 +1,10 @@
 import React from "react";
 import { Card, Button, Form } from "react-bootstrap";
-import { useLazyQuery } from "@apollo/client";
-import { userClient, getUserByUsernameOrEmail } from "../../services/userService";
 import { useHistory } from "react-router-dom";
+
 import GeneratorButton from "../../utils/GeneratorButton"
+import { useAuth } from "../../utils/use-auth";
+import SignUpForm from "./Components/SignUpForm";
 
 import "./SignInStyle.css";
 
@@ -12,23 +13,34 @@ const SignIn = (props) => {
   let [signup, setSignup] = React.useState(false);
 
   let [username, setUsername] = React.useState("");
+  let [password, setPassword] = React.useState("");
 
   const history = useHistory();
 
-  const retrievedUser = (data) => {
-    let user = data.getUserByUsernameOrEmail;
-    if(user){
-      window.sessionStorage.setItem("user", JSON.stringify(user));
-      history.push("/HottestMixtapes");
+  const auth = useAuth();
+
+  const [invalidLoginCreds, setInvalidLoginCreds] = React.useState(false);
+
+  const tryLogin = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Don't bother checking if either field is empty
+    if(username !== "" && password !== ""){
+      auth.login(username, password).then(res => {
+        if(res.error){;
+          setInvalidLoginCreds(true);
+        } else {
+          history.push("/HottestMixtapes");
+        }
+      });
     } else {
-      console.log("No such user")
+      setInvalidLoginCreds(true);
     }
   }
 
-  const [getUser] = useLazyQuery(getUserByUsernameOrEmail, {client: userClient, onCompleted: retrievedUser});
-
-  const tryLogIn = () => {
-    getUser({variables: {usernameOrEmail: username}});
+  const completeSignup = () => {
+    setSignup(false);
   }
 
   return (
@@ -39,24 +51,26 @@ const SignIn = (props) => {
         {forgotPassword && <h2>Forgot Password</h2>}
         {signup && <h2>Sign Up</h2>}
 
+        {/* ---------- LOGIN FORM ---------- */}
         {!forgotPassword && !signup && <Card.Body>
-          <Form className="space-above">
+          <Form className="space-above" onSubmit={tryLogin}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Username or Email address</Form.Label>
               <Form.Control
-                type="email"
+                type="text"
                 placeholder="Enter username or email"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
+                isInvalid={invalidLoginCreds}
               />
+              <Form.Control.Feedback type="invalid">Invalid username or password</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password{" "}<div className="mm-link-dark" onClick={() => setForgotPassword(true)}>Forgot Password</div>
-            </Form.Label>
-              <Form.Control type="password" placeholder="Password" />
+              <Form.Label>Password{" "}<div className="mm-link-dark" onClick={() => setForgotPassword(true)}>Forgot Password</div></Form.Label>
+              <Form.Control type="password" placeholder="Password" onChange={(event) => setPassword(event.target.value)} />
             </Form.Group>
-            <Button variant="primary" className="mm-btn-alt" onClick={tryLogIn}>
+            <Button type="submit" variant="primary" className="mm-btn-alt">
               Get Mashing!
             </Button>{" "}
             <Button variant="primary" className="mm-btn-alt" onClick={() => setSignup(true)}>
@@ -76,32 +90,7 @@ const SignIn = (props) => {
 
         {signup &&
           <Card.Body>
-            <Form>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                />
-                <Form.Label>Username</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Choose a username"
-                />
-              </Form.Group>
-
-              <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
-                <Form.Control type="password" placeholder="Confirm Password" />
-              </Form.Group>
-              <Button variant="primary" className="mm-btn-alt" onClick={() => setSignup(false)}>
-                Create Account
-              </Button>        
-              <Button variant="primary" className="mm-btn-alt" onClick={() => setSignup(false)}> 
-                Cancel
-              </Button>
-            </Form>
+            <SignUpForm cancelSignUp={() => setSignup(false)} successfulSignup={completeSignup}/>
           </Card.Body>}
       </Card>
     </div>
