@@ -73,7 +73,7 @@ const MashMixtapeModal = (props) => {
 
         <Modal show={show} onHide={() => setShow(false)}>
             <Modal.Header closeButton>
-                <Modal.Title>Sharing Privileges</Modal.Title>
+                <Modal.Title>Merge: <br/>Select a mixtape to recieve the contents of the mixtape you are viewing.</Modal.Title>
             </Modal.Header>
             <Modal.Body className="scroll-content">
                 {!loading && data.getUserMixtapes.filter(mixtape => mixtape.ownerId === auth.user._id).map(mixtape => (

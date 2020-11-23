@@ -24,8 +24,13 @@ import { mixtapesClient, getMixtape,
   addReply as addReplyMut,
   createMixtapeFromBase as createMixtapeFromBaseMut,
   updateLikes as updateLikesMut,
+  updateDislikes as updateDislikesMut,
+  updateMixtapeTitle as updateMixtapeTitleMut,
+  updateMixtapeDescription as updateMixtapeDescriptionMut,
+  updateMixtapeGenres as updateMixtapeGenresMut
   } from "../../services/mixtapesService"; 
-import {userClient, updateUserLikes as updateUserLikesMut} from "../../services/userService";
+
+import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
 import { useAuth } from "../../utils/use-auth";
 
 import "../Page.css";
@@ -42,6 +47,7 @@ const MixtapePage = (props) => {
   /* ---------- HOOKS ---------- */
   // Mixtape editing
   const [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
+  const [editingMixtapeDescription, setEditingMixtapeDescription] = React.useState(false);
   const [editingSongs, setEditingSongs] = React.useState(false);
   const [editList, setEditList] = React.useState([]);
   const [editView, setEditView] = React.useState(null);
@@ -54,8 +60,14 @@ const MixtapePage = (props) => {
   const [commentText, setCommentText] = React.useState("");
   const [replyIndex, setReplyIndex] = React.useState(-1);
 
+  //request pending
+  const [requestPending, setRequestPending] = React.useState(false);
+
   // // Forking
   // const [isPublic, setPublic] = React.useState(false);
+
+  const [tempTitle, setTempTitle] = React.useState("");
+  const [tempDescription, setTempDescription] = React.useState("");
 
   /* ---------- QUERIES ---------- */
   let {loading, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
@@ -68,9 +80,20 @@ const MixtapePage = (props) => {
   const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
   const [createMixtapeFromBase] = useMutation(createMixtapeFromBaseMut, {client: mixtapesClient});
   const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
+  const [updateDislikesMutation] = useMutation(updateDislikesMut, {client: mixtapesClient});
+  const [updateMixtapeTitleMutation] = useMutation(updateMixtapeTitleMut, {client: mixtapesClient});
+  const [updateMixtapeDescriptionMutation] = useMutation(updateMixtapeDescriptionMut, {client: mixtapesClient});
+  const [updateMixtapeGenresMutation] = useMutation(updateMixtapeGenresMut, {client: mixtapesClient});
+  
 
-  const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: () => {
-    console.log("Completed");
+  const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: (data) => {
+    auth.getUser({likedMixtapes: data.setLikeMixtape.likedMixtapes, dislikedMixtapes: data.setLikeMixtape.dislikedMixtapes});
+    setRequestPending(false);
+  }});
+
+  const [updateUserDislikesMutation] = useMutation(updateUserDislikesMut, {client: userClient, onCompleted: (data) => {
+    auth.getUser({likedMixtapes: data.setDislikeMixtape.likedMixtapes, dislikedMixtapes: data.setDislikeMixtape.dislikedMixtapes});
+    setRequestPending(false);
   }});
 
   /* ---------- CALLBACKS ---------- */
@@ -217,14 +240,39 @@ const MixtapePage = (props) => {
 
   const incrementLikes = () => {
     if (!loading){
-      updateLikesMutation({variables:{id: id, incAmount: 1}});
-      updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: true}});
+      if (!requestPending){
+        setRequestPending(true);
+        if (auth.user.dislikedMixtapes.includes(id)){
+          updateDislikesMutation({variables: {id: id, incAmount: -1}});
+        }
+        if (auth.user.likedMixtapes.includes(id)){
+          updateLikesMutation({variables: {id: id, incAmount: -1}});
+          updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: false}});
+        }
+        else{
+          updateLikesMutation({variables:{id: id, incAmount: 1}});
+          updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: true}});
+        }
+      }
     }
   }
 
-  const decrementLikes = () => {
+  const incrementDislikes = () => {
     if (!loading){
-      updateLikesMutation({variables: {id: id, incAmount: -1}});
+      if (!requestPending){
+        setRequestPending(true);
+        if (auth.user.likedMixtapes.includes(id)){
+          updateLikesMutation({variables: {id: id, incAmount: -1}});
+        }
+        if (auth.user.dislikedMixtapes.includes(id)){
+          updateDislikesMutation({variables: {id: id, incAmount: -1}});
+          updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, dislike: false}});
+        }
+        else{
+          updateDislikesMutation({variables:{id: id, incAmount: 1}});
+          updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, dislike: true}});
+        }
+      }
     }
   }
 
@@ -257,6 +305,26 @@ const MixtapePage = (props) => {
     }
   }
 
+  const editTitle = () => {
+    setEditingMixtapeTitle(false);
+    console.log("\nTemp Title: " +  tempTitle);
+    if(tempTitle.length != 0){
+      console.log("\nTemp Title: " +  tempTitle);
+      updateMixtapeTitleMutation({variables: {id: data.mixtape._id, title: tempTitle}});
+    }
+    setTempTitle("");
+  }
+
+  const editDescription = () => {
+    setEditingMixtapeDescription(false);
+    console.log("\nTemp Description: " +  tempDescription);
+    if(tempDescription.length != 0){
+      console.log("\nTemp Description: " +  tempDescription);
+      updateMixtapeDescriptionMutation({variables: {id: data.mixtape._id, description: tempDescription}});
+    }
+    setTempDescription("");
+  }
+
   return (
     <div className="page-container">
       <Navbar />
@@ -273,18 +341,21 @@ const MixtapePage = (props) => {
           (<Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row", alignItems:"center"}}>
             <div> </div>
           </Form.Group>)
-          }  
+          }
+          {/*Mixtape's Title*/}
           <div className="mixtape-title-container">
             {editView &&
-            <div>
-            {!editingMixtapeTitle ? (
-              <IconButton component={<EditIcon />}
-                callback={() => setEditingMixtapeTitle(true)}/>) 
-              : (
-              <IconButton component={<SaveIcon />}
-                callback={() => setEditingMixtapeTitle(false)}/>
-            )}
-            </div>
+              <div>
+              {!editingMixtapeTitle ? (
+                <IconButton component={<EditIcon />}
+                  callback={() => setEditingMixtapeTitle(true)}/>) 
+                : (
+                <IconButton component={<SaveIcon />}
+                  //callback={() => setEditingMixtapeTitle(false)}
+                  onClick={editTitle}
+                  />
+              )}
+              </div>
             }
             <div className="mixtape-page-title">
               <Form.Control
@@ -292,11 +363,14 @@ const MixtapePage = (props) => {
                 className="mixtape-title"
                 defaultValue={!loading && data.mixtape.title}
                 disabled={!editingMixtapeTitle}
+                onChange={event => setTempTitle(event.target.value)}
                 maxLength="50"
               />
+              {/* Mixtape's Owner */}
               {!loading && <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-dark">{data.mixtape.ownerName}</div></Link>}
             </div>
           </div>
+
           <div>
             <MashMixtapeModal mixtape={!loading ? data.mixtape : null} />
             <IconButton component={<CallSplitIcon onClick={addMixtape}/>} />
@@ -317,12 +391,15 @@ const MixtapePage = (props) => {
               <div className="likes-listens">
                 {!loading &&
                 <div>
-                  <IconButton component={<ThumbUpIcon />} onClick={incrementLikes} />
-                  <IconButton component={<ThumbDownIcon />} onClick={decrementLikes} />
+                  <IconButton component={<ThumbUpIcon style={auth.user.likedMixtapes.includes(id) ? ({color:"var(--primary-color)"}):({})}/>} onClick={incrementLikes} />
+                  <IconButton component={<ThumbDownIcon style={auth.user.dislikedMixtapes.includes(id) ? ({color:"var(--warning-color)"}):({})}/>} onClick={incrementDislikes} />
                 </div>
                 }
                 <div>
                   Likes: {!loading && data.mixtape.likes}
+                </div>
+                <div>
+                  Dislikes: {!loading && data.mixtape.dislikes}
                 </div>
                 <div>
                   Listens: {!loading && data.mixtape.listens}
@@ -356,9 +433,37 @@ const MixtapePage = (props) => {
               
             </div>
           </div>
-          <div>
+
+          {/* Mixtape Description */}
+          {/* <div>
             {!loading && <div>{data.mixtape.description}</div>}
+          </div> */}
+          <div>
+            {editView &&
+              <div>
+              {!editingMixtapeDescription ? (
+                <IconButton component={<EditIcon />}
+                  callback={() => setEditingMixtapeDescription(true)}/>) 
+                : (
+                <IconButton component={<SaveIcon />}
+                  //callback={() => setEditingMixtapeDescription(false)}
+                  onClick={editDescription}
+                  />
+              )}
+              </div>
+            }
+            {!loading && <div>
+              <Form.Control
+                type="input"
+                className="mixtape-description"
+                defaultValue={data.mixtape.description}
+                disabled={!editingMixtapeDescription}
+                onChange={event => setTempDescription(event.target.value)}
+                maxLength="500"
+              />  
+            </div>}
           </div>
+
           <div className="comment-section-container space-above">
             <div>
               <Card className="comments-card">

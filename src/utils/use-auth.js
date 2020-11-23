@@ -68,8 +68,23 @@ function useProvideAuth(){
         });
     }
 
+    const doOptimisticUpdate = (userFields) => {
+        if(user){
+            for(let key in userFields){
+                if(user[key] !== undefined){
+                    user[key] = userFields[key];
+                }
+            }
+            console.log("Optimistic User:", user);
+            setUser(user);
+        }
+    }
+
     // Retrieves an UPDATED version of the user from the database
-    const getUser = () => {
+    const getUser = (userFields) => {
+        if(userFields !== undefined){
+            doOptimisticUpdate(userFields);
+        }
         setLoading(true);
         return getUserPassport().then(userOrError => {
             if(userOrError.error){

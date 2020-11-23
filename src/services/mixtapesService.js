@@ -22,6 +22,7 @@ query getMixtape($id: String!){
     private,
     listens,
     likes,
+    dislikes,
     likesPerDay,
     listensPerDay,
     collaborators {
@@ -180,6 +181,7 @@ mutation AddMixtape(
   }
 `;
 
+
 export const addSongs = gql`
 mutation addSongs($id: String!, $songs: [songInput]!){
   addSongs(id: $id, songs: $songs){
@@ -300,6 +302,40 @@ export const updateLikes = gql`
 mutation updateLikes($id: String!, $incAmount: Int!){
   updateLikes(id: $id, incAmount: $incAmount){
     _id,
+    likes,
+    dislikes
+  }
+}`
+
+export const updateDislikes = gql`
+mutation updateDislikes($id: String!, $incAmount: Int!){
+  updateDislikes(id: $id, incAmount: $incAmount){
+    _id,
+    dislikes,
     likes
+  }
+}`
+
+export const updateMixtapeTitle = gql`
+mutation updateMixtapeTitle($id: String!, $title: String!){
+  updateMixtapeTitle(id: $id, title: $title){
+    _id,
+    title,
+  }
+}`
+
+export const updateMixtapeDescription = gql`
+mutation updateMixtapeDescription($id: String!, $description: String!){
+  updateMixtapeDescription(id: $id, description: $description){
+    _id,
+    description,
+  }
+}`
+
+export const updateMixtapeGenres = gql`
+mutation updateMixtapeGenres($id: String!, $genres: [String]!){
+  updateMixtapeGenres(id: $id, genres: $genres){
+    _id,
+    genres,
   }
 }`
