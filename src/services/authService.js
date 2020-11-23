@@ -80,3 +80,27 @@ export async function getUser(){
         return {error: response.status, message: await response.text()}
     }
 }
+
+export async function changePassword(username, password, newPassword){
+    const rawResponse = fetch("http://localhost:3000/auth/changePassword", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            Accept: "application/json",
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+            newPassword: newPassword
+        })
+    });
+
+    const response = await rawResponse;
+
+    if(response.ok){
+        return response.text();
+    } else {
+        return {error: response.status, message: await response.text()}
+    }
+}

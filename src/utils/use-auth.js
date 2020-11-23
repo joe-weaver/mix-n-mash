@@ -3,7 +3,8 @@ import {
     login as loginPassport,
     logout as logoutPassport,
     signup as signupPassport,
-    getUser as getUserPassport} from "../services/authService";
+    getUser as getUserPassport,
+    changePassword as changePasswordPassport} from "../services/authService";
 
 const authContext = React.createContext();
 
@@ -98,6 +99,10 @@ function useProvideAuth(){
         });
     }
 
+    const changePassword = (oldPassword, newPassword) => {
+        return changePasswordPassport(user.username, oldPassword, newPassword).then(messageOrError => messageOrError);
+    }
+
     // If provideAuth is being called, the app was just created, so see if a user session still exists
     // from a previously obtained cookie
     if(!initialized){
@@ -112,6 +117,7 @@ function useProvideAuth(){
         login,
         logout,
         signup,
-        getUser
+        getUser,
+        changePassword
     }
 }

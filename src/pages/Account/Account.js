@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, FormControl, Form } from "react-bootstrap";
+import { Card, Button, FormControl } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import RefreshIcon from "@material-ui/icons/Refresh";
@@ -11,6 +11,7 @@ import IconButton from "../../components/IconButton/IconButton";
 import MashmateCard from "../../components/MashmateCard/MashmateCard";
 import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRequestCard";
 import { useAuth } from "../../utils/use-auth";
+import ChangePassword from "./Components/ChangePassword";
 
 import "./AccountStyle.css";
 import "../Page.css";
@@ -20,7 +21,6 @@ const Account = (props) => {
   const auth = useAuth();
 
   let [editingBio, setEditingBio] = React.useState(false);
-  let [editingPassword, setEditingPassword] = React.useState(false);
 
   const [user, setUser] = React.useState(auth.user);
 
@@ -80,37 +80,7 @@ const Account = (props) => {
             />
 
             {/*Password stuff  */}
-            <div className="field-title">
-              {!editingPassword ? (
-                <IconButton
-                  component={<EditIcon />}
-                  callback={() => setEditingPassword(false)}
-                />
-              ) : (<IconButton
-                  component={<SaveIcon />}
-                  callback={() => setEditingPassword(true)}
-                />
-              )}
-              <h5>Password</h5>
-            </div>
-            {!editingPassword && (
-              <Form.Control
-                type="password"
-                value={"Phony Password"}
-                className="password-input"
-                disabled
-              />
-            )}
-            {editingPassword && (
-              <>
-                <Form.Control type="password" placeholder="New Password" />
-                <br />
-                <Form.Control
-                  type="password"
-                  placeholder="Confirm New Password"
-                />
-              </>
-            )}
+            <ChangePassword />
             <br />
             {/*Mashmate stuff  */}
             <div className="mashmateStuff-container">
