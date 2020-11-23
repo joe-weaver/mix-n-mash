@@ -10,29 +10,37 @@ import Navbar from "../../components/Navbar/Navbar";
 import IconButton from "../../components/IconButton/IconButton";
 import MashmateCard from "../../components/MashmateCard/MashmateCard";
 import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRequestCard";
-import { useQuery } from "@apollo/client"
-import { userClient, getUser } from "../../services/userService";
+import { useAuth } from "../../utils/use-auth";
 
 import "./AccountStyle.css";
 import "../Page.css";
 
 const Account = (props) => {
+  // Hook into the auth state
+  const auth = useAuth();
+
   let [editingBio, setEditingBio] = React.useState(false);
   let [editingPassword, setEditingPassword] = React.useState(false);
 
-  const [user, setUser] = React.useState(JSON.parse(window.sessionStorage.getItem("user")));
+  const [user, setUser] = React.useState(auth.user);
 
-  const refreshUser = (data) => {
-    setUser(data.user);
+  const refreshUser = () => {
+    auth.getUser().then(userOrError => {
+      if(!userOrError.error){
+        // We don't have an error
+        setUser(userOrError);
+      }
+    })
   }
-
-  const {refetch} = useQuery(getUser, { client: userClient, variables: {id: user._id}, onCompleted: refreshUser});
 
   const history = useHistory();
 
   const logOut = () => {
-    window.sessionStorage.clear();
-    history.push("/");
+    auth.logout().then(success => {
+      if(success !== false){
+        history.push("/");
+      }
+    });
   }
 
   return (
@@ -108,7 +116,7 @@ const Account = (props) => {
             <div className="mashmateStuff-container">
               <div className="mashmatesList-container">
                 Mashmates
-                <IconButton component={<RefreshIcon />} callback={() => refetch()} />
+                <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
                   {user.mashmates.map((mashmate) => (
                     <MashmateCard mashmate={mashmate} key={mashmate.id} />
@@ -120,7 +128,7 @@ const Account = (props) => {
               </div>
               <div className="mashmateRequests-container">
                 Mashmate Requests
-                <IconButton component={<RefreshIcon />} callback={() => refetch()} />
+                <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
                   {user.receivedMashmateRequests.map((mashmateRequest) => (
                     <MashmateRequestCard mashmateRequest={mashmateRequest} key={mashmateRequest.senderId} />

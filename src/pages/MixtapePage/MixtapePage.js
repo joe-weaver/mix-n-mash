@@ -22,21 +22,23 @@ import { mixtapesClient, getMixtape,
   editSongs as editSongsMut,
   addComment as addCommentMut,
   addReply as addReplyMut,
-  addMixtape as addMixtapeMut,
+  createMixtapeFromBase as createMixtapeFromBaseMut,
   updateLikes as updateLikesMut,
   } from "../../services/mixtapesService"; 
 import {userClient, updateUserLikes as updateUserLikesMut} from "../../services/userService";
+import { useAuth } from "../../utils/use-auth";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
 
 const MixtapePage = (props) => {
-  // Extract the id from the url
+  // Extract the mixtape id from the url
   let url = window.location.pathname.split("/");
   const id = url[url.length - 1];
 
-  // Extract the user from the session
-  const user = JSON.parse(window.sessionStorage.getItem("user"));
+  // Hook into the auth object
+  const auth = useAuth();
+
   /* ---------- HOOKS ---------- */
   // Mixtape editing
   const [editingMixtapeTitle, setEditingMixtapeTitle] = React.useState(false);
@@ -64,7 +66,7 @@ const MixtapePage = (props) => {
   const [addCommentMutation] = useMutation(addCommentMut, {client: mixtapesClient});
   const [addReplyMutation] = useMutation(addReplyMut, {client: mixtapesClient});
   const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
-  const [addMixtapeMutation] = useMutation(addMixtapeMut, {client: mixtapesClient});
+  const [createMixtapeFromBase] = useMutation(createMixtapeFromBaseMut, {client: mixtapesClient});
   const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
 
   const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: () => {
@@ -84,8 +86,8 @@ const MixtapePage = (props) => {
 
     // Add a comment to the backend (and update when it returns)
     const comment = {
-      userId: user._id,
-      username: user.username,
+      userId: auth.user._id,
+      username: auth.user.username,
       content: commentText
     };
     addCommentMutation({variables: {id: data.mixtape._id, comment: comment}});
@@ -97,8 +99,8 @@ const MixtapePage = (props) => {
   const submitReply = (commentId, replyText) => {
         // Add a comment to the backend (and update when it returns)
         const reply = {
-          userId: user._id,
-          username: user.username,
+          userId: auth.user._id,
+          username: auth.user.username,
           content: replyText
         };
 
@@ -130,30 +132,15 @@ const MixtapePage = (props) => {
 
   //Adding a mixtape
   const addMixtape = () => {
-    let tempSongs = data.mixtape.songs.map (song => 
-      (
-        {youtubeId: song.youtubeId,
-        name: song.name,
-        }
-      )
-    )
-    addMixtapeMutation({variables: {
+    createMixtapeFromBase({variables: {
+      ownerId: auth.user._id, 
+      ownerName: auth.user.username,
       title: data.mixtape.title, 
       description: data.mixtape.description, 
       genres: data.mixtape.genres, 
       image: data.mixtape.image, 
-      songs: tempSongs, 
-      ownerId: user._id, 
-      ownerName: user.username,
-      listens: 0, 
-      likes: 0, 
-      dislikes: 0, 
-      comments: [], 
-      private: true, 
-      collaborators: [],
-      likesPerDay: [],
-      listensPerDay: []
-      }});
+      songs: data.mixtape.songs.map(song =>({youtubeId: song.youtubeId, name: song.name}))
+    }});
   }
 
   const moveSongEarlier = (index) => {
@@ -222,8 +209,8 @@ const MixtapePage = (props) => {
 
   const userCanEdit = () => {
     if (!loading){
-      if (data.mixtape.ownerId === user._id){ return true; }
-      if (data.mixtape.collaborators.reduce((acc, x) => (x.userId === user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
+      if (data.mixtape.ownerId === auth.user._id){ return true; }
+      if (data.mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
       return false;
     }
   }
@@ -231,7 +218,7 @@ const MixtapePage = (props) => {
   const incrementLikes = () => {
     if (!loading){
       updateLikesMutation({variables:{id: id, incAmount: 1}});
-      updateUserLikesMutation({variables: {id: user._id, mixtapeId: id, like: true}});
+      updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: true}});
     }
   }
 

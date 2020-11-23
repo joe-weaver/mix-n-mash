@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import RefreshIcon from "@material-ui/icons/Refresh";
+import { useQuery, useMutation } from "@apollo/client";
 
 import { NavbarLinks } from "../../data/NavbarLinks";
 import Navbar from "../../components/Navbar/Navbar";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import IconButton from "../../components/IconButton/IconButton";
 import MixtapeCard from "../../components/MixtapeCard/MixtapeCard";
-
-
-import { useQuery, useMutation } from "@apollo/client";
 import { mixtapesClient, getUserMixtapes, createMixtape as createMixtapeMut} from "../../services/mixtapesService";
+import { useAuth } from "../../utils/use-auth";
 
 const items = [
   "All Mixtapes",
@@ -21,27 +20,25 @@ const items = [
 ];
 
 const MyMixtapes = (props) => {
+  // Hook into the auth
+  const auth = useAuth();
 
-  let user = JSON.parse(window.sessionStorage.getItem("user"));
-
-  let userId = user._id;
-
-  let {loading, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId}, pollInterval: 1000});
+  let {loading, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId: auth.user._id}, pollInterval: 1000});
 
   let [filterKey, setFilterKey] = useState("All Mixtapes");
 
   const filterFunctions = {
     "All Mixtapes": (mixtape) => true,
-    "Owner": (mixtape) => mixtape.ownerId === userId,
-    "Shared With Me": (mixtape) => mixtape.collaborators.reduce((acc, x) => x.userId === userId || acc, false),
-    "Can Edit": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === userId && x.privilegeLevel === "edit") || acc, false),
-    "Can View": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === userId && x.privilegeLevel === "view") || acc, false)
+    "Owner": (mixtape) => mixtape.ownerId === auth.user._id,
+    "Shared With Me": (mixtape) => mixtape.collaborators.reduce((acc, x) => x.userId === auth.user._id || acc, false),
+    "Can Edit": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "edit") || acc, false),
+    "Can View": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "view") || acc, false)
   }
 
   const [createMixtapeMutation] = useMutation(createMixtapeMut, {client: mixtapesClient});
 
   const createMixtape = () => {
-    createMixtapeMutation({variables: {ownerId: user._id , ownerName: user.username}});
+    createMixtapeMutation({variables: {ownerId: auth.user._id , ownerName: auth.user.username}});
     refetch();
   }
   

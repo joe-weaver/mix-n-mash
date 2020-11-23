@@ -115,6 +115,7 @@ mutation AddUser(
         $mashmates: [mashmateInput]!
         $mixtapes: [String]!
         $likedMixtapes: [String]!
+        $dislikedMixtapes: [String]!
         $genrePreferences: [genrePreferencesInput]!
         $sentMashmateRequests: [mashmateRequestInput]!
         $receivedMashmateRequests: [mashmateRequestInput]!
@@ -130,6 +131,7 @@ mutation AddUser(
         mashmates: $mashmates
         mixtapes: $mixtapes
         likedMixtapes: $likedMixtapes
+        dislikedMixtapes: $dislikedMixtapes
         genrePreferences: $genrePreferences
         sentMashmateRequests: $sentMashmateRequests
         receivedMashmateRequests: $receivedMashmateRequests
