@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^7.1.2",
     "bootstrap": "^4.5.3",
     "graphql": "^15.4.0",
+    "multiselect-react-dropdown": "^1.6.1",
     "react": "^17.0.0",
     "react-bootstrap": "^1.4.0",
     "react-bootstrap-multiselect": "^2.4.1",
