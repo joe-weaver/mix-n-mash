@@ -6,7 +6,8 @@ import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { Link } from "react-router-dom";
-import Multiselect from "react-bootstrap-multiselect"
+//import Multiselect from "react-bootstrap-multiselect"
+import { Multiselect } from 'multiselect-react-dropdown';
 import { useQuery, useMutation } from "@apollo/client";
 import YouTube from "react-youtube";
 
@@ -68,10 +69,10 @@ const MixtapePage = (props) => {
 
   const [tempTitle, setTempTitle] = React.useState("");
   const [tempDescription, setTempDescription] = React.useState("");
+  const [tempGenres, setTempGenres] = React.useState([]);
 
   /* ---------- QUERIES ---------- */
   let {loading, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
-
 
   /* ---------- MUTATIONS ---------- */
   const [addSongsMutation] = useMutation(addSongsMut, {client: mixtapesClient});
@@ -291,7 +292,15 @@ const MixtapePage = (props) => {
     {value: "Pop", selected: false}, 
     {value: "Classical", selected: false}
   ];
-
+  const genres2=[
+    {value: "Jazz"}, 
+    {value: "Rock"}, 
+    {value: "Ska"}, 
+    {value: "Pop"}, 
+    {value: "Classical"}
+  ];
+  const [options] = React.useState(genres);
+  const [options2] = React.useState(genres2);
   // const [genres, setGenres] = React.useState(GENRES);
 
   if (!loading){
@@ -307,9 +316,7 @@ const MixtapePage = (props) => {
 
   const editTitle = () => {
     setEditingMixtapeTitle(false);
-    console.log("\nTemp Title: " +  tempTitle);
     if(tempTitle.length != 0){
-      console.log("\nTemp Title: " +  tempTitle);
       updateMixtapeTitleMutation({variables: {id: data.mixtape._id, title: tempTitle}});
     }
     setTempTitle("");
@@ -317,13 +324,67 @@ const MixtapePage = (props) => {
 
   const editDescription = () => {
     setEditingMixtapeDescription(false);
-    console.log("\nTemp Description: " +  tempDescription);
     if(tempDescription.length != 0){
-      console.log("\nTemp Description: " +  tempDescription);
       updateMixtapeDescriptionMutation({variables: {id: data.mixtape._id, description: tempDescription}});
     }
     setTempDescription("");
   }
+
+
+  const addGenre = (selectedList, selectedItem) => {
+    console.log("GENRE Added\n");
+    var tempList = [];
+    console.log("selectedList: " + selectedList);
+    for(var i = 0; i < selectedList.length; i++){
+      tempList.push(selectedList[i].value);
+    }
+    console.log("tempList: " + tempList);
+    console.log("Selected Item Value: " + selectedItem.value);
+
+    //console.log("Before: " + tempGenres);
+    setTempGenres(tempList);
+    //console.log("After: " + tempGenres);
+    updateMixtapeGenresMutation({variables: {id: data.mixtape._id, genres: tempList}});
+    //setTempGenres([]);
+    console.log("data.mixtape.genres: " + data.mixtape.genres);
+    editPreSelected(tempList);
+    console.log("Preselected: " + preSelected);
+    console.log("Preselected's 0th Value: " + preSelected[0].value);
+    tempList = [];
+  }
+
+  const removeGenre = (selectedList, selectedItem) => {
+    console.log("GENRE Removed\n");
+    var tempList = [];
+    console.log("selectedList: " + selectedList);
+    for(var i = 0; i < selectedList.length; i++){
+      tempList.push(selectedList[i].value);
+    }
+    console.log("tempList: " + tempList);
+    console.log("Selected Item Value: " + selectedItem.value);
+
+    //console.log("Before: " + tempGenres);
+    setTempGenres(tempList);
+    //console.log("After: " + tempGenres);
+
+    updateMixtapeGenresMutation({variables: {id: data.mixtape._id, genres: tempList}});
+    //setTempGenres([]);
+    console.log("data.mixtape.genres: " + data.mixtape.genres);
+    editPreSelected(tempList);
+    console.log("Preselected: " + preSelected);
+    tempList = [];
+  }
+
+  function editPreSelected (selectedList) {
+    var tempPreSelected = []
+    for(var i = 0; i < selectedList.length; i++){
+      tempPreSelected.push({value: selectedList[i]});
+    }
+    preSelected = tempPreSelected;
+  }
+  var preSelected = [];
+  {!loading && editPreSelected(data.mixtape.genres)}
+  //const preSelectedUsed = React.useState(preSelected);
 
   return (
     <div className="page-container">
@@ -405,9 +466,30 @@ const MixtapePage = (props) => {
                   Listens: {!loading && data.mixtape.listens}
                 </div>
               </div>
-              {editView ? (<div>Genres: <Multiselect multiple data={genres}/></div>):
-              (<div>Genres: {!loading && <span>{data.mixtape.genres.join(", ")}</span>}</div>)}
+
+              {editView ? 
+                (
+                  <div>
+                    Genres: <Multiselect 
+                      //data={genres} 
+                      options={options2}
+                      displayValue="value"
+                      selectedValues={preSelected}
+                      onSelect={addGenre} 
+                      onRemove={removeGenre} 
+                      //multiple
+                      />
+                  </div>
+                ):
+                (
+                  <div>
+                    Genres: {!loading && <span>{data.mixtape.genres.join(", ")}</span>}
+                  </div>
+                )
+              }
             </div>
+
+
             <div className="song-container">
               <div style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
                 {editView && (!editingSongs ? (
