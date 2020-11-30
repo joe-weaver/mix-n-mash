@@ -178,3 +178,34 @@ export const updateUserDislikes = gql`
         likedMixtapes
     }
 }`
+
+export const updateBio = gql`
+    mutation newBio(
+        $id: String!
+        $bio: String!
+    ){
+        updateBio(
+            id: $id
+            bio: $bio
+        ){
+          _id
+          bio  
+        }
+    }
+`
+
+export const deactivateAccount = gql`
+mutation deactivateUserAccount($id: String!){
+    deactivateAccount(id: $id){
+        active
+    }
+}
+`
+
+export const reactivateAccount = gql`
+mutation reactivateUserAccount($id: String!){
+    reactivateAccount(id: $id){
+        active
+    }
+}
+`

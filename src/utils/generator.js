@@ -3,7 +3,7 @@ export const generateUser = () => {
     let first = generateFirstName();
     let last = generateLastName();
 
-    user.active = false;
+    user.active = true;
     user.email = generateEmail(first, last);
     user.username = generateUsername(first, last);
     user.hashedPassword = "password";
@@ -62,6 +62,7 @@ export const generateMixtape = (user) => {
     mixtape.timeCreated = 0;
     mixtape.likesPerDay = [];
     mixtape.listensPerDay = [];
+    mixtape.ownerActive = true;
 
     for(let i = 0; i < 7; i++){
         let likes = randomFromRangeInt(0, 100);

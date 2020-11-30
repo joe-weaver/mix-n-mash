@@ -6,7 +6,9 @@ import { useQuery } from "@apollo/client";
 
 import Navbar from "../../components/Navbar/Navbar";
 import { userClient, getUser } from "../../services/userService";
-import { mixtapesClient, getUserMixtapes } from "../../services/mixtapesService";
+import { mixtapesClient, getUserPageMixtapes } from "../../services/mixtapesService";
+
+import { useAuth } from "../../utils/use-auth";
 
 import "../Page.css";
 import "./UserPageStyle.css";
@@ -14,10 +16,11 @@ import "./UserPageStyle.css";
 const UserPage  = (props) => {
   let url = window.location.pathname.split("/");
   let idFromUrl = url[url.length - 1];
+  const auth = useAuth();
 
   let {loading, data} = useQuery(getUser, {variables: {id: idFromUrl}, client: userClient});
   let mixtapeObj = {loading: null, error: null, data: null};
-  mixtapeObj = useQuery(getUserMixtapes, {client: mixtapesClient, variables: {userId: idFromUrl}});
+  mixtapeObj = useQuery(getUserPageMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, otherUserId: idFromUrl}});
 
   return (
     <div>
@@ -43,7 +46,7 @@ const UserPage  = (props) => {
               <h4>{!loading && data.user.username}'s Mixtapes</h4>
                 
               <div className="scroll-content" style={{height: "90%"}}>
-              {!mixtapeObj.loading && mixtapeObj.data.getUserMixtapes.map((mixtape) => (
+              {!mixtapeObj.loading && mixtapeObj.data.getUserPageMixtapes.map((mixtape) => (
               <MixtapeResultCard mixtape={mixtape} key={mixtape._id} />
             ))}
               </div>

@@ -11,6 +11,7 @@ import { useQuery } from "@apollo/client";
 import { userClient, queryUsers } from "../../services/userService";
 import { mixtapesClient, queryMixtapes } from "../../services/mixtapesService";
 import UserResultCard from "../../components/UserResultCard/UserResultCard";
+import { useAuth } from "../../utils/use-auth";
 
 import "../Page.css";
 
@@ -29,7 +30,7 @@ const items = [
 const SearchResults = (props) => {
   // Extract the id from the url
   const query = useURLQuery();
-
+  const auth = useAuth();
   const searchTerm = query.get("search");
 
   // Objects to catch search results
@@ -38,7 +39,7 @@ const SearchResults = (props) => {
 
   // Query on page load the the params in the url
   userObj = useQuery(queryUsers, {client: userClient, variables: {searchTerm}});
-  mixtapeObj = useQuery(queryMixtapes, {client: mixtapesClient, variables: {searchTerm}});
+  mixtapeObj = useQuery(queryMixtapes, {client: mixtapesClient, variables: {searchTerm, userId: auth.user._id}});
 
   const refreshResults = () => {
     userObj.refetch();

@@ -12,6 +12,11 @@ import MashmateCard from "../../components/MashmateCard/MashmateCard";
 import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRequestCard";
 import { useAuth } from "../../utils/use-auth";
 import ChangePassword from "./Components/ChangePassword";
+import { useQuery, useMutation } from "@apollo/client";
+import {userClient, updateBio as updateBioMut, deactivateAccount as deactivateAccountMut} from "../../services/userService";
+import {mixtapesClient, getUserMixtapes, updateOwnerActive as updateOwnerActiveMut} from "../../services/mixtapesService";
+
+import DeactivateAccountModal from "../../components/Modals/DeactivateAccountModal";
 
 import "./AccountStyle.css";
 import "../Page.css";
@@ -20,7 +25,24 @@ const Account = (props) => {
   // Hook into the auth state
   const auth = useAuth();
 
+  let {loading, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId: auth.user._id}});
+
+  const [updateOwnerActiveMutation] = useMutation(updateOwnerActiveMut, {client: mixtapesClient});
+
   let [editingBio, setEditingBio] = React.useState(false);
+
+  const [tempBio, setTempBio] = React.useState("");
+
+  const [updateBioMutation] = useMutation(updateBioMut, {client: userClient, onCompleted: ()=>{auth.getUser();}});
+  const [deactivateAccountMutation] = useMutation(deactivateAccountMut, {client: userClient});
+
+  const updateBio = () => {
+    if(tempBio.length != 0){
+      updateBioMutation({variables: {id: user._id, bio: tempBio}});
+    }
+    setTempBio("");
+    setEditingBio(false);
+  }
 
   const [user, setUser] = React.useState(auth.user);
 
@@ -41,6 +63,19 @@ const Account = (props) => {
         history.push("/");
       }
     });
+  }
+
+  const updateMixtapesOwnerActive = () => {
+    data.getUserMixtapes.filter((mixtape) => mixtape.ownerId === auth.user._id)
+    .map((mixtape)=>{updateOwnerActiveMutation({variables: {id: mixtape._id, ownerActive: false}})});
+  }
+
+  const deactivateAccount = () => {
+    if(!loading){
+      deactivateAccountMutation({variables: {id: auth.user._id}});
+      updateMixtapesOwnerActive();
+      logOut();
+    }
   }
 
   return (
@@ -66,7 +101,7 @@ const Account = (props) => {
               {editingBio && (
                 <IconButton
                   component={<SaveIcon />}
-                  callback={() => setEditingBio(false)}
+                  callback={updateBio}
                 />
               )}
               <h5>Bio</h5>
@@ -77,6 +112,7 @@ const Account = (props) => {
               defaultValue={user.bio}
               disabled={!editingBio}
               maxLength="255"
+              onChange={event => setTempBio(event.target.value)}
             />
 
             {/*Password stuff  */}
@@ -108,7 +144,8 @@ const Account = (props) => {
             </div>
           </Card.Body>
           <Card.Footer>
-            <Button className="mm-btn-warning">Deactivate Account</Button>
+            {/* <Button className="mm-btn-warning" onClick={deactivateAccount}>Deactivate Account</Button> */}
+            <DeactivateAccountModal deactivateCallback={deactivateAccount} />
           </Card.Footer>
         </Card>
       </div>

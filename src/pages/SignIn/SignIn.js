@@ -31,7 +31,12 @@ const SignIn = (props) => {
         if(res.error){;
           setInvalidLoginCreds(true);
         } else {
-          history.push("/HottestMixtapes");
+          if (res.active){
+            history.push("/HottestMixtapes");
+          }
+          else {
+            history.push("/ReactivateAccount");
+          }
         }
       });
     } else {

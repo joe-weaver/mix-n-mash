@@ -49,22 +49,22 @@ query getMixtape($id: String!){
 `
 
 export const getHottestMixtapes = gql`
-{
-    hottestMixtapes{
-    	_id,
-      title,
-      description,
-      genres,
-      image,
-      ownerId,
-      ownerName,
-      listens,
-      likes,
-      likesPerDay,
-      listensPerDay,
-      timeCreated,
-    }
+query getHottestMixtapesQuery($userId: String!){
+  hottestMixtapes(userId: $userId){
+    _id,
+    title,
+    description,
+    genres,
+    image,
+    ownerId,
+    ownerName,
+    listens,
+    likes,
+    likesPerDay,
+    listensPerDay,
+    timeCreated,
   }
+}
 `
 
 export const getUserMixtapes = gql`
@@ -94,9 +94,63 @@ export const getUserMixtapes = gql`
   }
 `
 
+export const getAllUserMixtapes = gql`
+  query AllUserMixtapes($userId: String!){
+    getAllUserMixtapes(userId: $userId){
+      _id,
+      title,
+      description,
+      genres,
+      image,
+      ownerId,
+      ownerName,
+      private,
+      listens,
+      likes,
+      timeCreated,
+      collaborators {
+        userId,
+        username,
+        privilegeLevel
+      }
+      songs {
+        youtubeId,
+        name
+      }
+    }
+  }
+`
+
+export const getUserPageMixtapes = gql`
+  query UserPageMixtapes($userId: String!, $otherUserId: String!){
+    getUserPageMixtapes(userId: $userId, otherUserId: $otherUserId){
+      _id,
+      title,
+      description,
+      genres,
+      image,
+      ownerId,
+      ownerName,
+      private,
+      listens,
+      likes,
+      timeCreated,
+      collaborators {
+        userId,
+        username,
+        privilegeLevel
+      }
+      songs {
+        youtubeId,
+        name
+      }
+    }
+  }
+`
+
 export const queryMixtapes = gql`
-query qMixtapes($searchTerm: String!){
-  queryMixtapes(searchTerm: $searchTerm){
+query qMixtapes($searchTerm: String!, $userId: String!){
+  queryMixtapes(searchTerm: $searchTerm, userId: $userId){
     _id,
     title,
     description,
@@ -157,6 +211,7 @@ mutation AddMixtape(
   $collaborators: [collaboratorsInput]!
   $likesPerDay: [Int]!
   $listensPerDay: [Int]!
+  $ownerActive: Boolean!
   ){
     addMixtape(
       title: $title
@@ -174,6 +229,7 @@ mutation AddMixtape(
       collaborators: $collaborators
       likesPerDay: $likesPerDay
       listensPerDay: $listensPerDay
+      ownerActive: $ownerActive
     ){
       _id
       title
@@ -339,3 +395,21 @@ mutation updateMixtapeGenres($id: String!, $genres: [String]!){
     genres,
   }
 }`
+
+export const updateMixtapePrivate = gql`
+mutation updateMixtapePrivate($id: String!, $private: Boolean!){
+  updatePrivate(id: $id, private: $private){
+    _id,
+    private
+  }
+}
+`
+
+export const updateOwnerActive = gql`
+mutation updateOwnerActiveStatus($id: String!, $ownerActive: Boolean!){
+  updateOwnerActive(id: $id, ownerActive: $ownerActive){
+    _id,
+    ownerActive
+  }
+}
+`

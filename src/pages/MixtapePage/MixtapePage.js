@@ -28,7 +28,8 @@ import { mixtapesClient, getMixtape,
   updateDislikes as updateDislikesMut,
   updateMixtapeTitle as updateMixtapeTitleMut,
   updateMixtapeDescription as updateMixtapeDescriptionMut,
-  updateMixtapeGenres as updateMixtapeGenresMut
+  updateMixtapeGenres as updateMixtapeGenresMut,
+  updateMixtapePrivate as updateMixtapePrivateMut
   } from "../../services/mixtapesService"; 
 
 import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
@@ -71,8 +72,10 @@ const MixtapePage = (props) => {
   const [tempDescription, setTempDescription] = React.useState("");
   const [tempGenres, setTempGenres] = React.useState([]);
 
+  const [mixtapePrivate, setMixtapePrivate] = React.useState(null)
+
   /* ---------- QUERIES ---------- */
-  let {loading, data} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+  let {loading, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
 
   /* ---------- MUTATIONS ---------- */
   const [addSongsMutation] = useMutation(addSongsMut, {client: mixtapesClient});
@@ -85,7 +88,8 @@ const MixtapePage = (props) => {
   const [updateMixtapeTitleMutation] = useMutation(updateMixtapeTitleMut, {client: mixtapesClient});
   const [updateMixtapeDescriptionMutation] = useMutation(updateMixtapeDescriptionMut, {client: mixtapesClient});
   const [updateMixtapeGenresMutation] = useMutation(updateMixtapeGenresMut, {client: mixtapesClient});
-  
+  const [updateMixtapePrivateMutation] = useMutation(updateMixtapePrivateMut, {client: mixtapesClient});
+
 
   const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: (data) => {
     auth.getUser({likedMixtapes: data.setLikeMixtape.likedMixtapes, dislikedMixtapes: data.setLikeMixtape.dislikedMixtapes});
@@ -330,6 +334,11 @@ const MixtapePage = (props) => {
     setTempDescription("");
   }
 
+  const updateMixtapePrivate = () => {
+    updateMixtapePrivateMutation({variables: {id: data.mixtape._id, private: !mixtapePrivate}});
+    setMixtapePrivate(!mixtapePrivate);
+    refetch();
+  }
 
   const addGenre = (selectedList, selectedItem) => {
     console.log("GENRE Added\n");
@@ -386,6 +395,16 @@ const MixtapePage = (props) => {
   {!loading && editPreSelected(data.mixtape.genres)}
   //const preSelectedUsed = React.useState(preSelected);
 
+  if (!loading && mixtapePrivate == null){
+    console.log(data.mixtape.private);
+    setMixtapePrivate(data.mixtape.private);
+    refetch();
+  }
+
+  if (!loading){
+    console.log(mixtapePrivate);
+  }
+
   return (
     <div className="page-container">
       <Navbar />
@@ -395,7 +414,7 @@ const MixtapePage = (props) => {
         <Card.Header className="mixtape-page-header">
           {editView ? (
           <Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row"}}>
-            <Form.Check type="checkbox" defaultValue=""/>
+            <Form.Check type="checkbox" defaultValue="" checked={!mixtapePrivate} onChange={updateMixtapePrivate}/>
             <Form.Label style={{paddingLeft: "1vw"}}>Public</Form.Label>
           </Form.Group>
           ):

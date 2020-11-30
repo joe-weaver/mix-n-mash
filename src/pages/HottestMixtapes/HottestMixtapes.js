@@ -10,6 +10,8 @@ import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultC
 import { useQuery } from "@apollo/client";
 import { mixtapesClient, getHottestMixtapes } from "../../services/mixtapesService";
 
+import { useAuth } from "../../utils/use-auth";
+
 import "../Page.css";
 
 const items = [
@@ -43,7 +45,9 @@ const sortFunctions = {
 }
 
 const HottestMixtapes  = (props) => {
-  let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, pollInterval: 1000});
+  const auth = useAuth();
+  console.log(auth);
+  let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id}, pollInterval: 1000});
   const [dropdownState, setDropdownState] = React.useState("Hottest Mixtapes Today");
 
   if(!loading){
