@@ -104,3 +104,49 @@ export async function changePassword(username, password, newPassword){
         return {error: response.status, message: await response.text()}
     }
 }
+
+export async function forgotPassword(email){
+    const rawResponse = fetch("http://localhost:3000/auth/forgotPassword", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            Accept: "application/json",
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            email: email,
+        })
+    });
+
+    const response = await rawResponse;
+
+    if(response.ok){
+        return response.text();
+    } else {
+        return {error: response.status, message: await response.text()}
+    }
+}
+
+export async function resetPassword(email, tempCode, newPassword){
+    const rawResponse = fetch("http://localhost:3000/auth/verifyCode", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            Accept: "application/json",
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            email: email,
+            tempCode: tempCode,
+            newPassword: newPassword
+        })
+    });
+
+    const response = await rawResponse;
+
+    if(response.ok){
+        return response.text();
+    } else {
+        return {error: response.status, message: await response.text()}
+    }
+}

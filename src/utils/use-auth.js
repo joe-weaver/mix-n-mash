@@ -4,7 +4,9 @@ import {
     logout as logoutPassport,
     signup as signupPassport,
     getUser as getUserPassport,
-    changePassword as changePasswordPassport} from "../services/authService";
+    changePassword as changePasswordPassport,
+    forgotPassword as forgotPasswordPassport,
+    resetPassword as resetPasswordPassport} from "../services/authService";
 
 const authContext = React.createContext();
 
@@ -51,6 +53,14 @@ function useProvideAuth(){
             setLoading(false);
             return success;
         });
+    }
+
+    const forgotPassword = (email) => {
+        return forgotPasswordPassport(email);
+    }
+
+    const resetPassword = (email, tempCode, newPassword) => {
+        return resetPasswordPassport(email, tempCode, newPassword);
     }
 
     const signup = (username, email, password) => {
@@ -118,6 +128,8 @@ function useProvideAuth(){
         logout,
         signup,
         getUser,
-        changePassword
+        changePassword,
+        forgotPassword,
+        resetPassword
     }
 }

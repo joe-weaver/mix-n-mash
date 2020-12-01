@@ -10,10 +10,15 @@ import "./SignInStyle.css";
 
 const SignIn = (props) => {
   let [forgotPassword, setForgotPassword] = React.useState(false);
+  let [receivedEmailCode, setReceivedEmailCode] = React.useState(false);
   let [signup, setSignup] = React.useState(false);
 
   let [username, setUsername] = React.useState("");
   let [password, setPassword] = React.useState("");
+  let [newPassword, setNewPassword] = React.useState("");
+
+  let [tempEmail, setTempEmail] = React.useState("");
+  let [tempCode, setTempCode] = React.useState("");
 
   const history = useHistory();
 
@@ -47,6 +52,19 @@ const SignIn = (props) => {
   const completeSignup = () => {
     setSignup(false);
   }
+
+  
+
+  // const sendPassEmail = (msg) => {
+  //   sgMail
+  //   .send(msg)
+  //   .then(() => {
+  //     console.log('Email sent')
+  //   })
+  //   .catch((error) => {
+  //     console.error(error)
+  //   });
+  // }
 
   return (
     <div className="splash-container">
@@ -85,10 +103,41 @@ const SignIn = (props) => {
           </Form>
         </Card.Body>}
 
-        {forgotPassword && <Card.Body>
-          <div>Email Sent. Check your inbox.</div>
+        {forgotPassword && !receivedEmailCode && <Card.Body>
+          <div>Please enter your email:</div>
+          <Form.Group>
+            <Form.Control type="email" placeholder="Enter the email for your account..." onChange={(event)=> setTempEmail(event.target.value)}/>
+          </Form.Group>
+          <Button className="mm-btn-alt" onClick={() => {auth.forgotPassword(tempEmail); setReceivedEmailCode(true);}}>Send Email</Button>
           <br/>
-          <Button variant="primary" className="mm-btn-alt" onClick={() => setForgotPassword(false)}>
+          <Button variant="primary" className="mm-btn-alt" onClick={() => {setForgotPassword(false); setReceivedEmailCode(false); setTempEmail(""); setTempCode(""); setNewPassword("");}}>
+            Back to Log-In
+          </Button>
+        </Card.Body>}
+
+        {forgotPassword && receivedEmailCode && <Card.Body>
+          <div>Please enter the temporary code sent to your email:</div>
+          <Form.Group>
+            <Form.Control type="text" placeholder="Enter the temporary code sent to your email..." onChange={(event)=> setTempCode(event.target.value)}/>
+          </Form.Group>
+          <div>Enter your new desired password:</div>
+          <Form.Group>
+            <Form.Control type="text" placeholder="Enter your new desired password..." onChange={(event)=> setNewPassword(event.target.value)}/>
+          </Form.Group>
+          <Button className="mm-btn-alt" onClick={() => {auth.resetPassword(tempEmail, tempCode, newPassword).then((res)=>{
+            if (res.error){
+
+            }
+            else{
+              setForgotPassword(false);
+              setReceivedEmailCode(false); 
+              setTempEmail(""); 
+              setTempCode(""); 
+              setNewPassword("");
+            }
+          });}}>Update Password</Button>
+          <br/>
+          <Button variant="primary" className="mm-btn-alt" onClick={() => {setForgotPassword(false); setReceivedEmailCode(false); setTempEmail(""); setTempCode(""); setNewPassword("");}}>
             Back to Log-In
           </Button>
         </Card.Body>}
