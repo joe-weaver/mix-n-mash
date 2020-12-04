@@ -23,7 +23,7 @@ const ChangePassword = (props) => {
         event.preventDefault();
 
         setValidated(true);
-        if(password === newPassword){
+        if(newPassword.length < 6){
             setIsInvalid({password: false, newPassword: true});
         } else {
             // Send the request to the backend
@@ -35,7 +35,7 @@ const ChangePassword = (props) => {
                     setPassword("");
                     setNewPassword("");
                 }
-            })
+            });
         }
     }
 
@@ -76,7 +76,7 @@ const ChangePassword = (props) => {
                         onChange={(event) => {setNewPassword(event.target.value); isInvalid.newPassword = false; setIsInvalid(isInvalid)}}
                         isInvalid={validated && isInvalid.newPassword}
                     />
-                    <Form.Control.Feedback type="invalid">Your new password cannot be the same as your old one.</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">Your new password must be 6 or more characters in length.</Form.Control.Feedback>
                 </Col>
                 <Col md="auto">
                     <IconButton
