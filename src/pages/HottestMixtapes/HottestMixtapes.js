@@ -46,7 +46,6 @@ const sortFunctions = {
 
 const HottestMixtapes  = (props) => {
   const auth = useAuth();
-  console.log(auth);
   let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id}, pollInterval: 1000});
   const [dropdownState, setDropdownState] = React.useState("Hottest Mixtapes Today");
 

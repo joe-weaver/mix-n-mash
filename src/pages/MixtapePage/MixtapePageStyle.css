@@ -45,6 +45,17 @@
   color: white !important;
 }
 
+.mixtape-description{
+  resize: none;
+}
+
+.mixtape-description:disabled {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  color: white !important;
+  resize: none;
+}
+
 .mixtapeShare-container{
   width: 10%;
 }

@@ -28,9 +28,9 @@ const SignUpForm = (props) => {
 
         // Start validating after initial submit
         setValidated(true);
-        if(email === "" || !emailRegex.test(email) || username === "" || password === ""){
+        if(email === "" || !emailRegex.test(email) || username === "" || password.length < 6){
             // Empty fields are invalid
-            setIsInvalid({email: email === "" || !emailRegex.test(email), username: username === "", password: password === ""});
+            setIsInvalid({email: email === "" || !emailRegex.test(email), username: username === "", password: password.length < 6});
         } else {
             // If no fields are empty, try to create a user
             auth.signup(username, email, password).then(res => {
@@ -84,7 +84,7 @@ const SignUpForm = (props) => {
                         onChange={(event) => {setPassword(event.target.value); isInvalid.password = false; setIsInvalid(isInvalid)}}
                         isInvalid={validated && isInvalid.password}
                     />
-                    <Form.Control.Feedback type="invalid">You must enter a password.</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">You must enter a password with more than 6 characters.</Form.Control.Feedback>
                 </Col>
                 <Col md="auto">
                     <IconButton

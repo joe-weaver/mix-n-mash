@@ -25,7 +25,7 @@ const Account = (props) => {
   // Hook into the auth state
   const auth = useAuth();
 
-  let {loading, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId: auth.user._id}});
+  const {loading, data} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId: auth.user._id}});
 
   const [updateOwnerActiveMutation] = useMutation(updateOwnerActiveMut, {client: mixtapesClient});
 
@@ -37,7 +37,7 @@ const Account = (props) => {
   const [deactivateAccountMutation] = useMutation(deactivateAccountMut, {client: userClient});
 
   const updateBio = () => {
-    if(tempBio.length != 0){
+    if(tempBio.length !== 0){
       updateBioMutation({variables: {id: user._id, bio: tempBio}});
     }
     setTempBio("");
@@ -67,7 +67,7 @@ const Account = (props) => {
 
   const updateMixtapesOwnerActive = () => {
     data.getUserMixtapes.filter((mixtape) => mixtape.ownerId === auth.user._id)
-    .map((mixtape)=>{updateOwnerActiveMutation({variables: {id: mixtape._id, ownerActive: false}})});
+    .forEach((mixtape)=>{updateOwnerActiveMutation({variables: {id: mixtape._id, ownerActive: false}})});
   }
 
   const deactivateAccount = () => {

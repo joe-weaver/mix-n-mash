@@ -6,7 +6,6 @@ import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { Link } from "react-router-dom";
-//import Multiselect from "react-bootstrap-multiselect"
 import { Multiselect } from 'multiselect-react-dropdown';
 import { useQuery, useMutation } from "@apollo/client";
 import YouTube from "react-youtube";
@@ -70,7 +69,6 @@ const MixtapePage = (props) => {
 
   const [tempTitle, setTempTitle] = React.useState("");
   const [tempDescription, setTempDescription] = React.useState("");
-  const [tempGenres, setTempGenres] = React.useState([]);
 
   const [mixtapePrivate, setMixtapePrivate] = React.useState(null)
 
@@ -285,18 +283,7 @@ const MixtapePage = (props) => {
     setEditView(userCanEdit())
   }
 
-  // const handlePublicState = () => {
-  //   isPublic.setPublic(!isPublic.state);
-  // }
-
   const genres=[
-    {value: "Jazz", selected: false}, 
-    {value: "Rock", selected: false}, 
-    {value: "Ska", selected: false}, 
-    {value: "Pop", selected: false}, 
-    {value: "Classical", selected: false}
-  ];
-  const genres2=[
     {value: "Jazz"}, 
     {value: "Rock"}, 
     {value: "Ska"}, 
@@ -304,23 +291,10 @@ const MixtapePage = (props) => {
     {value: "Classical"}
   ];
   const [options] = React.useState(genres);
-  const [options2] = React.useState(genres2);
-  // const [genres, setGenres] = React.useState(GENRES);
-
-  if (!loading){
-    for (let mixtapeGenre of data.mixtape.genres){
-      for (let genre of genres){
-        if (mixtapeGenre === genre.value){
-          genre.selected = true;
-          break;
-        }
-      }
-    }
-  }
 
   const editTitle = () => {
     setEditingMixtapeTitle(false);
-    if(tempTitle.length != 0){
+    if(tempTitle.length !== 0){
       updateMixtapeTitleMutation({variables: {id: data.mixtape._id, title: tempTitle}});
     }
     setTempTitle("");
@@ -328,7 +302,7 @@ const MixtapePage = (props) => {
 
   const editDescription = () => {
     setEditingMixtapeDescription(false);
-    if(tempDescription.length != 0){
+    if(tempDescription.length !== 0){
       updateMixtapeDescriptionMutation({variables: {id: data.mixtape._id, description: tempDescription}});
     }
     setTempDescription("");
@@ -341,46 +315,24 @@ const MixtapePage = (props) => {
   }
 
   const addGenre = (selectedList, selectedItem) => {
-    console.log("GENRE Added\n");
     var tempList = [];
-    console.log("selectedList: " + selectedList);
     for(var i = 0; i < selectedList.length; i++){
       tempList.push(selectedList[i].value);
     }
-    console.log("tempList: " + tempList);
-    console.log("Selected Item Value: " + selectedItem.value);
 
-    //console.log("Before: " + tempGenres);
-    setTempGenres(tempList);
-    //console.log("After: " + tempGenres);
     updateMixtapeGenresMutation({variables: {id: data.mixtape._id, genres: tempList}});
-    //setTempGenres([]);
-    console.log("data.mixtape.genres: " + data.mixtape.genres);
     editPreSelected(tempList);
-    console.log("Preselected: " + preSelected);
-    console.log("Preselected's 0th Value: " + preSelected[0].value);
     tempList = [];
   }
 
   const removeGenre = (selectedList, selectedItem) => {
-    console.log("GENRE Removed\n");
     var tempList = [];
-    console.log("selectedList: " + selectedList);
     for(var i = 0; i < selectedList.length; i++){
       tempList.push(selectedList[i].value);
     }
-    console.log("tempList: " + tempList);
-    console.log("Selected Item Value: " + selectedItem.value);
-
-    //console.log("Before: " + tempGenres);
-    setTempGenres(tempList);
-    //console.log("After: " + tempGenres);
 
     updateMixtapeGenresMutation({variables: {id: data.mixtape._id, genres: tempList}});
-    //setTempGenres([]);
-    console.log("data.mixtape.genres: " + data.mixtape.genres);
     editPreSelected(tempList);
-    console.log("Preselected: " + preSelected);
     tempList = [];
   }
 
@@ -391,18 +343,15 @@ const MixtapePage = (props) => {
     }
     preSelected = tempPreSelected;
   }
-  var preSelected = [];
-  {!loading && editPreSelected(data.mixtape.genres)}
-  //const preSelectedUsed = React.useState(preSelected);
 
-  if (!loading && mixtapePrivate == null){
-    console.log(data.mixtape.private);
-    setMixtapePrivate(data.mixtape.private);
-    refetch();
+  var preSelected = [];
+  if(!loading){
+    editPreSelected(data.mixtape.genres)
   }
 
-  if (!loading){
-    console.log(mixtapePrivate);
+  if (!loading && mixtapePrivate == null){
+    setMixtapePrivate(data.mixtape.private);
+    refetch();
   }
 
   return (
@@ -490,13 +439,11 @@ const MixtapePage = (props) => {
                 (
                   <div>
                     Genres: <Multiselect 
-                      //data={genres} 
-                      options={options2}
+                      options={options}
                       displayValue="value"
                       selectedValues={preSelected}
                       onSelect={addGenre} 
-                      onRemove={removeGenre} 
-                      //multiple
+                      onRemove={removeGenre}
                       />
                   </div>
                 ):
@@ -536,9 +483,6 @@ const MixtapePage = (props) => {
           </div>
 
           {/* Mixtape Description */}
-          {/* <div>
-            {!loading && <div>{data.mixtape.description}</div>}
-          </div> */}
           <div>
             {editView &&
               <div>
@@ -547,7 +491,6 @@ const MixtapePage = (props) => {
                   callback={() => setEditingMixtapeDescription(true)}/>) 
                 : (
                 <IconButton component={<SaveIcon />}
-                  //callback={() => setEditingMixtapeDescription(false)}
                   onClick={editDescription}
                   />
               )}
@@ -555,7 +498,8 @@ const MixtapePage = (props) => {
             }
             {!loading && <div>
               <Form.Control
-                type="input"
+                as="textarea"
+                rows={5}
                 className="mixtape-description"
                 defaultValue={data.mixtape.description}
                 disabled={!editingMixtapeDescription}

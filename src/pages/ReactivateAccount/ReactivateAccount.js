@@ -21,14 +21,14 @@ const ReactivateAccount = (props) => {
 
     const [updateOwnerActiveMutation] = useMutation(updateOwnerActiveMut, {client: mixtapesClient});
 
-    let {loading, data, refetch} = useQuery(getAllUserMixtapes, {client: mixtapesClient, variables:{userId: auth.user._id}});
+    let {loading, data} = useQuery(getAllUserMixtapes, {client: mixtapesClient, variables:{userId: auth.user._id}});
 
     const updateMixtapesOwnerActive = () => {
-        if(!loading){
-            data.getAllUserMixtapes.filter((mixtape) => mixtape.ownerId === auth.user._id)
-            .map((mixtape)=>{updateOwnerActiveMutation({variables: {id: mixtape._id, ownerActive: true}})});
-        }
+      if(!loading){
+          data.getAllUserMixtapes.filter((mixtape) => mixtape.ownerId === auth.user._id)
+          .forEach((mixtape)=>{updateOwnerActiveMutation({variables: {id: mixtape._id, ownerActive: true}})});
       }
+    }
     
     return (
         <div className="splash-container">
