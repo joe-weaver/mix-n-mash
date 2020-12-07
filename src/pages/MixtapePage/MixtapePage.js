@@ -33,6 +33,7 @@ import { mixtapesClient, getMixtape,
 
 import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
 import { useAuth } from "../../utils/use-auth";
+import { useToast } from "../../utils/use-toast";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -44,6 +45,9 @@ const MixtapePage = (props) => {
 
   // Hook into the auth object
   const auth = useAuth();
+
+  // Hook into notifications
+  const toaster = useToast();
 
   /* ---------- HOOKS ---------- */
   // Mixtape editing
@@ -80,7 +84,10 @@ const MixtapePage = (props) => {
   const [addCommentMutation] = useMutation(addCommentMut, {client: mixtapesClient});
   const [addReplyMutation] = useMutation(addReplyMut, {client: mixtapesClient});
   const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
-  const [createMixtapeFromBase] = useMutation(createMixtapeFromBaseMut, {client: mixtapesClient});
+  const [createMixtapeFromBase] = useMutation(createMixtapeFromBaseMut, {client: mixtapesClient, onCompleted: (data) => {
+    // Notify the user a mixtape was created
+    toaster.notify("Mixtape Forked", <>You just forked a mixtape!</>);
+  }});
   const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
   const [updateDislikesMutation] = useMutation(updateDislikesMut, {client: mixtapesClient});
   const [updateMixtapeTitleMutation] = useMutation(updateMixtapeTitleMut, {client: mixtapesClient});

@@ -13,6 +13,7 @@ import UserPage from "./pages/UserPage/UserPage";
 import ReactivateAccount from "./pages/ReactivateAccount/ReactivateAccount";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import { ProvideAuth } from "./utils/use-auth";
+import { ProvideToast } from "./utils/use-toast";
 
 const client = new ApolloClient({
   uri: "http://localhost:3000",
@@ -24,6 +25,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <ProvideAuth>
         <BrowserRouter>
+        <ProvideToast>
           <Route path="/" exact component={SignIn} />
           <PrivateRoute path="/HottestMixtapes"><HottestMixtapes/></PrivateRoute>
           <PrivateRoute exact path="/MyMixtapes"><MyMixtapes/></PrivateRoute>
@@ -32,6 +34,7 @@ export default function App() {
           <PrivateRoute path="/SearchResults"><SearchResults/></PrivateRoute>
           <PrivateRoute exact path="/User/:userId"><UserPage/></PrivateRoute>
           <PrivateRoute path="/ReactivateAccount"><ReactivateAccount/></PrivateRoute>
+          </ProvideToast>
         </BrowserRouter>
       </ProvideAuth>
     </ApolloProvider>

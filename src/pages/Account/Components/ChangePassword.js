@@ -5,10 +5,14 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 import IconButton from "../../../components/IconButton/IconButton";
 import { useAuth } from "../../../utils/use-auth";
+import { useToast } from "../../../utils/use-toast";
 
 const ChangePassword = (props) => {
     // Hook into the auth state
     const auth = useAuth();
+
+    // Hook into notifications
+    const toaster = useToast();
 
     const [password, setPassword] = React.useState("");
     const [newPassword, setNewPassword] = React.useState("");
@@ -22,18 +26,23 @@ const ChangePassword = (props) => {
     const changePassword = (event) => {
         event.preventDefault();
 
-        setValidated(true);
         if(newPassword.length < 6){
             setIsInvalid({password: false, newPassword: true});
+            setValidated(true);
         } else {
             // Send the request to the backend
             auth.changePassword(password, newPassword).then(res => {
                 if(res.error){
                     setIsInvalid({password: true, newPassword: false});
+                    setValidated(true);
                 } else {
                     // Success
                     setPassword("");
                     setNewPassword("");
+                    setValidated(false);
+
+                    // Notify user of success
+                    toaster.alert("Password Changed", "Your password was sucessfully changed.", "success");
                 }
             });
         }
@@ -47,7 +56,6 @@ const ChangePassword = (props) => {
                     <Col>
                         <Form.Control
                             type={passwordVisible ? "text" : "password"}
-                            required
                             placeholder="Old Password"
                             value={password}
                             onChange={(event) => {setPassword(event.target.value); isInvalid.password = false; setIsInvalid(isInvalid)}}
@@ -70,7 +78,6 @@ const ChangePassword = (props) => {
                 <Col>
                     <Form.Control
                         type={newPasswordVisible ? "text" : "password"}
-                        required
                         placeholder="New Password"
                         value={newPassword}
                         onChange={(event) => {setNewPassword(event.target.value); isInvalid.newPassword = false; setIsInvalid(isInvalid)}}

@@ -144,7 +144,6 @@ const Account = (props) => {
             </div>
           </Card.Body>
           <Card.Footer>
-            {/* <Button className="mm-btn-warning" onClick={deactivateAccount}>Deactivate Account</Button> */}
             <DeactivateAccountModal deactivateCallback={deactivateAccount} />
           </Card.Footer>
         </Card>

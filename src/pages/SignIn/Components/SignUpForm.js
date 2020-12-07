@@ -5,11 +5,15 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { Button, Form, Col } from "react-bootstrap";
 
 import { useAuth } from "../../../utils/use-auth";
+import { useToast } from "../../../utils/use-toast";
 import IconButton from "../../../components/IconButton/IconButton";
 
 const SignUpForm = (props) => {
     // Hook into the auth state
     const auth = useAuth();
+
+    // Hook into notification state
+    const toaster = useToast();
 
     // Hook into state
     const [email, setEmail] = React.useState("");
@@ -39,8 +43,11 @@ const SignUpForm = (props) => {
                     if(!res.userCreated){
                         setIsInvalid({email: res.emailExists, username: res.usernameExists, password: false});
                     } else {
-                        // We created a user, so login
+                        // We created a user
                         props.successfulSignup();
+
+                        // And notify user
+                        toaster.alert("Account Created", "Congratulations " + username + " - Your account was successfully created! Please log in to begin your Mix n Mash adventure!", "success");
                     }
                 }
             });

@@ -10,6 +10,8 @@ import IconButton from "../../components/IconButton/IconButton";
 import MixtapeCard from "../../components/MixtapeCard/MixtapeCard";
 import { mixtapesClient, getUserMixtapes, createMixtape as createMixtapeMut} from "../../services/mixtapesService";
 import { useAuth } from "../../utils/use-auth";
+import { useToast } from "../../utils/use-toast";
+import { useHistory } from "react-router-dom";
 
 const items = [
   "All Mixtapes",
@@ -23,6 +25,12 @@ const MyMixtapes = (props) => {
   // Hook into the auth
   const auth = useAuth();
 
+  // Hook into notifications
+  const toaster = useToast();
+
+  // Hook into history
+  const history = useHistory();
+
   let {loading, data, refetch} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId: auth.user._id}, pollInterval: 1000});
 
   let [filterKey, setFilterKey] = useState("All Mixtapes");
@@ -35,11 +43,19 @@ const MyMixtapes = (props) => {
     "Can View": (mixtape) => mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "view") || acc, false)
   }
 
-  const [createMixtapeMutation] = useMutation(createMixtapeMut, {client: mixtapesClient});
+  const [createMixtapeMutation] = useMutation(createMixtapeMut, {client: mixtapesClient, onCompleted: (data) => {    
+    // Extract new mixtape
+    const mixtape = data.createNewMixtape;
+    
+    // Notify the user a mixtape was created
+    toaster.notify("Mixtape Created", "You just created a new mixtape!")
+
+    // Go to the new mixtape page
+    history.push("/Mixtape/" + mixtape._id)
+  }});
 
   const createMixtape = () => {
     createMixtapeMutation({variables: {ownerId: auth.user._id , ownerName: auth.user.username}});
-    refetch();
   }
   
   return (

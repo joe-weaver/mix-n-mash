@@ -1,0 +1,44 @@
+.toast-wrapper {
+    position: absolute;
+    margin-top: 0px;
+    z-index: 100;
+}
+
+.custom-toast {
+    color: var(--dark) !important;
+}
+
+.adding-toast {
+    position: relative;
+    top: 0px;
+    animation-name: slideIn;
+    animation-duration: 200ms;
+    animation-timing-function: ease-out;
+}
+
+.removing-toast {
+    margin-top: -12vh;
+    animation-name: remove;
+    animation-duration: 200ms;
+    animation-timing-function: ease-in;
+}
+
+@keyframes slideIn {
+    from {top: -12vh}
+    to {top: 0px}
+}
+
+@keyframes remove {
+    from {margin-top: 0px; opacity: 1}
+    to {margin-top: -12vh; opacity: 0}
+}
+
+/* ALERTS */
+.alert-wrapper{
+    position: absolute;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    z-index: 101;
+}

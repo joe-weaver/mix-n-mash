@@ -7,6 +7,7 @@ import { mixtapesClient, getUserMixtapes, mashMixtape as mashMixtapeMut } from "
 import IconButton from "../IconButton/IconButton";
 import MashMixtapeCard from "./Components/MashMixtapeCard";
 import { useAuth } from "../../utils/use-auth";
+import { useToast } from "../../utils/use-toast";
 
 import "../../pages/Page.css";
 
@@ -14,11 +15,17 @@ const MashMixtapeModal = (props) => {
     // Hook into the auth state
     const auth = useAuth();
 
+    // Hook into notifications
+    const toaster = useToast();
+
     const [show, setShow] = React.useState(false);
 
     // Get list of mixtapes from user
     const {loading, data} = useQuery(getUserMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id}});
-    const [mashMixtape] = useMutation(mashMixtapeMut, {client: mixtapesClient});
+    const [mashMixtape] = useMutation(mashMixtapeMut, {client: mixtapesClient, onCompleted: (data) => {
+        // Notify the user a mixtape was created
+        toaster.notify("Mixtape Mashed", <>You just mashed a mixtape!</>);
+    }});
 
     const mergeMixtape = (mixtape) => {
         let songs = [];
