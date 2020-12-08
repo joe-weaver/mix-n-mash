@@ -70,7 +70,10 @@ const SearchResults = (props) => {
   }
   
   const navigatePage = (increment) => {
-    const newSkip = (skip ? parseInt(skip) : 0) + increment;
+    let newSkip = (skip ? parseInt(skip) : 0) + increment;
+    if(newSkip < 0){
+      newSkip = 0;
+    }
 
     history.push("/SearchResults/" + criteria + "/" + filter + "/" + newSkip);
   }
@@ -105,7 +108,7 @@ const SearchResults = (props) => {
             }})}
           </Card.Body>
           <Card.Footer className="card-footer">
-            <IconButton component={<ArrowBackIcon/>} disabled={skip ? (skip === 0) : true} onClick={() => navigatePage(-1)}></IconButton>
+            <IconButton component={<ArrowBackIcon/>} disabled={skip ? parseInt(skip) === 0 : true} onClick={() => navigatePage(-1)}></IconButton>
             <div>{skip ? skip : "0"}</div>
             <IconButton component={<ArrowForwardIcon/>} disabled={userObj.loading || mixtapeObj.loading || getItems().length < 10} onClick={() => navigatePage(1)}></IconButton>
           </Card.Footer>
