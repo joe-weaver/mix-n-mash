@@ -23,8 +23,6 @@ query getMixtape($id: String!){
     listens,
     likes,
     dislikes,
-    likesPerDay,
-    listensPerDay,
     collaborators {
       userId,
       username,
@@ -49,8 +47,8 @@ query getMixtape($id: String!){
 `
 
 export const getHottestMixtapes = gql`
-query getHottestMixtapesQuery($userId: String!){
-  hottestMixtapes(userId: $userId){
+query getHottestMixtapesQuery($userId: String!, $criteria: String!, $skip: Int!, $limit: Int!){
+  hottestMixtapes(userId: $userId, criteria: $criteria, skip: $skip, limit: $limit){
     _id,
     title,
     description,
@@ -60,9 +58,7 @@ query getHottestMixtapesQuery($userId: String!){
     ownerName,
     listens,
     likes,
-    likesPerDay,
-    listensPerDay,
-    timeCreated,
+    listens,
   }
 }
 `
@@ -149,8 +145,8 @@ export const getUserPageMixtapes = gql`
 `
 
 export const queryMixtapes = gql`
-query qMixtapes($searchTerm: String!, $userId: String!){
-  queryMixtapes(searchTerm: $searchTerm, userId: $userId){
+query qMixtapes($searchTerm: String!, $userId: String!, $skip: Int!, $limit: Int!){
+  queryMixtapes(searchTerm: $searchTerm, userId: $userId, skip: $skip, limit: $limit){
     _id,
     title,
     description,
@@ -160,8 +156,6 @@ query qMixtapes($searchTerm: String!, $userId: String!){
     ownerName,
     listens,
     likes,
-    likesPerDay,
-    listensPerDay,
     timeCreated,
   }
 }`
@@ -209,8 +203,6 @@ mutation AddMixtape(
   $comments: [commentInput]!
   $private: Boolean!
   $collaborators: [collaboratorsInput]!
-  $likesPerDay: [Int]!
-  $listensPerDay: [Int]!
   $ownerActive: Boolean!
   ){
     addMixtape(
@@ -227,8 +219,6 @@ mutation AddMixtape(
       comments: $comments
       private: $private
       collaborators: $collaborators
-      likesPerDay: $likesPerDay
-      listensPerDay: $listensPerDay
       ownerActive: $ownerActive
     ){
       _id
@@ -355,8 +345,8 @@ mutation removeMixtape($id: String!){
 }`
 
 export const updateLikes = gql`
-mutation updateLikes($id: String!, $incAmount: Int!){
-  updateLikes(id: $id, incAmount: $incAmount){
+mutation updateLikes($id: String!, $userId: String!, $incAmount: Int!){
+  updateLikes(id: $id, userId: $userId, incAmount: $incAmount){
     _id,
     likes,
     dislikes
@@ -369,6 +359,14 @@ mutation updateDislikes($id: String!, $incAmount: Int!){
     _id,
     dislikes,
     likes
+  }
+}`
+
+export const addListen = gql`
+mutation addListen($id: String!, $userId: String!){
+  addListen(id: $id, userId: $userId){
+    _id,
+    listens
   }
 }`
 

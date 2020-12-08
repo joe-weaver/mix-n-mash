@@ -11,6 +11,12 @@
   background-color: var(--secondary-color) !important;
 }
 
+.card-footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .scroll-content {
   overflow-y: scroll;
 }

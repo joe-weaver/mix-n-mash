@@ -11,6 +11,7 @@ const IconButton = (props) => {
       onClick={props.callback || props.onClick}
       onMouseDown={props.onMouseDown}
       onMouseUp={props.onMouseUp}
+      disabled={!!props.disabled}
     >
       {props.component}
     </Button>

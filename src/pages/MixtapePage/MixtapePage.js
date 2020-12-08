@@ -28,7 +28,8 @@ import { mixtapesClient, getMixtape,
   updateMixtapeTitle as updateMixtapeTitleMut,
   updateMixtapeDescription as updateMixtapeDescriptionMut,
   updateMixtapeGenres as updateMixtapeGenresMut,
-  updateMixtapePrivate as updateMixtapePrivateMut
+  updateMixtapePrivate as updateMixtapePrivateMut,
+  addListen
   } from "../../services/mixtapesService"; 
 
 import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
@@ -76,6 +77,8 @@ const MixtapePage = (props) => {
 
   const [mixtapePrivate, setMixtapePrivate] = React.useState(null)
 
+  const [hasListened, setHasListened] = React.useState(false);
+
   /* ---------- QUERIES ---------- */
   let {loading, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
 
@@ -105,6 +108,8 @@ const MixtapePage = (props) => {
     auth.getUser({likedMixtapes: data.setDislikeMixtape.likedMixtapes, dislikedMixtapes: data.setDislikeMixtape.dislikedMixtapes});
     setRequestPending(false);
   }});
+
+  const [addListenMutation] = useMutation(addListen, {client: mixtapesClient});
 
   /* ---------- CALLBACKS ---------- */
   // Callback for when we add songs to the backend
@@ -256,11 +261,11 @@ const MixtapePage = (props) => {
           updateDislikesMutation({variables: {id: id, incAmount: -1}});
         }
         if (auth.user.likedMixtapes.includes(id)){
-          updateLikesMutation({variables: {id: id, incAmount: -1}});
+          updateLikesMutation({variables: {id: id, userId: auth.user._id, incAmount: -1}});
           updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: false}});
         }
         else{
-          updateLikesMutation({variables:{id: id, incAmount: 1}});
+          updateLikesMutation({variables:{id: id, userId: auth.user._id, incAmount: 1}});
           updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: true}});
         }
       }
@@ -272,7 +277,7 @@ const MixtapePage = (props) => {
       if (!requestPending){
         setRequestPending(true);
         if (auth.user.likedMixtapes.includes(id)){
-          updateLikesMutation({variables: {id: id, incAmount: -1}});
+          updateLikesMutation({variables: {id: id, userId: auth.user._id, incAmount: -1}});
         }
         if (auth.user.dislikedMixtapes.includes(id)){
           updateDislikesMutation({variables: {id: id, incAmount: -1}});
@@ -283,6 +288,13 @@ const MixtapePage = (props) => {
           updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, dislike: true}});
         }
       }
+    }
+  }
+
+  const handleListen = () => {
+    if(!hasListened){
+      addListenMutation({variables: {id: id, userId: auth.user._id}});
+      setHasListened(true);
     }
   }
 
@@ -420,7 +432,8 @@ const MixtapePage = (props) => {
         <Card.Body className="scroll-content">
           <div className="song-and-video">
             <div className="video-container">
-              {!loading && <YouTube className="video-preview" 
+              {!loading && <YouTube className="video-preview"
+                onPlay={handleListen}
                 videoId={data.mixtape.songs.length > 0 ? data.mixtape.songs[currentSongIndex].youtubeId : ""}
                 onEnd={changeToNextSong} opts={{playerVars: { autoplay: autoplay}}}
               />}

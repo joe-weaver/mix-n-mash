@@ -9,6 +9,9 @@ import IconButton from "../../components/IconButton/IconButton";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
 import { useQuery } from "@apollo/client";
 import { mixtapesClient, getHottestMixtapes } from "../../services/mixtapesService";
+import { useHistory, useParams } from "react-router-dom";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 import { useAuth } from "../../utils/use-auth";
 
@@ -20,37 +23,35 @@ const items = [
   "Hottest Mixtapes of All Time"
 ];
 
-const sortFunctions = {
-  "Hottest Mixtapes Today": (a, b) => b.listensPerDay[0] - a.listensPerDay[0],
-  "Hottest Mixtapes This Week": (a, b) => {
-    let aListens = 0;
-    let bListens = 0;
-
-    let i = 0;
-    while(i < a.listensPerDay.length || i < 7){
-      aListens += a.listensPerDay[i];
-      i++;
-    }
-
-    i = 0;
-    while(i < b.listensPerDay.length || i < 7){
-      bListens += b.listensPerDay[i];
-      i++;
-    }
-
-    return bListens - aListens;
-  
-  },
-  "Hottest Mixtapes of All Time": (a, b) => b.listens - a.listens
+const sortCriteria = {
+  "Hottest Mixtapes Today": "day",
+  "Hottest Mixtapes This Week": "week",
+  "Hottest Mixtapes of All Time": "allTime"
 }
 
 const HottestMixtapes  = (props) => {
+  // Hook into the auth state
   const auth = useAuth();
-  let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id}, pollInterval: 1000});
-  const [dropdownState, setDropdownState] = React.useState("Hottest Mixtapes Today");
 
-  if(!loading){
-    var tempData = data.hottestMixtapes.slice();
+  // Hook into browser history (for navigating)
+  const history = useHistory();
+
+  const {criteria, skip} = useParams();
+
+  let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, criteria: (criteria ? criteria : "day"), skip: (skip ? parseInt(skip) : 0) * 10, limit: 10}, pollInterval: 1000});
+
+  const handleChangeCriteria = (selection) => {
+    const newCriteria = sortCriteria[selection];
+    const newSkip = skip ? skip : 0;
+
+    history.push("/HottestMixtapes/" + newCriteria + "/" + newSkip);
+  }
+
+  const navigatePage = (increment) => {
+    const newCriteria = criteria ? criteria : "today";
+    const newSkip = (skip ? parseInt(skip) : 0) + increment;
+
+    history.push("/HottestMixtapes/" + newCriteria + "/" + newSkip);
   }
 
   return (
@@ -64,7 +65,7 @@ const HottestMixtapes  = (props) => {
               <Dropdown
                 title="MyDropdown"
                 items={items}
-                selectionCallback={setDropdownState}
+                selectionCallback={handleChangeCriteria}
               />
               <IconButton
                 component={<RefreshIcon />}
@@ -73,10 +74,15 @@ const HottestMixtapes  = (props) => {
             </div>
           </Card.Header>
           <Card.Body className="scroll-content">
-            {!loading && tempData.sort(sortFunctions[dropdownState]).map((hottestMixtape) => (
+            {!loading && data.hottestMixtapes.map((hottestMixtape) => (
               <MixtapeResultCard mixtape={hottestMixtape} key={hottestMixtape._id} />
             ))}
           </Card.Body>
+          <Card.Footer className="card-footer">
+            <IconButton component={<ArrowBackIcon/>} disabled={skip ? (skip === 0) : true} onClick={() => navigatePage(-1)}></IconButton>
+            <div>{skip ? skip : "0"}</div>
+            <IconButton component={<ArrowForwardIcon/>} disabled={loading || data.hottestMixtapes.length < 10} onClick={() => navigatePage(1)}></IconButton>
+          </Card.Footer>
         </Card>
       </div>
     </div>

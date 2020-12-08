@@ -14,7 +14,9 @@ const SiteNavbar = (props) => {
   let [searchTerm, setSearchTerm] = React.useState("");
 
   const doSearch = () => {
-    history.push("/SearchResults?search=" + searchTerm);
+    if(searchTerm !== ""){
+      history.push("/SearchResults/" + searchTerm + "/Mixtapes");
+    }
   }
 
   const handleSearch = (event) => {

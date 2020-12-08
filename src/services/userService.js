@@ -83,8 +83,8 @@ query User($usernameOrEmail: String!){
 }`
 
 export const queryUsers = gql`
-query qUsers($searchTerm: String!){
-    queryUsers(searchTerm: $searchTerm){
+query qUsers($searchTerm: String!, $skip: Int!, $limit: Int!){
+    queryUsers(searchTerm: $searchTerm, skip: $skip, limit: $limit){
         _id,
         username,
         email,
