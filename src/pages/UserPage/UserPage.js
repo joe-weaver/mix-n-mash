@@ -45,6 +45,20 @@ const UserPage  = (props) => {
     console.log("SENDING REQUEST");
   }
 
+  const isMashmateAlready = () => {
+    if(!loading){
+      if (data.user.mashmates.reduce((x) => data.user._id === x.id)){return true;}
+      return false;
+    }
+  }
+
+  const alreadySentRequest = () => {
+    if(!loading){
+      if (data.user.receivedMashmateRequests.reduce((x) => data.user._id === x.senderId)){return true;}
+      return false;
+    }
+  }
+
   return (
     <div>
       <div className="page-container">
@@ -58,9 +72,13 @@ const UserPage  = (props) => {
             {/*Bio stuff */}
             <div className="user-top-body">
               {!loading && data.user.bio}
-              <div className= "user-page-buttons">
-              <Button className="mm-btn-alt" onClick={addSentRequests}>Send Mashmate Request </Button>
-              <Button className="mm-btn-alt">Follow</Button>
+              <div>
+                {!loading && !((auth.user._id === data.user._id) || isMashmateAlready || alreadySentRequest) && 
+                <div className= "user-page-buttons">
+                <Button className="mm-btn-alt" onClick={addSentRequests}>Send Mashmate Request </Button>
+                
+                </div>}
+                <Button className="mm-btn-alt">Follow</Button>
               </div>
             </div>
 
