@@ -29,16 +29,19 @@ const UserPage  = (props) => {
   const [sendMashmateRequestMutation] = useMutation(sendMMRequestMut, {client: userClient});
 
   const addSentRequests = () => {
+    const mashmateRequest = {
+      senderId: data.user._id,
+      recipientId: auth.user._id,
+      username: auth.user.username,
+      //timeSent: Date.now(),
+      seen: false
+    };
+
     sendMashmateRequestMutation({variables: {
-      id: data.user.id, 
-      receivedMashmateRequests: data.user.receivedMashmateRequests.map(MashmateRequest=> ({
-        senderId: data.user.id,
-        recipientId: auth.user._id,
-        username: auth.user.username,
-        timeSent: Date.now(),
-        seen: false
-      }))
+      id: data.user._id, 
+      newMashmateRequest: mashmateRequest
     }});
+
     console.log("SENDING REQUEST");
   }
 
