@@ -3,8 +3,7 @@ import { Card, Button } from "react-bootstrap";
 import { NavbarLinks } from "../../data/NavbarLinks";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
 import { useMutation, useQuery } from "@apollo/client";
-import { ProvideToast } from "../../utils/use-toast";
-import { formatDate } from "../../utils/DateUtils";
+import { useToast } from "../../utils/use-toast";
 
 import Navbar from "../../components/Navbar/Navbar";
 import { userClient, getUser, sendMMRequest as sendMMRequestMut} from "../../services/userService";
@@ -25,38 +24,31 @@ const UserPage  = (props) => {
   
   mixtapeObj = useQuery(getUserPageMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, otherUserId: idFromUrl}});
   
-  //const toaster = useToast();
+  // Hook into notifications
+  const toaster = useToast();
+
   const [sendMashmateRequestMutation] = useMutation(sendMMRequestMut, {client: userClient});
-
-  const addSentRequests = () => {
-    const mashmateRequest = {
-      senderId: data.user._id,
-      recipientId: auth.user._id,
-      username: auth.user.username,
-      //timeSent: Date.now(),
-      seen: false
-    };
-
-    sendMashmateRequestMutation({variables: {
-      id: data.user._id, 
-      newMashmateRequest: mashmateRequest
-    }});
-
-    console.log("SENDING REQUEST");
-  }
-
-  const isMashmateAlready = () => {
-    if(!loading){
-      if (data.user.mashmates.reduce((x) => data.user._id === x.id)){return true;}
-      return false;
+  const SendMashmateRequest = () => {
+    if (auth.user._id === data.user._id){toaster.notify("You cannot add yourself!")}
+    else if (data.user.receivedMashmateRequests.reduce((acc, x) => data.user._id === x.senderId || acc, false)){toaster.notify("You already sent a Mashmate Request!")}
+    else if (data.user.mashmates.reduce((acc, x) => data.user._id === x.id || acc, false)){toaster.notify("You are already mashmates with this user!")}
+    else{
+      const mashmateRequest = {
+        senderId: data.user._id,
+        recipientId: auth.user._id,
+        username: auth.user.username,
+        //timeSent: Date.now(),
+        seen: false
+      };
+  
+      sendMashmateRequestMutation({variables: {
+        id: data.user._id, 
+        newMashmateRequest: mashmateRequest
+      }});
+  
+      console.log("SENDING REQUEST");
     }
-  }
-
-  const alreadySentRequest = () => {
-    if(!loading){
-      if (data.user.receivedMashmateRequests.reduce((x) => data.user._id === x.senderId)){return true;}
-      return false;
-    }
+    
   }
 
   return (
@@ -72,12 +64,8 @@ const UserPage  = (props) => {
             {/*Bio stuff */}
             <div className="user-top-body">
               {!loading && data.user.bio}
-              <div>
-                {!loading && !((auth.user._id === data.user._id) || isMashmateAlready || alreadySentRequest) && 
-                <div className= "user-page-buttons">
-                <Button className="mm-btn-alt" onClick={addSentRequests}>Send Mashmate Request </Button>
-                
-                </div>}
+              <div className= "user-page-buttons">
+                <Button className="mm-btn-alt" onClick={SendMashmateRequest}>Send Mashmate Request </Button>
                 <Button className="mm-btn-alt">Follow</Button>
               </div>
             </div>
