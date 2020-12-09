@@ -22,6 +22,7 @@ const UserPage  = (props) => {
 
   let {loading, data} = useQuery(getUser, {variables: {id: idFromUrl}, client: userClient});
   let mixtapeObj = {loading: null, error: null, data: null};
+  
   mixtapeObj = useQuery(getUserPageMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, otherUserId: idFromUrl}});
   
   //const toaster = useToast();
@@ -29,15 +30,16 @@ const UserPage  = (props) => {
 
   const addSentRequests = () => {
     sendMashmateRequestMutation({variables: {
-      id: auth.user._id, 
-      receivedMashmateRequests: auth.user.receivedMashmateRequests.map(MashmateRequest=> ({
-        //senderId: ,
+      id: data.user.id, 
+      receivedMashmateRequests: data.user.receivedMashmateRequests.map(MashmateRequest=> ({
+        senderId: data.user.id,
         recipientId: auth.user._id,
         username: auth.user.username,
-        //timeSent: formateDate(Date.now()),
+        timeSent: Date.now(),
         seen: false
       }))
     }});
+    console.log("SENDING REQUEST");
   }
 
   return (
@@ -54,7 +56,7 @@ const UserPage  = (props) => {
             <div className="user-top-body">
               {!loading && data.user.bio}
               <div className= "user-page-buttons">
-              <Button className="mm-btn-alt" callback={addSentRequests}>Send Mashmate Request </Button>
+              <Button className="mm-btn-alt" onClick={addSentRequests}>Send Mashmate Request </Button>
               <Button className="mm-btn-alt">Follow</Button>
               </div>
             </div>
