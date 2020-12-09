@@ -2,10 +2,11 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { NavbarLinks } from "../../data/NavbarLinks";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { useToast } from "../../utils/use-toast";
 
 import Navbar from "../../components/Navbar/Navbar";
-import { userClient, getUser } from "../../services/userService";
+import { userClient, getUser, sendMMRequest as sendMMRequestMut} from "../../services/userService";
 import { mixtapesClient, getUserPageMixtapes } from "../../services/mixtapesService";
 
 import { useAuth } from "../../utils/use-auth";
@@ -20,7 +21,35 @@ const UserPage  = (props) => {
 
   let {loading, data} = useQuery(getUser, {variables: {id: idFromUrl}, client: userClient});
   let mixtapeObj = {loading: null, error: null, data: null};
+  
   mixtapeObj = useQuery(getUserPageMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, otherUserId: idFromUrl}});
+  
+  // Hook into notifications
+  const toaster = useToast();
+
+  const [sendMashmateRequestMutation] = useMutation(sendMMRequestMut, {client: userClient});
+  const SendMashmateRequest = () => {
+    if (auth.user._id === data.user._id){toaster.notify("You cannot add yourself!")}
+    else if (data.user.receivedMashmateRequests.reduce((acc, x) => data.user._id === x.senderId || acc, false)){toaster.notify("You already sent a Mashmate Request!")}
+    else if (data.user.mashmates.reduce((acc, x) => data.user._id === x.id || acc, false)){toaster.notify("You are already mashmates with this user!")}
+    else{
+      const mashmateRequest = {
+        senderId: data.user._id,
+        recipientId: auth.user._id,
+        username: auth.user.username,
+        //timeSent: Date.now(),
+        seen: false
+      };
+  
+      sendMashmateRequestMutation({variables: {
+        id: data.user._id, 
+        newMashmateRequest: mashmateRequest
+      }});
+  
+      console.log("SENDING REQUEST");
+    }
+    
+  }
 
   return (
     <div>
@@ -36,8 +65,8 @@ const UserPage  = (props) => {
             <div className="user-top-body">
               {!loading && data.user.bio}
               <div className= "user-page-buttons">
-              <Button className="mm-btn-alt">Send Mashmate Request</Button>
-              <Button className="mm-btn-alt">Follow</Button>
+                <Button className="mm-btn-alt" onClick={SendMashmateRequest}>Send Mashmate Request </Button>
+                <Button className="mm-btn-alt">Follow</Button>
               </div>
             </div>
 
