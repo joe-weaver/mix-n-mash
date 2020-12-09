@@ -2,10 +2,12 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { NavbarLinks } from "../../data/NavbarLinks";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { ProvideToast } from "../../utils/use-toast";
+import { formatDate } from "../../utils/DateUtils";
 
 import Navbar from "../../components/Navbar/Navbar";
-import { userClient, getUser } from "../../services/userService";
+import { userClient, getUser, sendMMRequest as sendMMRequestMut} from "../../services/userService";
 import { mixtapesClient, getUserPageMixtapes } from "../../services/mixtapesService";
 
 import { useAuth } from "../../utils/use-auth";
@@ -21,6 +23,22 @@ const UserPage  = (props) => {
   let {loading, data} = useQuery(getUser, {variables: {id: idFromUrl}, client: userClient});
   let mixtapeObj = {loading: null, error: null, data: null};
   mixtapeObj = useQuery(getUserPageMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, otherUserId: idFromUrl}});
+  
+  //const toaster = useToast();
+  const [sendMashmateRequestMutation] = useMutation(sendMMRequestMut, {client: userClient});
+
+  const addSentRequests = () => {
+    sendMashmateRequestMutation({variables: {
+      id: auth.user._id, 
+      receivedMashmateRequests: auth.user.receivedMashmateRequests.map(MashmateRequest=> ({
+        //senderId: ,
+        recipientId: auth.user._id,
+        username: auth.user.username,
+        //timeSent: formateDate(Date.now()),
+        seen: false
+      }))
+    }});
+  }
 
   return (
     <div>
@@ -36,7 +54,7 @@ const UserPage  = (props) => {
             <div className="user-top-body">
               {!loading && data.user.bio}
               <div className= "user-page-buttons">
-              <Button className="mm-btn-alt">Send Mashmate Request</Button>
+              <Button className="mm-btn-alt" callback={addSentRequests}>Send Mashmate Request </Button>
               <Button className="mm-btn-alt">Follow</Button>
               </div>
             </div>

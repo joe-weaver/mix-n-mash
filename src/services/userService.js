@@ -209,3 +209,24 @@ mutation reactivateUserAccount($id: String!){
     }
 }
 `
+
+export const sendMMRequest = gql`
+mutation sendMashmateRequest(
+    $id: String!,
+    $mashmateRequest: mashmateRequestInput!
+    ){
+      sendMashmateRequest(
+        id: $id
+        receivedMashmateRequests: $receivedMashmateRequests
+        ){
+        _id
+        receivedMashmateRequests{
+            senderId
+            recipientId
+            username
+            timeSent
+            seen
+        }
+    }
+}`
+  
