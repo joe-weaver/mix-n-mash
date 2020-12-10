@@ -251,6 +251,56 @@ mutation resolveMashmateRequest(
                 username
             }
     }
-}
+}`;
 
-`;
+export const follow = gql`
+mutation followUser(
+    $id: String!,
+    $idToFollow: String!
+    ){
+        followUser(
+        id: $id
+        idToFollow: $idToFollow
+        ){
+        _id
+        following
+    }
+}`
+
+export const incFollowersCount = gql`
+mutation incNumFollowers(
+    $id: String!,
+    ){
+        incNumFollowers(
+        id: $id
+        ){
+        _id
+        numFollowers
+    }
+}`
+
+export const unfollow = gql`
+mutation unfollowUser(
+    $id: String!,
+    $idToUnfollow: String!
+    ){
+        unfollowUser(
+        id: $id
+        idToUnfollow: $idToUnfollow
+        ){
+        _id
+        following
+    }
+}`
+
+export const decFollowersCount = gql`
+mutation incNumFollowers(
+    $id: String!,
+    ){
+        decNumFollowers(
+        id: $id
+        ){
+        _id
+        numFollowers
+    }
+}`

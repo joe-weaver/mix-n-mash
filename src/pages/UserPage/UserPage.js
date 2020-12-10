@@ -6,7 +6,13 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useToast } from "../../utils/use-toast";
 
 import Navbar from "../../components/Navbar/Navbar";
-import { userClient, getUser, sendMMRequest as sendMMRequestMut} from "../../services/userService";
+import { userClient, 
+          getUser, 
+          sendMMRequest as sendMMRequestMut,
+          follow as followMut,
+          incFollowersCount as incFollowersCountMut,
+          unfollow as unfollowMut,
+          decFollowersCount as decFollowersCountMut} from "../../services/userService";
 import { mixtapesClient, getUserPageMixtapes } from "../../services/mixtapesService";
 
 import { useAuth } from "../../utils/use-auth";
@@ -30,6 +36,10 @@ const UserPage  = (props) => {
   const [sendMashmateRequestMutation] = useMutation(sendMMRequestMut, {client: userClient, onCompleted: (data) => {
     auth.getUser();
   }});
+  const [followUserMutation]= useMutation(followMut, {client: userClient, onCompleted:() => auth.getUser()});
+  const [incrementUserFollowCountMutation]= useMutation(incFollowersCountMut, {client: userClient});
+  const [unfollowUserMutation]= useMutation(unfollowMut, {client: userClient, onCompleted:() => auth.getUser()});
+  const [decrementUserFollowCountMutation]= useMutation(decFollowersCountMut, {client: userClient});
 
   const SendMashmateRequest = () => {
     const mashmateRequest = {
@@ -47,7 +57,60 @@ const UserPage  = (props) => {
     toaster.notify("Request Sent", "You sent a mashmate request to " + data.user.username + ".");
   }
 
+  const followUserFunct = () => {
+    if (auth.user._id === data.user._id){toaster.notify("You cannot follow yourself!")}
+    else if (auth.user.following.includes(data.user._id)){toaster.notify("You cannot follow this user again!")}
+    else{
+      console.log("Following User")
+      //setShowUnfollow(true);
+
+      followUserMutation({variables: {
+        id: auth.user._id, 
+        idToFollow: data.user._id
+      }});
+
+      incrementUserFollowCountMutation({variables: {
+        id: data.user._id, 
+      }});
+    }
+  }
+
+  const unfollowUserFunct = () => {
+    if (!(auth.user.following.includes(data.user._id))){toaster.notify("You cannot unfollow this user again!")}
+    else{
+      console.log("Unfollowing User")
+      //setShowUnfollow(false);
+
+      unfollowUserMutation({variables: {
+        id: auth.user._id, 
+        idToUnfollow: data.user._id
+      }});
+
+      decrementUserFollowCountMutation({variables: {
+        id: data.user._id, 
+      }});
+    }
+  }
+  const checkAlreadyFollowed = () => {
+    if (!loading){
+      if (auth.user.following.includes(data.user._id)){return true}
+      else{
+        return false;
+      }
+      
+    }
+  }
+  
+  // if (!loading && showUnfollow==null){
+  //   setShowUnfollow(checkAlreadyFollowed())
+  // }
+
+
+
   return (
+    
+      
+    
     <div>
       <div className="page-container">
         <Navbar currentPage={NavbarLinks} />
@@ -72,7 +135,11 @@ const UserPage  = (props) => {
                       {!data.user.receivedMashmateRequests.reduce((acc, x) => (auth.user._id === x.senderId) || acc, false) && !data.user.mashmates.reduce((acc, x) => (auth.user._id === x.id) || acc, false) && "Send Mashmate Request"}
                     </Button>
                   }
-                <Button className="mm-btn-alt">Follow</Button>
+                {!auth.user.following.includes(idFromUrl) ? 
+                (<Button className="mm-btn-alt"onClick={followUserFunct}>Follow</Button>) 
+                : 
+                (<Button className="mm-btn-alt"onClick={unfollowUserFunct}>Unfollow</Button>)
+                }
               </div>
             </div>
 
