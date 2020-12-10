@@ -13,7 +13,7 @@ import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRe
 import { useAuth } from "../../utils/use-auth";
 import ChangePassword from "./Components/ChangePassword";
 import { useQuery, useMutation } from "@apollo/client";
-import {userClient, updateBio as updateBioMut, deactivateAccount as deactivateAccountMut} from "../../services/userService";
+import {userClient, updateBio as updateBioMut, deactivateAccount as deactivateAccountMut, resolveMashmateRequest as resolveMMRequest} from "../../services/userService";
 import {mixtapesClient, getUserMixtapes, updateOwnerActive as updateOwnerActiveMut} from "../../services/mixtapesService";
 
 import DeactivateAccountModal from "../../components/Modals/DeactivateAccountModal";
@@ -35,6 +35,7 @@ const Account = (props) => {
 
   const [updateBioMutation] = useMutation(updateBioMut, {client: userClient, onCompleted: ()=>{auth.getUser();}});
   const [deactivateAccountMutation] = useMutation(deactivateAccountMut, {client: userClient});
+  const [resolveMMRequestMut] = useMutation(resolveMMRequest, {client: userClient, onCompleted: () => auth.getUser()});
 
   const updateBio = () => {
     if(tempBio.length !== 0){
@@ -63,6 +64,10 @@ const Account = (props) => {
         history.push("/");
       }
     });
+  }
+
+  const resolveMMR = (id, username, accepted) => {
+    resolveMMRequestMut({variables: {id: auth.user._id, username: auth.user.username, senderId: id, senderUsername: username, accepted: accepted}});
   }
 
   const updateMixtapesOwnerActive = () => {
@@ -137,7 +142,7 @@ const Account = (props) => {
                 <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
                   {user.receivedMashmateRequests.map((mashmateRequest) => (
-                    <MashmateRequestCard mashmateRequest={mashmateRequest} key={mashmateRequest.senderId} />
+                    <MashmateRequestCard mashmateRequest={mashmateRequest} key={mashmateRequest.senderId} resolve={resolveMMR} />
                   ))}
                 </div>
               </div>
