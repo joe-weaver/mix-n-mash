@@ -294,7 +294,7 @@ mutation unfollowUser(
 }`
 
 export const decFollowersCount = gql`
-mutation incNumFollowers(
+mutation decNumFollowers(
     $id: String!,
     ){
         decNumFollowers(
@@ -304,3 +304,24 @@ mutation incNumFollowers(
         numFollowers
     }
 }`
+
+export const removeMashmate = gql`
+mutation removeMashmate(
+    $id: String!,
+    $mashmateId: String!,
+    $username: String!,
+    $mashmateUsername: String!
+    ){
+        removeMashmate(
+            id: $id
+            mashmateId: $mashmateId
+            username: $username
+            mashmateUsername: $mashmateUsername
+        ){
+            _id
+            mashmates{
+                id
+                username
+            }
+    }
+}`;

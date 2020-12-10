@@ -13,7 +13,7 @@ import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRe
 import { useAuth } from "../../utils/use-auth";
 import ChangePassword from "./Components/ChangePassword";
 import { useQuery, useMutation } from "@apollo/client";
-import {userClient, updateBio as updateBioMut, deactivateAccount as deactivateAccountMut, resolveMashmateRequest as resolveMMRequest} from "../../services/userService";
+import {userClient, updateBio as updateBioMut, deactivateAccount as deactivateAccountMut, resolveMashmateRequest as resolveMMRequest, removeMashmate as removeMMMut} from "../../services/userService";
 import {mixtapesClient, getUserMixtapes, updateOwnerActive as updateOwnerActiveMut} from "../../services/mixtapesService";
 
 import DeactivateAccountModal from "../../components/Modals/DeactivateAccountModal";
@@ -36,6 +36,8 @@ const Account = (props) => {
   const [updateBioMutation] = useMutation(updateBioMut, {client: userClient, onCompleted: ()=>{auth.getUser();}});
   const [deactivateAccountMutation] = useMutation(deactivateAccountMut, {client: userClient});
   const [resolveMMRequestMut] = useMutation(resolveMMRequest, {client: userClient, onCompleted: () => auth.getUser()});
+  const [removeMMMutation] = useMutation(removeMMMut, {client: userClient, onCompleted: () => auth.getUser()});
+
 
   const updateBio = () => {
     if(tempBio.length !== 0){
@@ -63,6 +65,10 @@ const Account = (props) => {
     resolveMMRequestMut({variables: {id: auth.user._id, username: auth.user.username, senderId: id, senderUsername: username, accepted: accepted}});
   }
 
+  const removeMM = (id, username) => {
+    removeMMMutation({variables: {id: auth.user._id, username: auth.user.username, mashmateId: id, mashmateUsername: username}});
+  }
+
   const updateMixtapesOwnerActive = () => {
     data.getUserMixtapes.filter((mixtape) => mixtape.ownerId === auth.user._id)
     .forEach((mixtape)=>{updateOwnerActiveMutation({variables: {id: mixtape._id, ownerActive: false}})});
@@ -75,6 +81,7 @@ const Account = (props) => {
       logOut();
     }
   }
+  
 
   return (
     <div>
@@ -123,7 +130,10 @@ const Account = (props) => {
                 <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
                   {auth.user.mashmates.map((mashmate) => (
-                    <MashmateCard mashmate={mashmate} key={mashmate.id} />
+                    <MashmateCard 
+                      mashmate={mashmate} 
+                      key={mashmate.id}
+                      remove={removeMM} />
                   ))}
                 </div>
               </div>
