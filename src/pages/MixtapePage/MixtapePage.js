@@ -422,7 +422,7 @@ const MixtapePage = (props) => {
           <div>
             <MashMixtapeModal mixtape={!loading ? data.mixtape : null} />
             <IconButton component={<CallSplitIcon onClick={addMixtape}/>} />
-            {editView &&
+            {(!loading && auth.user._id === data.mixtape.ownerId) &&
             <AddCollaboratorModal mixtape={!loading ? data.mixtape : null}/>
             }
           </div>
