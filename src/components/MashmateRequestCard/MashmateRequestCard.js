@@ -26,8 +26,8 @@ const MashmateRequestCard = (props) => {
       </div>
       <div className="mashmate-request-responses">
         {/*Button paddings are too big, thus they are too far apart  */}
-        <IconButton component={<CheckCircleIcon />} />
-        <IconButton component={<CancelIcon />} />
+        <IconButton component={<CheckCircleIcon />} onClick={() => props.resolve(props.mashmateRequest.senderId, props.mashmateRequest.username, true)} />
+        <IconButton component={<CancelIcon />} onClick={() => props.resolve(props.mashmateRequest.senderId, props.mashmateRequest.username, false)} />
       </div>
     </Card>
   );

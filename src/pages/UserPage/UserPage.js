@@ -27,28 +27,24 @@ const UserPage  = (props) => {
   // Hook into notifications
   const toaster = useToast();
 
-  const [sendMashmateRequestMutation] = useMutation(sendMMRequestMut, {client: userClient});
+  const [sendMashmateRequestMutation] = useMutation(sendMMRequestMut, {client: userClient, onCompleted: (data) => {
+    auth.getUser();
+  }});
+
   const SendMashmateRequest = () => {
-    if (auth.user._id === data.user._id){toaster.notify("You cannot add yourself!")}
-    else if (data.user.receivedMashmateRequests.reduce((acc, x) => data.user._id === x.senderId || acc, false)){toaster.notify("You already sent a Mashmate Request!")}
-    else if (data.user.mashmates.reduce((acc, x) => data.user._id === x.id || acc, false)){toaster.notify("You are already mashmates with this user!")}
-    else{
-      const mashmateRequest = {
-        senderId: data.user._id,
-        recipientId: auth.user._id,
-        username: auth.user.username,
-        //timeSent: Date.now(),
-        seen: false
-      };
-  
-      sendMashmateRequestMutation({variables: {
-        id: data.user._id, 
-        newMashmateRequest: mashmateRequest
-      }});
-  
-      console.log("SENDING REQUEST");
-    }
-    
+    const mashmateRequest = {
+      senderId: auth.user._id,
+      username: auth.user.username,
+      seen: false
+    };
+
+    sendMashmateRequestMutation({variables: {
+      id: data.user._id, 
+      newMashmateRequest: mashmateRequest
+    }});
+
+    // Notify user
+    toaster.notify("Request Sent", "You sent a mashmate request to " + data.user.username + ".");
   }
 
   return (
@@ -65,7 +61,17 @@ const UserPage  = (props) => {
             <div className="user-top-body">
               {!loading && data.user.bio}
               <div className= "user-page-buttons">
-                <Button className="mm-btn-alt" onClick={SendMashmateRequest}>Send Mashmate Request </Button>
+                {!loading && auth.user._id !== data.user._id &&
+                  <Button
+                    className="mm-btn-alt"
+                    onClick={SendMashmateRequest}
+                    disabled={loading || data.user.mashmates.reduce((acc, x) => (auth.user._id === x.id) || acc, false)
+                            || data.user.receivedMashmateRequests.reduce((acc, x) => (auth.user._id === x.senderId) || acc, false)}>
+                      {data.user.receivedMashmateRequests.reduce((acc, x) => (auth.user._id === x.senderId) || acc, false) && "Mashmate Request Sent"}
+                      {data.user.mashmates.reduce((acc, x) => (auth.user._id === x.id) || acc, false) && "Already mashmates"}
+                      {!data.user.receivedMashmateRequests.reduce((acc, x) => (auth.user._id === x.senderId) || acc, false) && !data.user.mashmates.reduce((acc, x) => (auth.user._id === x.id) || acc, false) && "Send Mashmate Request"}
+                    </Button>
+                  }
                 <Button className="mm-btn-alt">Follow</Button>
               </div>
             </div>
