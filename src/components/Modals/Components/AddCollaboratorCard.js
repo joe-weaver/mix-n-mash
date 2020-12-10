@@ -10,7 +10,7 @@ const AddCollaboratorCard = (props) => {
 
     return (
         <Card className="edit-permissions-card">
-            <div>{props.mashmate.username}</div>
+            <div>{props.mashmateObj.username}</div>
             <IconButton component={<AddIcon/>} callback={props.addCollaborator}/>
         </Card>
     )

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import Dropdown from "../../Dropdown/Dropdown";
+import CustomDropdown from "../../Dropdown/Dropdown";
 import IconButton from "../../IconButton/IconButton";
 import CancelIcon from "@material-ui/icons/Cancel";
 
@@ -11,9 +11,9 @@ const EditPermissionsCard = (props) => {
 
     return (
         <Card className="edit-permissions-card">
-            <div>{props.collaborator.username}</div>
+            <div>{props.collaboratorObj.username}</div>
             <div>
-                <Dropdown items={["Can View", "Can Edit"]} defaultIndex={0} selectionCallback={(selection) => console.log(selection)}/>
+                <CustomDropdown items={["Can View", "Can Edit"]} defaultIndex={props.collaboratorObj.privilegeLevel==="view" ? 0 : 1} selectionCallback={(selection) => props.updatePrivilegeLevel(selection)}/>
                 <IconButton component={<CancelIcon/>} callback={props.removeCollaborator}/>
             </div>
         </Card>

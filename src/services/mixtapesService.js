@@ -411,3 +411,16 @@ mutation updateOwnerActiveStatus($id: String!, $ownerActive: Boolean!){
   }
 }
 `
+
+export const updateCollaborators = gql`
+mutation updateCollaboratorsOnMixtape($id: String!, $collaborators: [collaboratorsInput]!){
+  updateCollaborators(id: $id, collaborators: $collaborators){
+    _id,
+    collaborators{
+      userId,
+      username,
+      privilegeLevel
+    }
+  }
+}
+`

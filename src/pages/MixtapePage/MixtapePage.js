@@ -423,7 +423,7 @@ const MixtapePage = (props) => {
             <MashMixtapeModal mixtape={!loading ? data.mixtape : null} />
             <IconButton component={<CallSplitIcon onClick={addMixtape}/>} />
             {editView &&
-            <AddCollaboratorModal />
+            <AddCollaboratorModal mixtape={!loading ? data.mixtape : null}/>
             }
           </div>
         </Card.Header>}
@@ -505,7 +505,7 @@ const MixtapePage = (props) => {
           {/* Mixtape Description */}
           <div>
             {editView &&
-              <div>
+            <span>
               {!editingMixtapeDescription ? (
                 <IconButton component={<EditIcon />}
                   callback={() => setEditingMixtapeDescription(true)}/>) 
@@ -514,8 +514,9 @@ const MixtapePage = (props) => {
                   onClick={editDescription}
                   />
               )}
-              </div>
+              </span>
             }
+            Description:
             {!loading && <div>
               <Form.Control
                 as="textarea"

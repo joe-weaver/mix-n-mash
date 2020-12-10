@@ -104,7 +104,7 @@ const Account = (props) => {
                   callback={updateBio}
                 />
               )}
-              <h5>Bio</h5>
+              <h5>Bio:</h5>
             </div>
             <FormControl
               as="textarea"
