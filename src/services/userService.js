@@ -18,7 +18,6 @@ export const getUsers = gql`
         mixtapes,
         receivedMashmateRequests {
             senderId,
-            recipientId,
             username,
             timeSent,
             seen
@@ -42,7 +41,6 @@ export const getUser = gql`
             dislikedMixtapes,
             receivedMashmateRequests {
                 senderId,
-                recipientId,
                 username,
                 timeSent,
                 seen
@@ -70,7 +68,6 @@ query User($usernameOrEmail: String!){
         dislikedMixtapes,
         receivedMashmateRequests {
             senderId,
-            recipientId,
             username,
             timeSent,
             seen
@@ -95,7 +92,6 @@ query qUsers($searchTerm: String!, $skip: Int!, $limit: Int!){
         mixtapes,
         receivedMashmateRequests {
             senderId,
-            recipientId,
             username,
             timeSent,
             seen
@@ -222,7 +218,6 @@ mutation sendMashmateRequest(
         _id
         receivedMashmateRequests{
             senderId
-            recipientId
             username
             timeSent
             seen
@@ -230,6 +225,34 @@ mutation sendMashmateRequest(
     }
 }`
   
+export const resolveMashmateRequest = gql`
+mutation resolveMashmateRequest(
+    $id: String!,
+    $senderId: String!,
+    $username: String!,
+    $senderUsername: String!,
+    $accepted: Boolean!){
+        resolveMashmateRequest(
+            id: $id
+            senderId: $senderId
+            username: $username
+            senderUsername: $senderUsername
+            accepted: $accepted
+        ){
+            _id
+            receivedMashmateRequests{
+                senderId
+                username
+                timeSent
+                seen
+            }
+            mashmates{
+                id
+                username
+            }
+    }
+}`;
+
 export const follow = gql`
 mutation followUser(
     $id: String!,

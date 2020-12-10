@@ -13,7 +13,7 @@ import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRe
 import { useAuth } from "../../utils/use-auth";
 import ChangePassword from "./Components/ChangePassword";
 import { useQuery, useMutation } from "@apollo/client";
-import {userClient, updateBio as updateBioMut, deactivateAccount as deactivateAccountMut} from "../../services/userService";
+import {userClient, updateBio as updateBioMut, deactivateAccount as deactivateAccountMut, resolveMashmateRequest as resolveMMRequest} from "../../services/userService";
 import {mixtapesClient, getUserMixtapes, updateOwnerActive as updateOwnerActiveMut} from "../../services/mixtapesService";
 
 import DeactivateAccountModal from "../../components/Modals/DeactivateAccountModal";
@@ -35,24 +35,18 @@ const Account = (props) => {
 
   const [updateBioMutation] = useMutation(updateBioMut, {client: userClient, onCompleted: ()=>{auth.getUser();}});
   const [deactivateAccountMutation] = useMutation(deactivateAccountMut, {client: userClient});
+  const [resolveMMRequestMut] = useMutation(resolveMMRequest, {client: userClient, onCompleted: () => auth.getUser()});
 
   const updateBio = () => {
     if(tempBio.length !== 0){
-      updateBioMutation({variables: {id: user._id, bio: tempBio}});
+      updateBioMutation({variables: {id: auth.user._id, bio: tempBio}});
     }
     setTempBio("");
     setEditingBio(false);
   }
 
-  const [user, setUser] = React.useState(auth.user);
-
   const refreshUser = () => {
-    auth.getUser().then(userOrError => {
-      if(!userOrError.error){
-        // We don't have an error
-        setUser(userOrError);
-      }
-    })
+    auth.getUser();
   }
 
   const history = useHistory();
@@ -63,6 +57,10 @@ const Account = (props) => {
         history.push("/");
       }
     });
+  }
+
+  const resolveMMR = (id, username, accepted) => {
+    resolveMMRequestMut({variables: {id: auth.user._id, username: auth.user.username, senderId: id, senderUsername: username, accepted: accepted}});
   }
 
   const updateMixtapesOwnerActive = () => {
@@ -84,7 +82,7 @@ const Account = (props) => {
         <Navbar currentPage={NavbarLinks.ACCOUNT} />
         <Card className="page-content">
           <Card.Header className="content-header">
-            <h1>{user.username}</h1>
+            <h1>{auth.user.username}</h1>
             <div>
               <Button className="mm-btn-alt" onClick={logOut}>Log Out</Button>
             </div>
@@ -109,7 +107,7 @@ const Account = (props) => {
             <FormControl
               as="textarea"
               className="bio-textarea"
-              defaultValue={user.bio}
+              defaultValue={auth.user.bio}
               disabled={!editingBio}
               maxLength="255"
               onChange={event => setTempBio(event.target.value)}
@@ -124,7 +122,7 @@ const Account = (props) => {
                 Mashmates
                 <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
-                  {user.mashmates.map((mashmate) => (
+                  {auth.user.mashmates.map((mashmate) => (
                     <MashmateCard mashmate={mashmate} key={mashmate.id} />
                   ))}
                 </div>
@@ -136,8 +134,8 @@ const Account = (props) => {
                 Mashmate Requests
                 <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
                 <div className="scroll-content" style={{maxHeight: "275px"}}>
-                  {user.receivedMashmateRequests.map((mashmateRequest) => (
-                    <MashmateRequestCard mashmateRequest={mashmateRequest} key={mashmateRequest.senderId} />
+                  {auth.user.receivedMashmateRequests.map((mashmateRequest) => (
+                    <MashmateRequestCard mashmateRequest={mashmateRequest} key={mashmateRequest.senderId} resolve={resolveMMR} />
                   ))}
                 </div>
               </div>
