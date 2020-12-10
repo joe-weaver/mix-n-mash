@@ -28,7 +28,7 @@ const SiteNavbar = (props) => {
 
   return (
     <Navbar bg="dark" variant="dark" className="navbar-style">
-      <Link to="/" className="navbar-brand">
+      <Link to="/HottestMixtapes" className="navbar-brand">
         Mix n Mash
       </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />

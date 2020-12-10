@@ -15,7 +15,7 @@ const MashmateCard = (props) => {
         <Link to={"/User/" + props.mashmate.id}>
           <div className="mixtape-result-user mm-link-dark">{props.mashmate.username}</div>
         </Link>
-          <IconButton component={<CancelIcon />} />
+          <IconButton component={<CancelIcon />} onClick={() => props.remove(props.mashmate.id, props.mashmate.username)} />
         </div>
       </div>
     </Card>

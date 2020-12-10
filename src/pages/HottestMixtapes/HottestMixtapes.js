@@ -20,13 +20,19 @@ import "../Page.css";
 const items = [
   "Hottest Mixtapes Today",
   "Hottest Mixtapes This Week",
-  "Hottest Mixtapes of All Time"
+  "Hottest Mixtapes of All Time",
+  "Follower Mixtapes Today",
+  "Follower Mixtapes This Week",
+  "Follower Mixtapes of All Time",
 ];
 
 const sortCriteria = {
   "Hottest Mixtapes Today": "day",
   "Hottest Mixtapes This Week": "week",
-  "Hottest Mixtapes of All Time": "allTime"
+  "Hottest Mixtapes of All Time": "allTime",
+  "Follower Mixtapes Today": "dayFollowers",
+  "Follower Mixtapes This Week": "weekFollowers",
+  "Follower Mixtapes of All Time": "allTimeFollowers",
 }
 
 const HottestMixtapes  = (props) => {
@@ -38,7 +44,7 @@ const HottestMixtapes  = (props) => {
 
   const {criteria, skip} = useParams();
 
-  let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, criteria: (criteria ? criteria : "day"), skip: (skip ? parseInt(skip) : 0) * 10, limit: 10}, pollInterval: 1000});
+  let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, criteria: (criteria ? criteria : "day"), skip: (skip ? parseInt(skip) : 0) * 10, limit: 10, following: auth.user.following}, pollInterval: 1000});
 
   const handleChangeCriteria = (selection) => {
     const newCriteria = sortCriteria[selection];
@@ -48,7 +54,7 @@ const HottestMixtapes  = (props) => {
   }
 
   const navigatePage = (increment) => {
-    const newCriteria = criteria ? criteria : "today";
+    const newCriteria = criteria ? criteria : "day";
     let newSkip = (skip ? parseInt(skip) : 0) + increment;
     if(newSkip < 0){
       newSkip = 0;

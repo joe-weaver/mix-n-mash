@@ -18,7 +18,6 @@ export const getUsers = gql`
         mixtapes,
         receivedMashmateRequests {
             senderId,
-            recipientId,
             username,
             timeSent,
             seen
@@ -42,7 +41,6 @@ export const getUser = gql`
             dislikedMixtapes,
             receivedMashmateRequests {
                 senderId,
-                recipientId,
                 username,
                 timeSent,
                 seen
@@ -70,7 +68,6 @@ query User($usernameOrEmail: String!){
         dislikedMixtapes,
         receivedMashmateRequests {
             senderId,
-            recipientId,
             username,
             timeSent,
             seen
@@ -95,7 +92,6 @@ query qUsers($searchTerm: String!, $skip: Int!, $limit: Int!){
         mixtapes,
         receivedMashmateRequests {
             senderId,
-            recipientId,
             username,
             timeSent,
             seen
@@ -209,3 +205,123 @@ mutation reactivateUserAccount($id: String!){
     }
 }
 `
+
+export const sendMMRequest = gql`
+mutation sendMashmateRequest(
+    $id: String!,
+    $newMashmateRequest: mashmateRequestInput!
+    ){
+      sendMashmateRequest(
+        id: $id
+        newMashmateRequest: $newMashmateRequest
+        ){
+        _id
+        receivedMashmateRequests{
+            senderId
+            username
+            timeSent
+            seen
+        }
+    }
+}`
+  
+export const resolveMashmateRequest = gql`
+mutation resolveMashmateRequest(
+    $id: String!,
+    $senderId: String!,
+    $username: String!,
+    $senderUsername: String!,
+    $accepted: Boolean!){
+        resolveMashmateRequest(
+            id: $id
+            senderId: $senderId
+            username: $username
+            senderUsername: $senderUsername
+            accepted: $accepted
+        ){
+            _id
+            receivedMashmateRequests{
+                senderId
+                username
+                timeSent
+                seen
+            }
+            mashmates{
+                id
+                username
+            }
+    }
+}`;
+
+export const follow = gql`
+mutation followUser(
+    $id: String!,
+    $idToFollow: String!
+    ){
+        followUser(
+        id: $id
+        idToFollow: $idToFollow
+        ){
+        _id
+        following
+    }
+}`
+
+export const incFollowersCount = gql`
+mutation incNumFollowers(
+    $id: String!,
+    ){
+        incNumFollowers(
+        id: $id
+        ){
+        _id
+        numFollowers
+    }
+}`
+
+export const unfollow = gql`
+mutation unfollowUser(
+    $id: String!,
+    $idToUnfollow: String!
+    ){
+        unfollowUser(
+        id: $id
+        idToUnfollow: $idToUnfollow
+        ){
+        _id
+        following
+    }
+}`
+
+export const decFollowersCount = gql`
+mutation decNumFollowers(
+    $id: String!,
+    ){
+        decNumFollowers(
+        id: $id
+        ){
+        _id
+        numFollowers
+    }
+}`
+
+export const removeMashmate = gql`
+mutation removeMashmate(
+    $id: String!,
+    $mashmateId: String!,
+    $username: String!,
+    $mashmateUsername: String!
+    ){
+        removeMashmate(
+            id: $id
+            mashmateId: $mashmateId
+            username: $username
+            mashmateUsername: $mashmateUsername
+        ){
+            _id
+            mashmates{
+                id
+                username
+            }
+    }
+}`;

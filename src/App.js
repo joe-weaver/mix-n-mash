@@ -27,7 +27,7 @@ export default function App() {
         <BrowserRouter>
         <ProvideToast>
           <Route path="/" exact component={SignIn} />
-          <PrivateRoute path="/HottestMixtapes/:criteria?/:skip?"><HottestMixtapes/></PrivateRoute>
+          <PrivateRoute path="/HottestMixtapes/:criteria?/:skip?/:filter?"><HottestMixtapes/></PrivateRoute>
           <PrivateRoute exact path="/MyMixtapes"><MyMixtapes/></PrivateRoute>
           <PrivateRoute exact path="/Mixtape/:mixtapeId"><MixtapePage/></PrivateRoute>
           <PrivateRoute path="/Account"><Account/></PrivateRoute>
