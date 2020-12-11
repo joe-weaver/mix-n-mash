@@ -91,21 +91,6 @@ const UserPage  = (props) => {
       }});
     }
   }
-  const checkAlreadyFollowed = () => {
-    if (!loading){
-      if (auth.user.following.includes(data.user._id)){return true}
-      else{
-        return false;
-      }
-      
-    }
-  }
-  
-  // if (!loading && showUnfollow==null){
-  //   setShowUnfollow(checkAlreadyFollowed())
-  // }
-
-
 
   return (
     
@@ -141,6 +126,12 @@ const UserPage  = (props) => {
                 (<Button className="mm-btn-alt"onClick={unfollowUserFunct}>Unfollow</Button>)
                 }
               </div>
+            </div>
+
+            <div>
+              <h5>
+                Number of Followers: {!loading && data.user.numFollowers}
+              </h5>
             </div>
 
             {/*List of their public mixtapes  */}

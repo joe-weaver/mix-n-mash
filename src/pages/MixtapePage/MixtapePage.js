@@ -489,10 +489,10 @@ const MixtapePage = (props) => {
               </div>
               <div className="scroll-content song-list space-below">
                 {!loading && !editingSongs && data.mixtape.songs.map((song, index) => (
-                  <SongCard song={song} key={index} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)}/>
+                  <SongCard song={song} key={index} songIndex={data.mixtape.songs.indexOf(song)} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)}/>
                 ))}
                 {!loading && editingSongs && editList.map((song, index) => (
-                  <SongCard song={song} key={index} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)} />
+                  <SongCard song={song} key={index} songIndex={data.mixtape.songs.indexOf(song)} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)} />
                 ))}
               </div>
               <div>

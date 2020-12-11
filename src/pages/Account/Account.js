@@ -123,6 +123,8 @@ const Account = (props) => {
             {/*Password stuff  */}
             <ChangePassword />
             <br />
+              <div>Number of Followers: {!loading && auth.user.numFollowers}</div>
+            <br/>
             {/*Mashmate stuff  */}
             <div className="mashmateStuff-container">
               <div className="mashmatesList-container">
