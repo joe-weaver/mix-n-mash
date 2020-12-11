@@ -1,7 +1,8 @@
 import React from "react";
-import { Card, Form } from "react-bootstrap";
+import { Card, Form, Button } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from '@material-ui/icons/Cancel';
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
@@ -231,6 +232,10 @@ const MixtapePage = (props) => {
     confirmRemoveSongs();
     setEditingSongs(false);
 
+  }
+
+  const cancelEditing = () => {
+    setEditingSongs(false);
   }
 
   const removeSong = (index) => {
@@ -485,7 +490,18 @@ const MixtapePage = (props) => {
                   <IconButton component={<SaveIcon />}
                     callback={disableEditing}/>
                 ))}
+                {editView && (!editingSongs ? 
+                  (<div/>) 
+                    : 
+                  (
+                    <div>
+                      {/* <Button variant="primary" className="mm-btn-alt">Cancel Changes </Button> */}
+                      <IconButton component={<CancelIcon />} callback={cancelEditing}/>
+                     </div>
+                  )
+                )}
                 <div className="space-below">Songs</div>
+                
               </div>
               <div className="scroll-content song-list space-below">
                 {!loading && !editingSongs && data.mixtape.songs.map((song, index) => (

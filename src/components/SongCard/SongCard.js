@@ -12,15 +12,11 @@ const SongCard = (props) => {
  
   return (
     <Card key={props.song.name} className="song-card mm-card">
-      {(props.songIndex + 1) + ":  "}
+      {!props.editingSongs && ((props.songIndex + 1) + ":  ")}
       <div>
         <img src={"https://img.youtube.com/vi/"+props.song.youtubeId+"/0.jpg"} alt="" className="thumbnail-image"/> 
       </div>
-
-      <div>
-        
-      </div>
-
+      
       <div className="song-title">
         {props.song.name}
       </div>
