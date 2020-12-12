@@ -28,49 +28,55 @@ const MashMixtapeModal = (props) => {
     }});
 
     const mergeMixtape = (mixtape) => {
-        let songs = [];
+        if((mixtape.songs.length + props.mixtape.songs.length) > 100){
+            toaster.notify("Total Songs are over 100! Cannot Merge!");
+        }
+        else{
+            let songs = [];
 
-        let i = 0;
-        let j = 0;
-
-        while(i < mixtape.songs.length && j < props.mixtape.songs.length){
-            let choice = Math.random();
-
-            if(choice < 0.5){
-                songs.push(mixtape.songs[i]);
-                i++;
-            } else {
-                songs.push(props.mixtape.songs[j]);
-                j++;
+            let i = 0;
+            let j = 0;
+    
+            while(i < mixtape.songs.length && j < props.mixtape.songs.length){
+                let choice = Math.random();
+    
+                if(choice < 0.5){
+                    songs.push(mixtape.songs[i]);
+                    i++;
+                } else {
+                    songs.push(props.mixtape.songs[j]);
+                    j++;
+                }
             }
-        }
-
-        while(i < mixtape.songs.length || j < props.mixtape.songs.length){
-            if(i < mixtape.songs.length){
-                songs.push(mixtape.songs[i]);
-                i++;
-            } else {
-                songs.push(props.mixtape.songs[j]);
-                j++;
+    
+            while(i < mixtape.songs.length || j < props.mixtape.songs.length){
+                if(i < mixtape.songs.length){
+                    songs.push(mixtape.songs[i]);
+                    i++;
+                } else {
+                    songs.push(props.mixtape.songs[j]);
+                    j++;
+                }
             }
-        }
-
-        let genres = [...mixtape.genres];
-
-        for(let genre of props.mixtape.genres){
-            if(!genres.includes(genre)){
-                genres.push(genre);
+    
+            let genres = [...mixtape.genres];
+    
+            for(let genre of props.mixtape.genres){
+                if(!genres.includes(genre)){
+                    genres.push(genre);
+                }
             }
+    
+            let reqObj = {
+                id: mixtape._id,
+                title: mixtape.title + " X " + props.mixtape.title,
+                songs: songs.map(song => ({name: song.name, youtubeId: song.youtubeId})),
+                genres: genres
+            }
+    
+            mashMixtape({variables: reqObj});
         }
-
-        let reqObj = {
-            id: mixtape._id,
-            title: mixtape.title + " X " + props.mixtape.title,
-            songs: songs.map(song => ({name: song.name, youtubeId: song.youtubeId})),
-            genres: genres
-        }
-
-        mashMixtape({variables: reqObj});
+        
 
         setShow(false);
     }

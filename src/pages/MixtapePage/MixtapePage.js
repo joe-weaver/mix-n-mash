@@ -512,7 +512,7 @@ const MixtapePage = (props) => {
                 ))}
               </div>
               <div>
-              {editView && <AddSongModal addSongsCallback={addSongs} disabledButton={editingSongs} />}
+              {editView && <AddSongModal originalSongLength={data.mixtape.songs.length} addSongsCallback={addSongs} disabledButton={editingSongs} />}
               </div>
               
             </div>
