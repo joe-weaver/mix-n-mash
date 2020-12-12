@@ -72,7 +72,6 @@ function useProvideAuth(){
                 return userOrError;
             } else {
                 // We just created a valid user, so set the user object
-                console.log("Setting user:", user);
                 setUser(userOrError);
                 return userOrError;
             }

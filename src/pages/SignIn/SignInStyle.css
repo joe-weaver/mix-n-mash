@@ -1,18 +1,115 @@
-.splash-container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(45deg, rgb(235, 94, 40), var(--primary-color));
+/* ########## SPLASH PAGE ########## */
+.splash-screen{
+  position: absolute;
 }
 
-.signin-card {
-  width: 80vw;
-  max-width: 600px;
-  height: 60vh;
-  min-height: 420px;
-  padding: 5vh 5vw;
-  box-shadow: 0px 2px 5px 3px rgba(0, 0, 0, 0.3);
-  border-color: transparent;
+.logo-container{
+  position: absolute;
+  left: 50%;
+}
+
+#logo{
+  position: relative;
+  left: -50%;
+  height: 70vh;
+  padding-top: 5vh;
+}
+
+.splash-btn-container{
+  position: absolute;
+  top: 75vh;
+  left: 50%;
+  height: 25vh;
+  display: flex;
+  align-items: center;
+}
+
+.splash-btn{
+  position: relative;
+  left: -50%;
+  background-color: transparent;
+  border-style: none;
+  color: var(--mm-pink);
+  font-family: 'Century Gothic';
+  font-size: 6vh;
+  transition: background-color 0.5s, box-shadow 0.5s;
+}
+
+.splash-btn:hover{
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0px 0px 20px 1px rgba(255, 255, 255, 0.1);
+  transition: background-color 0.5s, box-shadow 0.5s;
+  cursor: pointer;
+}
+
+.splash-btn::after{
+  content: "\203a";
+  padding-left: 10px;
+  font-size: 7vh;
+  transition: padding-left 0.5s;
+}
+
+.splash-btn:hover::after{
+  padding-left: 30px;
+  transition: padding-left 0.5s;
+}
+
+/* ########## LOGIN PAGE ########## */
+.slide-left{
+  left: 20%;
+  animation-name: slide-left;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes slide-left{
+  from {left: 50%}
+  to {left: 20%;}
+}
+
+.login-container{
+  position: absolute;
+  left: 75%;
+  font-family: 'Century Gothic';
+}
+
+.login-card{
+  position: relative;
+  left: -50%;
+  margin-top: 25vh;
+  width: 35vw;
+  min-height: 50vh;
+  background-color: var(--bg-light) !important;
+}
+
+.login-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-card .card-body {
+  padding-left: 4vw;
+  padding-right: 4vw;
+}
+
+.login-card .card-footer {
+  justify-content: space-evenly;
+}
+
+.login-card .mm-link-light::after{
+  content: "\203a";
+  padding-left: 10px;
+  font-size: x-large;
+}
+
+.fade-in{
+  animation-name: fade-in;
+  animation-duration: 2.5s;
+}
+
+@keyframes fade-in{
+  0% {opacity: 0}
+  50% {opacity: 0}
+  100% {opacity: 1}
 }

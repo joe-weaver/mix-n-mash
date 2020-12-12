@@ -23,6 +23,23 @@
 
   --gray-color: rgb(61, 66, 75);
   --black: rgb(2, 4, 34);
+  
+  --bg: rgb(46, 43, 49);
+  --bg-light: rgb(63, 60, 66);
+
+  --mm-blue: rgb(0, 187, 249);
+  --mm-blue-transparent: rgba(0, 187, 249, 0.1);
+  --mm-blue-transparent-less: rgba(0, 187, 249, 0.2);
+  --mm-blue-lighter: rgb(43, 202, 255);
+  --mm-blue-darker: rgb(2, 148, 197);
+
+  --mm-pink: rgb(250, 108, 193);
+
+  --mm-red: rgb(234, 82, 111);
+  --mm-red-transparent: rgba(234, 82, 111, 0.1);
+  --mm-red-transparent-less: rgba(234, 82, 111, 0.2);
+  --mm-red-lighter: rgb(236, 106, 130);
+  --mm-red-darker: rgb(207, 70, 95);
 }
 /* rgb(4, 30, 78); */
 body {
@@ -78,75 +95,105 @@ body {
 
 /* ##################################################################### */
 /* Button Style */
+.btn{
+  border-radius: 0.3rem !important;
+}
+
 .mm-btn {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
-  color: white;
+  background-color: var(--mm-blue) !important;
+  border-color: var(--mm-blue) !important;
+  color: var(--bg) !important;
+  font-family: 'Century Gothic Bold';
 }
 
 .mm-btn:hover {
-  background-color: var(--primary-color-lighter) !important;
-  border-color: var(--primary-color-lighter) !important;
-  color: white;
+  background-color: var(--mm-blue-lighter) !important;
+  border-color: var(--mm-blue-lighter) !important;
+  color: var(--bg) !important;
 }
 
 .mm-btn:active {
-  background-color: var(--primary-color-lighter) !important;
-  border-color: var(--primary-color-lighter) !important;
-  color: white;
+  background-color: var(--mm-blue-lighter) !important;
+  border-color: var(--mm-blue-lighter) !important;
+  color: var(--bg) !important;
 }
 
 .mm-btn:focus {
-  background-color: var(--primary-color-lighter) !important;
-  border-color: var(--primary-color-lighter) !important;
-  color: white !important;
+  background-color: var(--mm-blue-lighter) !important;
+  border-color: var(--mm-blue-lighter) !important;
+  color: var(--bg) !important;
 }
 
 .mm-btn-alt {
-  background-color: var(--primary-color-transparent-more) !important;
-  border-color: var(--primary-color) !important;
+  background-color: var(--mm-blue-transparent) !important;
+  border-color: var(--mm-blue) !important;
   color: white !important;
 }
 
 .mm-btn-alt:hover {
-  background-color: var(--primary-color-transparent) !important;
-  border-color: var(--primary-color-lighter) !important;
+  background-color: var(--mm-blue-transparent-less) !important;
+  border-color: var(--mm-blue-lighter) !important;
   color: white !important;
 }
 
 .mm-btn-alt:active {
-  background-color: var(--primary-color-transparent) !important;
-  border-color: var(--primary-color-lighter) !important;
+  background-color: var(--mm-blue-transparent-less) !important;
+  border-color: var(--mm-blue-lighter) !important;
   color: white;
 }
 
 .mm-btn-alt:focus {
-  background-color: var(--primary-color-transparent) !important;
-  border-color: var(--primary-color-lighter) !important;
+  background-color: var(--mm-blue-transparent) !important;
+  border-color: var(--mm-blue-lighter) !important;
   color: white !important;
 }
 
 .mm-btn-warning {
-  background-color: var(--warning-color-transparent-more) !important;
-  border-color: var(--warning-color) !important;
-  color: white !important;
+  background-color: var(--mm-red) !important;
+  border-color: var(--mm-red) !important;
+  color: var(--bg) !important;
+  font-family: 'Century Gothic Bold';
 }
 
 .mm-btn-warning:hover {
-  background-color: var(--warning-color-transparent) !important;
+  background-color: var(--mm-red-lighter) !important;
+  border-color: var(--mm-red-lighter) !important;
+  color: var(--bg) !important;
+}
+
+.mm-btn-warning:active {
+  background-color: var(--mm-red-lighter) !important;
+  border-color: var(--mm-red-lighter) !important;
+  color: var(--bg) !important;
+}
+
+.mm-btn-warning:focus {
+  background-color: var(--mm-red-lighter) !important;
+  border-color: var(--mm-red-lighter) !important;
+  color: var(--bg) !important;
+}
+
+.mm-btn-warning-alt {
+  background-color: var(--mm-red-transparent) !important;
+  border-color: var(--mm-red) !important;
+  color: white !important;
+}
+
+.mm-btn-warning-alt:hover {
+  background-color: var(--mm-red-transparent-less) !important;
   border-color: var(--warning-color-lighter) !important;
   color: white !important;
 }
 
-.mm-btn-warning:active {
-  background-color: var(--warning-color-transparent) !important;
-  border-color: var(--warning-color-lighter) !important;
+.mm-btn-warning-alt:active {
+  background-color: var(--mm-red-transparent-less) !important;
+  border-color: var(--mm-red-lighter) !important;
   color: white;
 }
 
-.mm-btn-warning:focus {
-  background-color: var(--warning-color-transparent) !important;
-  border-color: var(--warning-color-lighter) !important;
+.mm-btn-warning-alt:focus {
+  background-color: var(--mm-red-transparent) !important;
+  border-color: var(--mm-red-lighter) !important;
   color: white !important;
 }
 /* ##################################################################### */
@@ -172,23 +219,23 @@ body {
 }
 
 .mm-link-dark {
-  color: var(--primary-color) !important;
+  color: var(--mm-blue) !important;
   cursor: pointer;
   user-select: none;
 }
 
 .mm-link-dark:hover {
-  color: var(--primary-color-darker) !important;
+  color: var(--mm-blue-darker) !important;
   text-decoration: underline;
 }
 
 .mm-link-dark:active {
-  color: var(--primary-color-darker) !important;
+  color: var(--mm-blue-darker) !important;
   text-decoration: underline;
 }
 
 .mm-link-dark:visited {
-  color: var(--primary-color-lighter) !important;
+  color: var(--mm-blue-lighter) !important;
 }
 /* ##################################################################### */
 /* Card Style */
@@ -197,6 +244,17 @@ body {
   background-color: var(--primary-color-transparent-more) !important;
   border-color: var(--primary-color) !important;
   color: white !important;
+}
+
+/* ##################################################################### */
+/* Page Style */
+.mm-container{
+  background-color: var(--bg);
+}
+
+.single-screen{
+  width: 100vw;
+  height: 100vh;
 }
 
 /* ##################################################################### */

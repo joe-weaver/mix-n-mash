@@ -2,7 +2,7 @@ import React from "react";
 
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import { Button, Form, Col } from "react-bootstrap";
+import { Button, Form, Col, Card } from "react-bootstrap";
 
 import { useAuth } from "../../../utils/use-auth";
 import { useToast } from "../../../utils/use-toast";
@@ -44,7 +44,7 @@ const SignUpForm = (props) => {
                         setIsInvalid({email: res.emailExists, username: res.usernameExists, password: false});
                     } else {
                         // We created a user
-                        props.successfulSignup();
+                        props.exitSignUp();
 
                         // And notify user
                         toaster.alert("Account Created", "Congratulations " + username + " - Your account was successfully created! Please log in to begin your Mix n Mash adventure!", "success");
@@ -54,62 +54,65 @@ const SignUpForm = (props) => {
         }
     }
 
-    return (
-    <Form>
-        <Form.Group noValidate controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-                type="email"
-                required
-                placeholder="Enter email"
-                onChange={event => {setEmail(event.target.value); isInvalid.email = false; setIsInvalid(isInvalid)}}
-                isInvalid={validated && isInvalid.email}
-            />
-            <Form.Control.Feedback type="invalid">{email === "" ? "You must enter a valid email." : "That email already has an account."}</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group noValidate>
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-                type="text"
-                required
-                placeholder="Choose a username"
-                onChange={event => {setUsername(event.target.value); isInvalid.username = false; setIsInvalid(isInvalid)}}
-                isInvalid={validated && isInvalid.username}
-            />
-            <Form.Control.Feedback type="invalid">{username === "" ? "You must enter a username." : "Username already exists"}</Form.Control.Feedback>
-
-        </Form.Group>
-
-        <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Row>
-                <Col>
+    return (<>
+        <Card.Header>
+            <h2>Sign Up</h2>
+        </Card.Header>
+        <Form>
+            <Card.Body>
+                <Form.Group noValidate controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
                     <Form.Control
-                        type={passwordVisible ? "text" : "password"}
+                        type="email"
                         required
-                        placeholder="Password"
-                        onChange={(event) => {setPassword(event.target.value); isInvalid.password = false; setIsInvalid(isInvalid)}}
-                        isInvalid={validated && isInvalid.password}
+                        placeholder="Enter email"
+                        onChange={event => {setEmail(event.target.value); isInvalid.email = false; setIsInvalid(isInvalid)}}
+                        isInvalid={validated && isInvalid.email}
                     />
-                    <Form.Control.Feedback type="invalid">You must enter a password with more than 6 characters.</Form.Control.Feedback>
-                </Col>
-                <Col md="auto">
-                    <IconButton
-                        component={passwordVisible ? <VisibilityIcon/> : <VisibilityOffIcon/>}
-                        onMouseDown={() => setPasswordVisible(true)}
-                        onMouseUp={() => setPasswordVisible(false)}
-                    ></IconButton>
-                </Col>
-            </Form.Row>
-        </Form.Group>
-        <Button variant="primary" type="submit" className="mm-btn-alt" onClick={signUp}>
-        Create Account
-        </Button>        
-        <Button variant="primary" className="mm-btn-alt" onClick={props.cancelSignUp}> 
-        Cancel
-        </Button>
-    </Form>
-    )
+                    <Form.Control.Feedback type="invalid">{email === "" ? "You must enter a valid email." : "That email already has an account."}</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group noValidate>
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
+                        type="text"
+                        required
+                        placeholder="Choose a username"
+                        onChange={event => {setUsername(event.target.value); isInvalid.username = false; setIsInvalid(isInvalid)}}
+                        isInvalid={validated && isInvalid.username}
+                    />
+                    <Form.Control.Feedback type="invalid">{username === "" ? "You must enter a username." : "Username already exists"}</Form.Control.Feedback>
+
+                </Form.Group>
+
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Row>
+                        <Col>
+                            <Form.Control
+                                type={passwordVisible ? "text" : "password"}
+                                required
+                                placeholder="Password"
+                                onChange={(event) => {setPassword(event.target.value); isInvalid.password = false; setIsInvalid(isInvalid)}}
+                                isInvalid={validated && isInvalid.password}
+                            />
+                            <Form.Control.Feedback type="invalid">You must enter a password with more than 6 characters.</Form.Control.Feedback>
+                        </Col>
+                        <Col md="auto">
+                            <IconButton
+                                component={passwordVisible ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                                onMouseDown={() => setPasswordVisible(true)}
+                                onMouseUp={() => setPasswordVisible(false)}
+                            ></IconButton>
+                        </Col>
+                    </Form.Row>
+                </Form.Group>
+            </Card.Body>
+            <Card.Footer>
+                <Button variant="primary" type="submit" className="mm-btn" onClick={signUp}>Create Account</Button>        
+                <Button variant="primary" className="mm-btn-warning" onClick={props.exitSignUp}> Cancel</Button>
+            </Card.Footer>
+        </Form>
+    </>)
 }
 
 export default SignUpForm;

@@ -5,7 +5,6 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import HottestMixtapes from "./pages/HottestMixtapes/HottestMixtapes";
 import MyMixtapes from "./pages/MyMixtapes/MyMixtapes";
 import Account from "./pages/Account/Account";
-import SignIn from "./pages/SignIn/SignIn";
 import MixtapePage from "./pages/MixtapePage/MixtapePage";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,6 +13,8 @@ import ReactivateAccount from "./pages/ReactivateAccount/ReactivateAccount";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import { ProvideAuth } from "./utils/use-auth";
 import { ProvideToast } from "./utils/use-toast";
+import Splash from "./pages/SignIn/Splash.js";
+import SignIn from "./pages/SignIn/SignIn.js";
 
 const client = new ApolloClient({
   uri: "http://localhost:3000",
@@ -26,7 +27,8 @@ export default function App() {
       <ProvideAuth>
         <BrowserRouter>
         <ProvideToast>
-          <Route path="/" exact component={SignIn} />
+          <Route path="/" exact component={Splash} />
+          <Route path="/login" component={SignIn} />
           <PrivateRoute path="/HottestMixtapes/:criteria?/:skip?/:filter?"><HottestMixtapes/></PrivateRoute>
           <PrivateRoute exact path="/MyMixtapes"><MyMixtapes/></PrivateRoute>
           <PrivateRoute exact path="/Mixtape/:mixtapeId"><MixtapePage/></PrivateRoute>
