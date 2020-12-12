@@ -411,14 +411,20 @@ const MixtapePage = (props) => {
               </div>
             }
             <div className="mixtape-page-title">
-              <Form.Control
+              {!editView ? 
+              (
+                <h4>{data.mixtape.title}</h4>
+              ): 
+              (
+                <Form.Control
                 type="input"
                 className="mixtape-title"
                 defaultValue={!loading && data.mixtape.title}
                 disabled={!editingMixtapeTitle}
                 onChange={event => setTempTitle(event.target.value)}
                 maxLength={50}
-              />
+                />
+              )}
               {/* Mixtape's Owner */}
               {!loading && <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-dark">{data.mixtape.ownerName}</div></Link>}
             </div>
