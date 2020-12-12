@@ -155,6 +155,9 @@ query qMixtapes($searchTerm: String!, $userId: String!, $skip: Int!, $limit: Int
     description,
     genres,
     image,
+    songs{
+      youtubeId
+    },
     ownerId,
     ownerName,
     listens,

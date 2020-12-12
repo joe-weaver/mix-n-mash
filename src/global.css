@@ -45,7 +45,15 @@
   --mm-red-lighter: rgb(236, 106, 130);
   --mm-red-darker: rgb(207, 70, 95);
 }
-/* rgb(4, 30, 78); */
+
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('./fonts/GOTHIC.TTF');
+}
+@font-face {
+  font-family: 'Century Gothic Bold';
+  src: url('./fonts/GOTHICB.TTF');
+}
 
 html, body {
   min-height: 100%;

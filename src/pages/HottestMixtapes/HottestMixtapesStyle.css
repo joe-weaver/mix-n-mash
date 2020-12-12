@@ -1,0 +1,23 @@
+.page-title{
+    padding: 10px 20px;
+    font-family: "Century Gothic";
+    display: flex;
+    justify-content: space-between;
+    padding-right: 20vw;
+}
+
+.page-navigator{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-family: 'Century Gothic';
+}
+
+.loading{
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -15,7 +15,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 import { useAuth } from "../../utils/use-auth";
 
-import "./TestStyle.css";
+import "./HottestMixtapesStyle.css";
 
 const items = [
   "Hottest Mixtapes Today",
@@ -86,20 +86,7 @@ const HottestMixtapes  = (props) => {
           </div>
         )}
         {!loading && data.hottestMixtapes.map((mixtape, index) => (
-          <div className="mixtape-result-card">
-            <div className={"title" + (index%2 === 0 ? " even" : " odd")}>
-              <span className="mm-link-dark" onClick={()=>history.push("/Mixtape/" + mixtape._id)}>{mixtape.title}</span>
-              <div className="stats">
-                <div>Likes: {mixtape.likes}</div>
-                <div>Listens: {mixtape.listens}</div>
-                <div>Genres: {mixtape.genres.length < 5 ? mixtape.genres.join(", ") : mixtape.genres.slice(0, 5).join(", ") + "..."}</div>
-              </div>
-            </div>
-            <div className="mixtape-image">
-              <img src={"https://img.youtube.com/vi/" + mixtape.songs[0].youtubeId + "/0.jpg"} alt="" className="thumbnail-image"/> 
-            </div>
-            <div className="mixtape-details">Mixed By: <Link to={"/User/" + mixtape.ownerId} className="mm-link-pink">{mixtape.ownerName}</Link></div>
-          </div>
+          <MixtapeResultCard mixtape={mixtape} index={index}/>
         ))}
       </div>
       <div className="page-navigator">

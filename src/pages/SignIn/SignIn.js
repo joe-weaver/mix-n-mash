@@ -14,7 +14,7 @@ export default function SignIn(props){
   return(
   <div className="mm-container single-screen splash-screen">
     <div className="logo-container slide-left">
-        <img src="headphones w rainbow w text.svg" id="logo"/>
+        <img src={require("../../images/headphones w rainbow w text.svg")} id="logo"/>
     </div>
     <div className="login-container">
       <Card className="login-card fade-in">

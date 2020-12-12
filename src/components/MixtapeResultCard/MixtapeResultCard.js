@@ -1,38 +1,24 @@
 import React from "react";
-import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+
 import "./MixtapeResultCardStyle.css";
 
 const MixtapeResultCard = (props) => {
   return (
-    <Card className="mixtape-result mm-card" key={props.mixtape._id}>
-      
-      <div className="mixtape-result-image"></div>
-
-      <div className="mixtape-result-body">
-        <Link to={"/Mixtape/" + props.mixtape._id}>
-          <div className="mixtape-result-title mm-link-light"><h4>{props.mixtape.title}</h4></div>
-        </Link>
-
-        <Link to={"/User/" + props.mixtape.ownerId}>
-          <div className="mixtape-result-user mm-link-blue">{props.mixtape.ownerName}</div>
-        </Link>
-
-        <div className="mixtape-result-description">
-          {props.mixtape.description}
+    <div className="mixtape-result-card">
+      <div className={"title" + (props.index%2 === 0 ? " even" : " odd")}>
+        <Link className="mm-link-dark" to={"/Mixtape/" + props.mixtape._id}>{props.mixtape.title}</Link>
+        <div className="stats">
+          <div>Likes: {props.mixtape.likes}</div>
+          <div>Listens: {props.mixtape.listens}</div>
+          <div>Genres: {props.mixtape.genres.length < 5 ? props.mixtape.genres.join(", ") : props.mixtape.genres.slice(0, 5).join(", ") + "..."}</div>
         </div>
       </div>
-
-      <div className="mixtape-result-stats">
-        <div>
-          Listens: {props.mixtape.listens}
-          <br /> Likes: {props.mixtape.likes}
-          <br /> Genres:{" "}
-          {props.mixtape.genres.reduce((acc, genre) => acc + ", " + genre, "").substring(2)}
-        </div>
+      <div className="mixtape-image">
+        <img src={"https://img.youtube.com/vi/" + props.mixtape.songs[0].youtubeId + "/0.jpg"} alt="" className="thumbnail-image"/> 
       </div>
-    </Card>
-   
+      <div className="mixtape-details">Mixed By: <Link to={"/User/" + props.mixtape.ownerId} className="mm-link-pink">{props.mixtape.ownerName}</Link></div>
+    </div>
   );
 };
 

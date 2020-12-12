@@ -1,7 +1,6 @@
 import React from "react";
-import { NavbarLinks } from "../../data/NavbarLinks";
 import Navbar from "../../components/Navbar/Navbar";
-import { Card } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import IconButton from "../../components/IconButton/IconButton";
@@ -16,7 +15,7 @@ import { useParams } from "react-router-dom";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
-import "../Page.css";
+import "./SearchResultsStyle.css";
 
 const filterTypes = {
   Mixtapes: "Mixtapes",
@@ -76,44 +75,83 @@ const SearchResults = (props) => {
 
     history.push("/SearchResults/" + criteria + "/" + filter + "/" + newSkip);
   }
-  
+
   return (
-    <div>
-      <div className="page-container">
-        <Navbar currentPage={NavbarLinks} />
-        <Card className="page-content">
-          <Card.Header className="content-header">
-            <div><h1>Search Results</h1>
-              Searching for: {criteria}</div>
-            <div>
-              <Dropdown
-                title="MyDropdown"
-                items={items}
-                selectionCallback={handleFilter}
-                defaultIndex={0}
-              />
-              <IconButton
-                component={<RefreshIcon />}
-                callback={refreshResults}
-              ></IconButton>
-            </div>
-          </Card.Header>
-          <Card.Body className="scroll-content">
-            {!mixtapeObj.loading && !userObj.loading && getItems().map(item => {
+    <div className="mm-container scroll-screen">
+      <Navbar currentPage={null} />
+      <h1 className="page-title">Search Results
+      <div>
+      <Dropdown
+        title="MyDropdown"
+        items={items}
+        selectionCallback={handleFilter}
+        defaultIndex={filter === filterTypes.Users ? 1 : 0}
+        key={filter}
+      />
+      <IconButton
+        component={<RefreshIcon />}
+        callback={refreshResults}
+      ></IconButton>
+      </div>
+      </h1>
+      <div className="search-display">Searching for: {criteria}</div>
+      <div id="mixtape-list">
+        {(userObj.loading || mixtapeObj.loading) && (
+          <div className="loading">
+            <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+            </Spinner>
+          </div>
+        )}
+        {!mixtapeObj.loading && !userObj.loading && getItems().map((item, index) => {
             if(item.isMixtape){
-              return (<MixtapeResultCard mixtape={item.data} key={item.data._id} />);
+              return (<MixtapeResultCard mixtape={item.data} index={index} />);
             } else {
               return (<UserResultCard user={item.data} key={item.data._id}/>);
             }})}
-          </Card.Body>
-          <Card.Footer className="card-footer">
-            <IconButton component={<ArrowBackIcon/>} disabled={skip ? parseInt(skip) === 0 : true} onClick={() => navigatePage(-1)}></IconButton>
-            <div>{skip ? skip : "0"}</div>
-            <IconButton component={<ArrowForwardIcon/>} disabled={userObj.loading || mixtapeObj.loading || getItems().length < 10} onClick={() => navigatePage(1)}></IconButton>
-          </Card.Footer>
-        </Card>
+      </div>
+      <div className="page-navigator">
+        <IconButton component={<ArrowBackIcon/>} disabled={skip ? parseInt(skip) === 0 : true} onClick={() => navigatePage(-1)}></IconButton>
+        <div>{skip ? skip : "0"}</div>
+        <IconButton component={<ArrowForwardIcon/>} disabled={userObj.loading || mixtapeObj.loading || getItems().length < 10} onClick={() => navigatePage(1)}></IconButton>
       </div>
     </div>
+    // <div>
+    //   <div className="page-container">
+    //     <Navbar currentPage={NavbarLinks} />
+    //     <Card className="page-content">
+    //       <Card.Header className="content-header">
+    //         <div><h1>Search Results</h1>
+    //           Searching for: {criteria}</div>
+    //         <div>
+    //           <Dropdown
+    //             title="MyDropdown"
+    //             items={items}
+    //             selectionCallback={handleFilter}
+    //             defaultIndex={0}
+    //           />
+    //           <IconButton
+    //             component={<RefreshIcon />}
+    //             callback={refreshResults}
+    //           ></IconButton>
+    //         </div>
+    //       </Card.Header>
+    //       <Card.Body className="scroll-content">
+    //         {!mixtapeObj.loading && !userObj.loading && getItems().map(item => {
+    //         if(item.isMixtape){
+    //           return (<MixtapeResultCard mixtape={item.data} key={item.data._id} />);
+    //         } else {
+    //           return (<UserResultCard user={item.data} key={item.data._id}/>);
+    //         }})}
+    //       </Card.Body>
+    //       <Card.Footer className="card-footer">
+    //         <IconButton component={<ArrowBackIcon/>} disabled={skip ? parseInt(skip) === 0 : true} onClick={() => navigatePage(-1)}></IconButton>
+    //         <div>{skip ? skip : "0"}</div>
+    //         <IconButton component={<ArrowForwardIcon/>} disabled={userObj.loading || mixtapeObj.loading || getItems().length < 10} onClick={() => navigatePage(1)}></IconButton>
+    //       </Card.Footer>
+    //     </Card>
+    //   </div>
+    // </div>
   );
 }
 

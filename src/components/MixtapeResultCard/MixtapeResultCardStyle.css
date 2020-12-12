@@ -1,35 +1,60 @@
-.mixtape-result {
-  padding: 5px;
-  border-radius: 10px;
+.mixtape-result-card{
+  position: relative;
+  width: 100%;
+  font-family: "Century Gothic";
+}
+
+.mixtape-result-card .title{
+  width: 80%;
+  height: 10vh;
+  border-radius: 0px 5vh 5vh 0px;
+  padding-left: 12vw;
   display: flex;
-  flex-direction: row !important;
+  align-items: flex-start;
+  flex-direction: column;
+  color: var(--bg);
+  font-size: 1.5vw;
+  font-family: "Century Gothic Bold";
 }
 
-.mixtape-result + .mixtape-result {
-  margin-top: 10px;
+.mixtape-result-card .stats{
+  font-size: 1.2vw;
+  font-family: "Century Gothic";
+  display: flex;
+  justify-content: space-between;
+  padding-left: 2vw;
 }
 
-.mixtape-result + .user-result {
-  margin-top: 10px;
+.mixtape-result-card .stats div + div{
+  padding-left: 20px;
 }
 
-.mixtape-result-image {
-  width: 10%;
+.mixtape-result-card .title.even{
+  background-color: var(--mm-blue);
 }
 
-.mixtape-result-body {
-  width: 70%;
+.mixtape-result-card .title.odd{
+  background-color: var(--mm-green);
 }
 
-.mixtape-result-title {
-  font-size: larger;
-  font-weight: light;
+.mixtape-result-card .mixtape-image{
+  position: absolute;
+  top: 0px;
+  width: 14vh;
+  height: 14vh;
+  border-radius: 7vh;
+  background-color: black;
+  margin-top: 0.5vh;
+  margin-left: 1vw;
+  overflow: hidden;
 }
 
-.mixtape-result-description {
-  font-size: smaller;
+.mixtape-result-card .mixtape-image img{
+  height: 100%;
+  width: auto;
 }
 
-.mixtape-result-stats {
-  width: 20%;
+.mixtape-result-card .mixtape-details{
+  height: 8vh;
+  padding-left: 12vw;
 }
