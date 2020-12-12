@@ -88,7 +88,7 @@ const HottestMixtapes  = (props) => {
         {!loading && data.hottestMixtapes.map((mixtape, index) => (
           <div className="mixtape-result-card">
             <div className={"title" + (index%2 === 0 ? " even" : " odd")}>
-              <span>{mixtape.title}</span>
+              <span className="mm-link-dark" onClick={()=>history.push("/Mixtape/" + mixtape._id)}>{mixtape.title}</span>
               <div className="stats">
                 <div>Likes: {mixtape.likes}</div>
                 <div>Listens: {mixtape.listens}</div>

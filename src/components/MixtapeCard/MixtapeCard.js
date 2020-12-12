@@ -25,7 +25,7 @@ const MixtapeCard = (props) => {
           <h4 className="mm-link-light">{props.mixtape.title}</h4>
         </Link>
         <Link to={"/User/" + props.mixtape.ownerId}>
-          <div className="mm-link-dark">{props.mixtape.ownerName}</div>
+          <div className="mm-link-blue">{props.mixtape.ownerName}</div>
         </Link>
           <div>{props.mixtape.description}</div>
         </div>

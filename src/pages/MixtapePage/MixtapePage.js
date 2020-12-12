@@ -426,7 +426,7 @@ const MixtapePage = (props) => {
                 />
               )}
               {/* Mixtape's Owner */}
-              {!loading && <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-dark">{data.mixtape.ownerName}</div></Link>}
+              {!loading && <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-blue">{data.mixtape.ownerName}</div></Link>}
             </div>
           </div>
 

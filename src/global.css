@@ -228,22 +228,42 @@ body {
 }
 
 .mm-link-dark {
-  color: var(--mm-blue) !important;
+  color: var(--bg) !important;
   cursor: pointer;
   user-select: none;
 }
 
 .mm-link-dark:hover {
-  color: var(--mm-blue-darker) !important;
+  color: var(--bg-light) !important;
   text-decoration: underline;
 }
 
 .mm-link-dark:active {
-  color: var(--mm-blue-darker) !important;
+  color: var(--bg-light) !important;
   text-decoration: underline;
 }
 
 .mm-link-dark:visited {
+  color: var(--bg-light) !important;
+}
+
+.mm-link-blue {
+  color: var(--mm-blue) !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mm-link-blue:hover {
+  color: var(--mm-blue-darker) !important;
+  text-decoration: underline;
+}
+
+.mm-link-blue:active {
+  color: var(--mm-blue-darker) !important;
+  text-decoration: underline;
+}
+
+.mm-link-blue:visited {
   color: var(--mm-blue-lighter) !important;
 }
 

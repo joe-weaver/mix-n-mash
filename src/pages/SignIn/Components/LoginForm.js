@@ -40,7 +40,7 @@ export default function LoginForm(props){
   return (<>
     <Card.Header>
       <h2>Log In</h2>
-      <div className="mm-link-dark" onClick={() => props.setSignup(true)}>No Account? Sign Up!</div>
+      <div className="mm-link-blue" onClick={() => props.setSignup(true)}>No Account? Sign Up!</div>
     </Card.Header>
     <Card.Body>
       <Form onSubmit={tryLogin}>
@@ -57,7 +57,7 @@ export default function LoginForm(props){
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
-          <Form.Label style={{display: "flex", justifyContent: "space-between"}}>Password{" "}<span className="mm-link-dark" onClick={() => props.setForgotPassword(true)}>Forgot Password</span></Form.Label>
+          <Form.Label style={{display: "flex", justifyContent: "space-between"}}>Password{" "}<span className="mm-link-blue" onClick={() => props.setForgotPassword(true)}>Forgot Password</span></Form.Label>
           <Form.Control type="password" placeholder="Password" onChange={(event) => setPassword(event.target.value)} />
         </Form.Group>
         {/* Hidden button to handle form submission w/ enter key */}
