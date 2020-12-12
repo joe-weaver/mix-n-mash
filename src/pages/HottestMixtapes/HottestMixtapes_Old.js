@@ -1,6 +1,6 @@
 import React from "react";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import { Spinner } from 'react-bootstrap';
+import { Card } from "react-bootstrap";
 
 import { NavbarLinks } from "../../data/NavbarLinks";
 import Navbar from "../../components/Navbar/Navbar";
@@ -9,13 +9,13 @@ import IconButton from "../../components/IconButton/IconButton";
 import MixtapeResultCard from "../../components/MixtapeResultCard/MixtapeResultCard";
 import { useQuery } from "@apollo/client";
 import { mixtapesClient, getHottestMixtapes } from "../../services/mixtapesService";
-import { useHistory, useParams, Link } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 import { useAuth } from "../../utils/use-auth";
 
-import "./TestStyle.css";
+import "../Page.css";
 
 const items = [
   "Hottest Mixtapes Today",
@@ -62,50 +62,35 @@ const HottestMixtapes  = (props) => {
   }
 
   return (
-    <div className="mm-container scroll-screen">
-      <Navbar currentPage={NavbarLinks.HOTTEST_MIXTAPES} />
-      <h1 className="page-title">Hottest Mixtapes
-      <div>
-        <Dropdown
-          title="MyDropdown"
-          items={items}
-          selectionCallback={handleChangeCriteria}
-        />
-        <IconButton
-          component={<RefreshIcon />}
-          callback={() => refetch()}
-        ></IconButton>
-      </div>
-      </h1>
-      <div id="mixtape-list">
-        {loading && (
-          <div className="loading">
-            <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
-            </Spinner>
-          </div>
-        )}
-        {!loading && data.hottestMixtapes.map((mixtape, index) => (
-          <div className="mixtape-result-card">
-            <div className={"title" + (index%2 === 0 ? " even" : " odd")}>
-              <span>{mixtape.title}</span>
-              <div className="stats">
-                <div>Likes: {mixtape.likes}</div>
-                <div>Listens: {mixtape.listens}</div>
-                <div>Genres: {mixtape.genres.length < 5 ? mixtape.genres.join(", ") : mixtape.genres.slice(0, 5).join(", ") + "..."}</div>
-              </div>
+    <div>
+      <div className="page-container">
+        <Navbar currentPage={NavbarLinks.HOTTEST_MIXTAPES} />
+        <Card className="page-content">
+          <Card.Header className="content-header">
+            <h1>Hottest Mixtapes</h1>
+            <div>
+              <Dropdown
+                title="MyDropdown"
+                items={items}
+                selectionCallback={handleChangeCriteria}
+              />
+              <IconButton
+                component={<RefreshIcon />}
+                callback={() => refetch()}
+              ></IconButton>
             </div>
-            <div className="mixtape-image">
-              <img src={"https://img.youtube.com/vi/" + mixtape.songs[0].youtubeId + "/0.jpg"} alt="" className="thumbnail-image"/> 
-            </div>
-            <div className="mixtape-details">Mixed By: <Link to={"/User/" + mixtape.ownerId} className="mm-link-pink">{mixtape.ownerName}</Link></div>
-          </div>
-        ))}
-      </div>
-      <div className="page-navigator">
-        <IconButton component={<ArrowBackIcon/>} disabled={skip ? parseInt(skip) === 0 : true} onClick={() => navigatePage(-1)}></IconButton>
-          <div>{skip ? skip : "0"}</div>
-        <IconButton component={<ArrowForwardIcon/>} disabled={loading || data.hottestMixtapes.length < 10} onClick={() => navigatePage(1)}></IconButton>
+          </Card.Header>
+          <Card.Body className="scroll-content">
+            {!loading && data.hottestMixtapes.map((hottestMixtape) => (
+              <MixtapeResultCard mixtape={hottestMixtape} key={hottestMixtape._id} />
+            ))}
+          </Card.Body>
+          <Card.Footer className="card-footer">
+            <IconButton component={<ArrowBackIcon/>} disabled={skip ? parseInt(skip) === 0 : true} onClick={() => navigatePage(-1)}></IconButton>
+            <div>{skip ? skip : "0"}</div>
+            <IconButton component={<ArrowForwardIcon/>} disabled={loading || data.hottestMixtapes.length < 10} onClick={() => navigatePage(1)}></IconButton>
+          </Card.Footer>
+        </Card>
       </div>
     </div>
   );

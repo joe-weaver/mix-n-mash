@@ -15,6 +15,7 @@ import { ProvideAuth } from "./utils/use-auth";
 import { ProvideToast } from "./utils/use-toast";
 import Splash from "./pages/SignIn/Splash.js";
 import SignIn from "./pages/SignIn/SignIn.js";
+import Test from "./pages/HottestMixtapes/HottestMixtapes";
 
 const client = new ApolloClient({
   uri: "http://localhost:3000",

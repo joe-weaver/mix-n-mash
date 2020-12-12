@@ -33,7 +33,11 @@
   --mm-blue-lighter: rgb(43, 202, 255);
   --mm-blue-darker: rgb(2, 148, 197);
 
+  --mm-green: rgb(0, 245, 212);
+
   --mm-pink: rgb(250, 108, 193);
+  --mm-pink-lighter: rgb(245, 142, 204);
+  --mm-pink-darker: rgb(214, 84, 162);
 
   --mm-red: rgb(234, 82, 111);
   --mm-red-transparent: rgba(234, 82, 111, 0.1);
@@ -42,13 +46,18 @@
   --mm-red-darker: rgb(207, 70, 95);
 }
 /* rgb(4, 30, 78); */
+
+html, body {
+  min-height: 100%;
+  min-width: 100%;
+}
+
 body {
   color: white !important;
-  overflow: hidden;
 }
 
 * {
-  font-size: 2vh;
+  /* font-size: 2vh; */
 }
 
 /* ##################################################################### */
@@ -237,6 +246,26 @@ body {
 .mm-link-dark:visited {
   color: var(--mm-blue-lighter) !important;
 }
+
+.mm-link-pink {
+  color: var(--mm-pink) !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mm-link-pink:hover {
+  color: var(--mm-pink-darker) !important;
+  text-decoration: underline;
+}
+
+.mm-link-pink:active {
+  color: var(--mm-pink-darker) !important;
+  text-decoration: underline;
+}
+
+.mm-link-pink:visited {
+  color: var(--mm-pink-lighter) !important;
+}
 /* ##################################################################### */
 /* Card Style */
 
@@ -250,11 +279,14 @@ body {
 /* Page Style */
 .mm-container{
   background-color: var(--bg);
+  width: 100%;
+  min-height: 100vh;
 }
 
 .single-screen{
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 /* ##################################################################### */

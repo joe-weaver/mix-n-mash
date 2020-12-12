@@ -54,6 +54,9 @@ query getHottestMixtapesQuery($userId: String!, $criteria: String!, $skip: Int!,
     description,
     genres,
     image,
+    songs{
+      youtubeId
+    },
     ownerId,
     ownerName,
     listens,
