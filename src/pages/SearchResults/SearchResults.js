@@ -56,9 +56,8 @@ const SearchResults = (props) => {
   }
 
   const handleFilter = (selection) => {
-    const newSkip = (skip ? parseInt(skip) : 0);
-
-    history.push("/SearchResults/" + criteria + "/" + selection + "/" + newSkip);
+    // On filter change, always return to page 0
+    history.push("/SearchResults/" + criteria + "/" + selection + "/0");
   }
 
   const getItems = () => {

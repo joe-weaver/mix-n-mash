@@ -121,3 +121,7 @@
 .video-preview {
   width: 40vw !important;
 }
+
+.optionContainer .highlight{
+  background-color: rgb(200, 224, 255);
+}

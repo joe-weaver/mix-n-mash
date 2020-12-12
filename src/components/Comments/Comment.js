@@ -38,6 +38,7 @@ const Comment = (props) => {
                 value={replyText}
                 placeholder={"Write your reply here..."}
                 onChange={event => setReplyText(event.target.value)}
+                maxLength={250}
                 />
             </Form>}
             {props.comment.replies.map(reply =>

@@ -417,7 +417,7 @@ const MixtapePage = (props) => {
                 defaultValue={!loading && data.mixtape.title}
                 disabled={!editingMixtapeTitle}
                 onChange={event => setTempTitle(event.target.value)}
-                maxLength="50"
+                maxLength={50}
               />
               {/* Mixtape's Owner */}
               {!loading && <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-dark">{data.mixtape.ownerName}</div></Link>}
@@ -559,6 +559,7 @@ const MixtapePage = (props) => {
                         placeholder={"Write your comment here..."}
                         style={{width:"80% !important"}}
                         onChange={event => setCommentText(event.target.value)}
+                        maxLength={250}
                       />
                     </Form>
                   </div>

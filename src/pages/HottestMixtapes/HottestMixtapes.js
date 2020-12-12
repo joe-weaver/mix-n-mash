@@ -48,9 +48,7 @@ const HottestMixtapes  = (props) => {
 
   const handleChangeCriteria = (selection) => {
     const newCriteria = sortCriteria[selection];
-    const newSkip = skip ? skip : 0;
-
-    history.push("/HottestMixtapes/" + newCriteria + "/" + newSkip);
+    history.push("/HottestMixtapes/" + newCriteria + "/0");
   }
 
   const navigatePage = (increment) => {
