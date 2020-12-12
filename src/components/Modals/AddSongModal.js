@@ -10,7 +10,6 @@ import { useToast } from "../../utils/use-toast";
 import "./ModalStyle.css";
 import "../../pages/Page.css";
 
-let tempSongLength = 0;
 
 const AddSongModal = (props) => {
     const [show, setShow] = React.useState(false);
@@ -24,7 +23,6 @@ const AddSongModal = (props) => {
     const [songLength, updateSongLength] = React.useState(0);
 
     
-
     const handleSearch = async (event) => {
         // Prevent reload on pressing enter
         event.preventDefault();
@@ -38,17 +36,14 @@ const AddSongModal = (props) => {
         let song = results.songs[index];
         setAddList([...addList, song]);
         updateSongLength(songLength + 1);
-        console.log(songLength);
     }
 
     const removeSong = (index) => {
         setAddList(addList.filter((_, i) => i !== index));
         updateSongLength(songLength - 1);
-        console.log(songLength);
     }
 
     const confirmAddSongs = () => {
-        console.log(songLength);
         if((songLength + props.originalSongLength) > 100){
             toaster.notify("Total Songs are over 100! Cannot Merge!");
         }
