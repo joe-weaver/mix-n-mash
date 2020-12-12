@@ -1,81 +1,73 @@
 import React from "react";
-import {Navbar, Nav, Form, FormControl} from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
-import IconButton from "../../components/IconButton/IconButton";
 import SearchIcon from '@material-ui/icons/Search';
+import { Form } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+
 import { NavbarLinks } from "../../data/NavbarLinks";
 
 import "./NavbarStyle.css";
 
-const SiteNavbar = (props) => {
+export default function Navbar(props){
+    const history = useHistory();
 
-  const history = useHistory();
+    const [searchTerm, setSearchTerm] = React.useState("");
+    const [scrollPastZero, setScrollPastZero] = React.useState(false);
 
-  let [searchTerm, setSearchTerm] = React.useState("");
-
-  const doSearch = () => {
-    if(searchTerm !== ""){
-      history.push("/SearchResults/" + searchTerm + "/Mixtapes");
+    const checkScroll = () => {
+        setScrollPastZero(window.pageYOffset > 0);
     }
-  }
 
-  const handleSearch = (event) => {
-    event.preventDefault();
-    doSearch();
-  }
+    React.useEffect(() => {
+        // Add scroll event
+        window.addEventListener('scroll', checkScroll, {passive: true});
 
-  const page = props.currentPage;
+        // When component unmounts, remove the event listener
+        return () => {
+            window.removeEventListener('scroll', checkScroll);
+        }
+    })
 
-  return (
-    <Navbar bg="dark" variant="dark" className="navbar-style">
-      <Link to="/HottestMixtapes" className="navbar-brand">
-        Mix n Mash
-      </Link>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          <Form inline onSubmit={handleSearch}>
-            <FormControl
-              type="text"
-              placeholder="Search"
-              className="mr-sm-2 mm-search"
-              onChange={(event) => setSearchTerm(event.target.value)}
-            />
-          </Form>
-          <IconButton
-            component={<SearchIcon />}
-            callback={doSearch}
-          />
-          <Link
-            to="/HottestMixtapes"
-            className={
-              "nav-link" +
-              (page === NavbarLinks.HOTTEST_MIXTAPES ? " selected" : "")
-            }
-          >
-            Hottest Mixtapes
-          </Link>
-          <Link
-            to="/MyMixtapes"
-            className={
-              "nav-link" +
-              (page === NavbarLinks.MY_MIXTAPES ? " selected" : "")
-            }
-          >
-            My Mixtapes
-          </Link>
-          <Link
-            to="/Account"
-            className={
-              "nav-link" + (page === NavbarLinks.ACCOUNT ? " selected" : "")
-            }
-          >
-            My Account
-          </Link>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
-  );
+
+    const doSearch = () => {
+        if(searchTerm !== ""){
+            history.push("/SearchResults/" + searchTerm + "/Mixtapes");
+        }
+    }
+
+    const handleSearch = (event) => {
+        event.preventDefault();
+        doSearch();
+    }
+
+    return (
+        <ul id="navbar" className={scrollPastZero ? "detached" : ""}>
+            <li id="searchbar-item">
+            <Form inline id="search-form" onSubmit={handleSearch}>
+                <SearchIcon id="search-icon"/>
+                <Form.Control
+                    type="text"
+                    placeholder="Search"
+                    id="searchbar"
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                />
+            </Form>
+            </li>
+            <li
+                className={"nav-item" + (props.currentPage === NavbarLinks.HOTTEST_MIXTAPES ? " selected": "")}
+                onClick={() => history.push("/HottestMixtapes")}    >
+                <div>Hottest Mixtapes</div>
+            </li>
+            <li
+                className={"nav-item" + (props.currentPage === NavbarLinks.MY_MIXTAPES ? " selected": "")}
+                onClick={() => history.push("/MyMixtapes")}    >
+                <div>My Mixtapes</div>
+            </li>
+            <li
+                className={"nav-item" + (props.currentPage === NavbarLinks.ACCOUNT ? " selected": "")}
+                onClick={() => history.push("/Account")}>
+                <div>Account</div>
+            </li>
+            <img src="navbar-logo.svg" id="navbar-logo" className={scrollPastZero ? "scrolled" : ""}></img>
+        </ul>
+    )
 }
-
-export default SiteNavbar;
