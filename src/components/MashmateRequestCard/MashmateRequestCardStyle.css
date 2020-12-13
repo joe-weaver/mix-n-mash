@@ -1,8 +1,18 @@
 .mashmate-request-card {
   flex-direction: row !important;
-  justify-content: space-between;
+  justify-content: space-between !important;
+  align-items: center;
+  padding-left: 2vw;
+  height: 6vh;
+  border-radius: 3vh !important;
+  background-color: var(--mm-blue) !important;
+  font-family: "Century Gothic Bold";
 }
 
 .mashmate-request-card + .mashmate-request-card {
   margin-top: 5px;
+}
+
+.mashmate-request-card.odd{
+  background-color: var(--mm-green) !important;
 }

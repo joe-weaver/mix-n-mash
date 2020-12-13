@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Button, FormControl } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from '@material-ui/icons/Cancel';
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { useHistory } from "react-router-dom";
 
@@ -19,9 +20,8 @@ import {mixtapesClient, getUserMixtapes, updateOwnerActive as updateOwnerActiveM
 import DeactivateAccountModal from "../../components/Modals/DeactivateAccountModal";
 
 import "./AccountStyle.css";
-import "../Page.css";
 
-const Account = (props) => {
+export default function Account(){
   // Hook into the auth state
   const auth = useAuth();
 
@@ -29,9 +29,9 @@ const Account = (props) => {
 
   const [updateOwnerActiveMutation] = useMutation(updateOwnerActiveMut, {client: mixtapesClient});
 
-  let [editingBio, setEditingBio] = React.useState(false);
-
-  const [tempBio, setTempBio] = React.useState("");
+  console.log(auth.user.bio);
+  const [editingBio, setEditingBio] = React.useState(false);
+  const [tempBio, setTempBio] = React.useState(auth.user.bio);
 
   const [updateBioMutation] = useMutation(updateBioMut, {client: userClient, onCompleted: ()=>{auth.getUser();}});
   const [deactivateAccountMutation] = useMutation(deactivateAccountMut, {client: userClient});
@@ -40,10 +40,15 @@ const Account = (props) => {
 
 
   const updateBio = () => {
-    if(tempBio.length !== 0){
+    // Bio is different
+    if(tempBio !== auth.user.bio){
       updateBioMutation({variables: {id: auth.user._id, bio: tempBio}});
     }
-    setTempBio("");
+    setEditingBio(false);
+  }
+
+  const cancelUpdateBio = () => {
+    setTempBio(auth.user.bio);
     setEditingBio(false);
   }
 
@@ -81,85 +86,87 @@ const Account = (props) => {
       logOut();
     }
   }
-  
 
   return (
-    <div>
-      <div className="page-container">
-        <Navbar currentPage={NavbarLinks.ACCOUNT} />
-        <Card className="page-content">
-          <Card.Header className="content-header">
-            <h1>{auth.user.username}</h1>
-            <div>
-              <Button className="mm-btn-alt" onClick={logOut}>Log Out</Button>
+    <div className="mm-container scroll-screen">
+      <Navbar currentPage={NavbarLinks.ACCOUNT} />
+      <h1 className="page-title">Account</h1>
+      <div className="account-container">
+        <div className="username">{auth.user.username}</div>
+        <h4 className="followers">{auth.user.numFollowers} Follower{auth.user.numFollowers !== 1 ? "s" : ""}</h4>
+        {/* BIO STUFF */}
+        <h3 style={{paddingLeft: "4vw", paddingTop: "4vh"}}>Edit Bio:</h3>
+        <div className="user-bio-container">
+          <div className="edit-bio-buttons">
+            {!editingBio && (
+              <IconButton
+                component={<EditIcon />}
+                callback={() => setEditingBio(true)}
+              />
+            )}
+            {editingBio && (
+              <IconButton
+                component={<SaveIcon />}
+                callback={updateBio}
+              />
+            )}
+            {editingBio && (
+              <IconButton
+                component={<CancelIcon />}
+                callback={() => cancelUpdateBio()}
+              />
+            )}
+        </div>
+        <FormControl
+          as="textarea"
+          className="user-bio"
+          value={tempBio}
+          disabled={!editingBio}
+          maxLength="255"
+          onChange={event => setTempBio(event.target.value)}
+        />
+        </div>
+        {/* PASSWORD STUFF */}
+        <h3 style={{paddingLeft: "4vw"}}>Change Password:</h3>
+        <div className="password-container">
+          <ChangePassword />
+        </div>
+        {/* MASHMATE STUFF */}
+        <h3 style={{paddingLeft: "4vw", paddingTop: "4vh"}}>Mashmates:</h3>
+        <div className="mashmate-info-container">
+          <div className="mashmates">
+            Mashmates
+            <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
+            <div className="scroll-content" style={{maxHeight: "275px"}}>
+              {auth.user.mashmates.map((mashmate, index) => (
+                <MashmateCard 
+                  mashmate={mashmate} 
+                  key={mashmate.id}
+                  index={index}
+                  remove={removeMM} />
+              ))}
             </div>
-          </Card.Header>
-          <Card.Body className="scroll-content">
-            {/*Bio stuff  */}
-            <div className="field-title">
-              {!editingBio && (
-                <IconButton
-                  component={<EditIcon />}
-                  callback={() => setEditingBio(true)}
-                />
-              )}
-              {editingBio && (
-                <IconButton
-                  component={<SaveIcon />}
-                  callback={updateBio}
-                />
-              )}
-              <h5>Bio:</h5>
+          </div>
+          <div className="mashmate-requests">
+            Mashmate Requests
+            <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
+            <div className="scroll-content" style={{maxHeight: "275px"}}>
+              {auth.user.receivedMashmateRequests.map((mashmateRequest, index) => (
+                <MashmateRequestCard
+                  mashmateRequest={mashmateRequest}
+                  key={mashmateRequest.senderId}
+                  index={index}
+                  resolve={resolveMMR} />
+              ))}
             </div>
-            <FormControl
-              as="textarea"
-              className="bio-textarea"
-              defaultValue={auth.user.bio}
-              disabled={!editingBio}
-              maxLength="255"
-              onChange={event => setTempBio(event.target.value)}
-            />
-
-            {/*Password stuff  */}
-            <ChangePassword />
-            <br />
-              <div>Number of Followers: {!loading && auth.user.numFollowers}</div>
-            <br/>
-            {/*Mashmate stuff  */}
-            <div className="mashmateStuff-container">
-              <div className="mashmatesList-container">
-                Mashmates
-                <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
-                <div className="scroll-content" style={{maxHeight: "275px"}}>
-                  {auth.user.mashmates.map((mashmate) => (
-                    <MashmateCard 
-                      mashmate={mashmate} 
-                      key={mashmate.id}
-                      remove={removeMM} />
-                  ))}
-                </div>
-              </div>
-              <div className="filler">
-                
-              </div>
-              <div className="mashmateRequests-container">
-                Mashmate Requests
-                <IconButton component={<RefreshIcon />} callback={() => refreshUser()} />
-                <div className="scroll-content" style={{maxHeight: "275px"}}>
-                  {auth.user.receivedMashmateRequests.map((mashmateRequest) => (
-                    <MashmateRequestCard mashmateRequest={mashmateRequest} key={mashmateRequest.senderId} resolve={resolveMMR} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Card.Body>
-          <Card.Footer>
-            <DeactivateAccountModal deactivateCallback={deactivateAccount} />
-          </Card.Footer>
-        </Card>
+          </div>
+        </div>
+        {/* ACCOUNT STUFF */}
+        <h3 style={{paddingLeft: "4vw", paddingTop: "4vh"}}>Deactivate Account:</h3>
+        <div style={{paddingLeft: "6vw", paddingBottom: "10vh"}}>
+        <DeactivateAccountModal deactivateCallback={deactivateAccount} />
+        </div>
       </div>
     </div>
-  );
+  )
 }
-
-export default Account;

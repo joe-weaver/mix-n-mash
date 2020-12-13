@@ -15,7 +15,7 @@ import { ProvideAuth } from "./utils/use-auth";
 import { ProvideToast } from "./utils/use-toast";
 import Splash from "./pages/SignIn/Splash.js";
 import SignIn from "./pages/SignIn/SignIn.js";
-import Test from "./pages/HottestMixtapes/HottestMixtapes";
+// import Test from "./pages/Account/Account";
 
 const client = new ApolloClient({
   uri: "http://localhost:3000",
@@ -30,6 +30,7 @@ export default function App() {
         <ProvideToast>
           <Route path="/" exact component={Splash} />
           <Route path="/login" component={SignIn} />
+          {/* <PrivateRoute path="/test"><Test/></PrivateRoute> */}
           <PrivateRoute path="/HottestMixtapes/:criteria?/:skip?/:filter?"><HottestMixtapes/></PrivateRoute>
           <PrivateRoute exact path="/MyMixtapes"><MyMixtapes/></PrivateRoute>
           <PrivateRoute exact path="/Mixtape/:mixtapeId"><MixtapePage/></PrivateRoute>

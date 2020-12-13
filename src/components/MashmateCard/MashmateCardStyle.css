@@ -1,19 +1,18 @@
-.mashmate-result {
-  padding: 5px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: row;
+.mashmate-card {
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center;
+  padding-left: 2vw;
+  height: 6vh;
+  border-radius: 3vh !important;
+  background-color: var(--mm-blue) !important;
+  font-family: "Century Gothic Bold";
 }
 
 .mashmate-card + .mashmate-card {
   margin-top: 5px;
 }
 
-.mashmate-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: top;
-  flex-direction: row;
-  font-size: larger;
-  font-weight: light;
+.mashmate-card.odd{
+  background-color: var(--mm-green) !important;
 }
