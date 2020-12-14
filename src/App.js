@@ -16,7 +16,6 @@ import { ProvideToast } from "./utils/use-toast";
 import Splash from "./pages/SignIn/Splash.js";
 import SignIn from "./pages/SignIn/SignIn.js";
 import { ProvidePolling } from "./utils/use-polling";
-import Test from "./pages/MixtapePage/Test";
 
 const client = new ApolloClient({
   uri: "http://localhost:3000",
@@ -35,7 +34,6 @@ export default function App() {
               <PrivateRoute path="/HottestMixtapes/:criteria?/:skip?/:filter?"><HottestMixtapes/></PrivateRoute>
               <PrivateRoute exact path="/MyMixtapes"><MyMixtapes/></PrivateRoute>
               <PrivateRoute exact path="/Mixtape/:mixtapeId"><MixtapePage/></PrivateRoute>
-              <PrivateRoute exact path="/test/:mixtapeId"><Test/></PrivateRoute>
               <PrivateRoute path="/Account"><Account/></PrivateRoute>
               <PrivateRoute path="/SearchResults/:criteria/:filter/:skip?"><SearchResults/></PrivateRoute>
               <PrivateRoute exact path="/User/:userId"><UserPage/></PrivateRoute>

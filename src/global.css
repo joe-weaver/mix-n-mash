@@ -324,7 +324,7 @@ body {
 /* ##################################################################### */
 /* Multiselect */
 #multiselectContainerReact div{
-  border-color: var(--primary-color) !important;
+  border-color: var(--mm-blue) !important;
   color: white !important;
 }
 .searchBox{
@@ -337,8 +337,9 @@ body {
   margin: 5px;
 }
 .chip{
-  background-color: var(--primary-color-transparent-more) !important;
-  border-color: var(--primary-color) !important;
+  background-color: var(--mm-blue) !important;
+  border-color: var(--mm-blue) !important;
+  color: var(--bg) !important;
   border-width: 1px;
   border-style: solid;
 }

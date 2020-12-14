@@ -12,6 +12,7 @@
 
 .song-card.odd{
   background-color: var(--mm-green) !important;
+  border-color: var(--mm-green) !important;
 }
 
 .song-card + .song-card {
