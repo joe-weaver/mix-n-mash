@@ -6,6 +6,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import { Link } from "react-router-dom";
 import { Multiselect } from 'multiselect-react-dropdown';
 import { useQuery, useMutation } from "@apollo/client";
@@ -36,6 +37,7 @@ import { mixtapesClient, getMixtape,
 import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
 import { useAuth } from "../../utils/use-auth";
 import { useToast } from "../../utils/use-toast";
+import { usePolling } from "../../utils/use-polling";
 
 import "../Page.css";
 import "./MixtapePageStyle.css";
@@ -50,6 +52,12 @@ const MixtapePage = (props) => {
 
   // Hook into notifications
   const toaster = useToast();
+
+  // Hook into polling
+  const polling = usePolling();
+  if (id !== polling.mixtapeId){
+    polling.startPolling(id);
+  }
 
   /* ---------- HOOKS ---------- */
   // Mixtape editing
@@ -81,7 +89,7 @@ const MixtapePage = (props) => {
   const [hasListened, setHasListened] = React.useState(false);
 
   /* ---------- QUERIES ---------- */
-  let {loading, data, refetch} = useQuery(getMixtape, {client: mixtapesClient, variables: {id: id}});
+
 
   /* ---------- MUTATIONS ---------- */
   const [addSongsMutation] = useMutation(addSongsMut, {client: mixtapesClient});
@@ -129,7 +137,7 @@ const MixtapePage = (props) => {
       username: auth.user.username,
       content: commentText
     };
-    addCommentMutation({variables: {id: data.mixtape._id, comment: comment}});
+    addCommentMutation({variables: {id: polling.data.mixtape._id, comment: comment}});
 
     // Remove comment text
     setCommentText("");
@@ -143,7 +151,7 @@ const MixtapePage = (props) => {
           content: replyText
         };
 
-        addReplyMutation({variables: {id: data.mixtape._id, commentId: commentId, reply: reply}});
+        addReplyMutation({variables: {id: polling.data.mixtape._id, commentId: commentId, reply: reply}});
     
         // Remove comment text
         setReplyIndex(-1);
@@ -151,8 +159,8 @@ const MixtapePage = (props) => {
 
   // Callback for when the current song is done playing
   const changeToNextSong = (event) => {
-    if(!loading){
-      let index = (currentSongIndex + 1) % data.mixtape.songs.length;
+    if(!polling.loading){
+      let index = (currentSongIndex + 1) % polling.data.mixtape.songs.length;
 
       setCurrentSongIndex(index);
 
@@ -163,7 +171,7 @@ const MixtapePage = (props) => {
       }
 
       // Player state won't update if we play the same song twice in a row. Handle this:
-      if(index !== 0 && data.mixtape.songs[index].youtubeId === data.mixtape.songs[index-1].youtubeId){
+      if(index !== 0 && polling.data.mixtape.songs[index].youtubeId === polling.data.mixtape.songs[index-1].youtubeId){
         event.target.seekTo(0);
       }
     }
@@ -174,16 +182,16 @@ const MixtapePage = (props) => {
     createMixtapeFromBase({variables: {
       ownerId: auth.user._id, 
       ownerName: auth.user.username,
-      title: data.mixtape.title, 
-      description: data.mixtape.description, 
-      genres: data.mixtape.genres, 
-      image: data.mixtape.image, 
-      songs: data.mixtape.songs.map(song =>({youtubeId: song.youtubeId, name: song.name}))
+      title: polling.data.mixtape.title, 
+      description: polling.data.mixtape.description, 
+      genres: polling.data.mixtape.genres, 
+      image: polling.data.mixtape.image, 
+      songs: polling.data.mixtape.songs.map(song =>({youtubeId: song.youtubeId, name: song.name}))
     }});
   }
 
   const moveSongEarlier = (index) => {
-    if (!loading){
+    if (!polling.loading){
       if (index !== 0){
         let tempSongsArr = editList.slice();
         let tempSong = tempSongsArr[index];
@@ -203,8 +211,8 @@ const MixtapePage = (props) => {
   }
 
   const moveSongLater = (index) => {
-    if (!loading){
-      if (index !== data.mixtape.songs.length-1){
+    if (!polling.loading){
+      if (index !== polling.data.mixtape.songs.length-1){
         let tempSongsArr = editList.slice();
         let tempSong = tempSongsArr[index];
         tempSongsArr[index] = tempSongsArr[index+1];
@@ -224,7 +232,7 @@ const MixtapePage = (props) => {
   
   const enableEditing = () =>{
     setEditingSongs(true);
-    setEditList(data.mixtape.songs.slice());
+    setEditList(polling.data.mixtape.songs.slice());
 
   }
 
@@ -251,15 +259,15 @@ const MixtapePage = (props) => {
   }
 
   const userCanEdit = () => {
-    if (!loading){
-      if (data.mixtape.ownerId === auth.user._id){ return true; }
-      if (data.mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
+    if (!polling.loading){
+      if (polling.data.mixtape.ownerId === auth.user._id){ return true; }
+      if (polling.data.mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
       return false;
     }
   }
 
   const incrementLikes = () => {
-    if (!loading){
+    if (!polling.loading){
       if (!requestPending){
         setRequestPending(true);
         if (auth.user.dislikedMixtapes.includes(id)){
@@ -278,7 +286,7 @@ const MixtapePage = (props) => {
   }
 
   const incrementDislikes = () => {
-    if (!loading){
+    if (!polling.loading){
       if (!requestPending){
         setRequestPending(true);
         if (auth.user.likedMixtapes.includes(id)){
@@ -303,23 +311,43 @@ const MixtapePage = (props) => {
     }
   }
 
-  if (!loading && editView==null){
+  if (!polling.loading && editView==null){
     setEditView(userCanEdit())
   }
 
   const genres=[
-    {value: "Jazz"}, 
+    {value: "Alternative Rock"},
+    {value: "Ambient"},
+    {value: "Blues"},
+    {value: "Chill"},
+    {value: "Classical"},
+    {value: "Country"},
+    {value: "Drum and Bass"},
+    {value: "Dubstep"},
+    {value: "Electronic"},
+    {value: "Folk"},
+    {value: "Hip Hop"},
+    {value: "House"},
+    {value: "Indie"},
+    {value: "Instrumental"},
+    {value: "Jazz"},
+    {value: "LoFi"},
+    {value: "Metal"},
+    {value: "Musical Theatre"}, 
+    {value: "New Wave"},
+    {value: "Pop"},
+    {value: "Reggae"},
     {value: "Rock"}, 
-    {value: "Ska"}, 
-    {value: "Pop"}, 
-    {value: "Classical"}
+    {value: "Ska"},
+    {value: "Soundtrack"},
+    {value: "Swing"}
   ];
   const [options] = React.useState(genres);
 
   const editTitle = () => {
     setEditingMixtapeTitle(false);
     if(tempTitle.length !== 0){
-      updateMixtapeTitleMutation({variables: {id: data.mixtape._id, title: tempTitle}});
+      updateMixtapeTitleMutation({variables: {id: polling.data.mixtape._id, title: tempTitle}});
     }
     setTempTitle("");
   }
@@ -327,15 +355,14 @@ const MixtapePage = (props) => {
   const editDescription = () => {
     setEditingMixtapeDescription(false);
     if(tempDescription.length !== 0){
-      updateMixtapeDescriptionMutation({variables: {id: data.mixtape._id, description: tempDescription}});
+      updateMixtapeDescriptionMutation({variables: {id: polling.data.mixtape._id, description: tempDescription}});
     }
     setTempDescription("");
   }
 
   const updateMixtapePrivate = () => {
-    updateMixtapePrivateMutation({variables: {id: data.mixtape._id, private: !mixtapePrivate}});
+    updateMixtapePrivateMutation({variables: {id: polling.data.mixtape._id, private: !mixtapePrivate}});
     setMixtapePrivate(!mixtapePrivate);
-    refetch();
   }
 
   const addGenre = (selectedList, selectedItem) => {
@@ -344,7 +371,7 @@ const MixtapePage = (props) => {
       tempList.push(selectedList[i].value);
     }
 
-    updateMixtapeGenresMutation({variables: {id: data.mixtape._id, genres: tempList}});
+    updateMixtapeGenresMutation({variables: {id: polling.data.mixtape._id, genres: tempList}});
     editPreSelected(tempList);
     tempList = [];
   }
@@ -355,7 +382,7 @@ const MixtapePage = (props) => {
       tempList.push(selectedList[i].value);
     }
 
-    updateMixtapeGenresMutation({variables: {id: data.mixtape._id, genres: tempList}});
+    updateMixtapeGenresMutation({variables: {id: polling.data.mixtape._id, genres: tempList}});
     editPreSelected(tempList);
     tempList = [];
   }
@@ -369,13 +396,12 @@ const MixtapePage = (props) => {
   }
 
   var preSelected = [];
-  if(!loading){
-    editPreSelected(data.mixtape.genres)
+  if(!polling.loading){
+    editPreSelected(polling.data.mixtape.genres)
   }
 
-  if (!loading && mixtapePrivate == null){
-    setMixtapePrivate(data.mixtape.private);
-    refetch();
+  if (!polling.loading && mixtapePrivate == null){
+    setMixtapePrivate(polling.data.mixtape.private);
   }
 
   return (
@@ -383,7 +409,7 @@ const MixtapePage = (props) => {
       <Navbar />
       <Card className="page-content">
         {/* The Mixtape Header */}
-        {!loading &&
+        {!polling.loading &&
         <Card.Header className="mixtape-page-header">
           {editView ? (
           <Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row"}}>
@@ -413,28 +439,28 @@ const MixtapePage = (props) => {
             <div className="mixtape-page-title">
               {!editView ? 
               (
-                <h4>{data.mixtape.title}</h4>
+                <h4>{polling.data.mixtape.title}</h4>
               ): 
               (
                 <Form.Control
                 type="input"
                 className="mixtape-title"
-                defaultValue={!loading && data.mixtape.title}
+                defaultValue={!polling.loading && polling.data.mixtape.title}
                 disabled={!editingMixtapeTitle}
                 onChange={event => setTempTitle(event.target.value)}
                 maxLength={50}
                 />
               )}
               {/* Mixtape's Owner */}
-              {!loading && <Link to={"/User/" + data.mixtape.ownerId}><div className="mm-link-blue">{data.mixtape.ownerName}</div></Link>}
+              {!polling.loading && <Link to={"/User/" + polling.data.mixtape.ownerId}><div className="mm-link-blue">{polling.data.mixtape.ownerName}</div></Link>}
             </div>
           </div>
 
           <div>
-            <MashMixtapeModal mixtape={!loading ? data.mixtape : null} />
+            <MashMixtapeModal mixtape={!polling.loading ? polling.data.mixtape : null} />
             <IconButton component={<CallSplitIcon onClick={addMixtape}/>} />
-            {(!loading && auth.user._id === data.mixtape.ownerId) &&
-            <AddCollaboratorModal mixtape={!loading ? data.mixtape : null}/>
+            {(!polling.loading && auth.user._id === polling.data.mixtape.ownerId) &&
+            <AddCollaboratorModal mixtape={!polling.loading ? polling.data.mixtape : null}/>
             }
           </div>
         </Card.Header>}
@@ -443,26 +469,26 @@ const MixtapePage = (props) => {
         <Card.Body className="scroll-content">
           <div className="song-and-video">
             <div className="video-container">
-              {!loading && <YouTube className="video-preview"
+              {!polling.loading && <YouTube className="video-preview"
                 onPlay={handleListen}
-                videoId={data.mixtape.songs.length > 0 ? data.mixtape.songs[currentSongIndex].youtubeId : ""}
+                videoId={polling.data.mixtape.songs.length > 0 ? polling.data.mixtape.songs[currentSongIndex].youtubeId : ""}
                 onEnd={changeToNextSong} opts={{playerVars: { autoplay: autoplay}}}
               />}
               <div className="likes-listens">
-                {!loading &&
+                {!polling.loading &&
                 <div>
                   <IconButton component={<ThumbUpIcon style={auth.user.likedMixtapes.includes(id) ? ({color:"var(--primary-color)"}):({})}/>} onClick={incrementLikes} />
                   <IconButton component={<ThumbDownIcon style={auth.user.dislikedMixtapes.includes(id) ? ({color:"var(--warning-color)"}):({})}/>} onClick={incrementDislikes} />
                 </div>
                 }
                 <div>
-                  Likes: {!loading && data.mixtape.likes}
+                  Likes: {!polling.loading && polling.data.mixtape.likes}
                 </div>
                 <div>
-                  Dislikes: {!loading && data.mixtape.dislikes}
+                  Dislikes: {!polling.loading && polling.data.mixtape.dislikes}
                 </div>
                 <div>
-                  Listens: {!loading && data.mixtape.listens}
+                  Listens: {!polling.loading && polling.data.mixtape.listens}
                 </div>
               </div>
 
@@ -475,12 +501,14 @@ const MixtapePage = (props) => {
                       selectedValues={preSelected}
                       onSelect={addGenre} 
                       onRemove={removeGenre}
+                      selectionLimit={5}
+                      avoidHighlightFirstOption={true}
                       />
                   </div>
                 ):
                 (
                   <div>
-                    Genres: {!loading && <span>{data.mixtape.genres.join(", ")}</span>}
+                    Genres: {!polling.loading && <span>{polling.data.mixtape.genres.join(", ")}</span>}
                   </div>
                 )
               }
@@ -502,7 +530,7 @@ const MixtapePage = (props) => {
                   (
                     <div>
                       {/* <Button variant="primary" className="mm-btn-alt">Cancel Changes </Button> */}
-                      <IconButton component={<CancelIcon />} callback={cancelEditing}/>
+                      <IconButton component={<NotInterestedIcon />} callback={cancelEditing}/>
                      </div>
                   )
                 )}
@@ -510,15 +538,15 @@ const MixtapePage = (props) => {
                 
               </div>
               <div className="scroll-content song-list space-below">
-                {!loading && !editingSongs && data.mixtape.songs.map((song, index) => (
-                  <SongCard song={song} key={index} songIndex={data.mixtape.songs.indexOf(song)} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)}/>
+                {!polling.loading && !editingSongs && polling.data.mixtape.songs.map((song, index) => (
+                  <SongCard song={song} key={index} songIndex={polling.data.mixtape.songs.indexOf(song)} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)}/>
                 ))}
-                {!loading && editingSongs && editList.map((song, index) => (
-                  <SongCard song={song} key={index} songIndex={data.mixtape.songs.indexOf(song)} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)} />
+                {!polling.loading && editingSongs && editList.map((song, index) => (
+                  <SongCard song={song} key={index} songIndex={polling.data.mixtape.songs.indexOf(song)} editingSongs={editingSongs} removeCallback={() => removeSong(index)} moveSongEarlierCallback={() => moveSongEarlier(index)} moveSongLaterCallback={() => moveSongLater(index)} />
                 ))}
               </div>
               <div>
-              {editView && <AddSongModal originalSongLength={data.mixtape.songs.length} addSongsCallback={addSongs} disabledButton={editingSongs} />}
+              {editView && !polling.loading && <AddSongModal originalSongLength={polling.data.mixtape.songs.length} addSongsCallback={addSongs} disabledButton={editingSongs} />}
               </div>
               
             </div>
@@ -539,12 +567,12 @@ const MixtapePage = (props) => {
               </span>
             }
             Description:
-            {!loading && <div>
+            {!polling.loading && <div>
               <Form.Control
                 as="textarea"
                 rows={5}
                 className="mixtape-description"
-                defaultValue={data.mixtape.description}
+                defaultValue={polling.data.mixtape.description}
                 disabled={!editingMixtapeDescription}
                 onChange={event => setTempDescription(event.target.value)}
                 maxLength="500"
@@ -571,7 +599,7 @@ const MixtapePage = (props) => {
                   </div>
                 </Card.Header>
                 <Card.Body className="scroll-content comments-section">
-                  {!loading && data.mixtape.comments.map((comment, index) =>
+                  {!polling.loading && polling.data.mixtape.comments.map((comment, index) =>
                     <Comment
                       comment={comment}
                       startReply={() => setReplyIndex(index)}

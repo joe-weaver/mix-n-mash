@@ -11,7 +11,8 @@ const MixtapeResultCard = (props) => {
         <div className="stats">
           <div>Likes: {props.mixtape.likes}</div>
           <div>Listens: {props.mixtape.listens}</div>
-          <div>Genres: {props.mixtape.genres.length < 5 ? props.mixtape.genres.join(", ") : props.mixtape.genres.slice(0, 5).join(", ") + "..."}</div>
+          {/* <div>Genres: {props.mixtape.genres.length < 5 ? props.mixtape.genres.join(", ") : props.mixtape.genres.slice(0, 4).join(", ") + "..."}</div> */}
+          <div>Genres: {props.mixtape.genres.join(", ")}</div>
         </div>
       </div>
       <div className="mixtape-image">
