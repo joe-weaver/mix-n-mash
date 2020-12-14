@@ -23,11 +23,13 @@ export function ProvideToast({children}){
     return (
         <toastContext.Provider value={toaster}>
             {/* Render the toasts on top of all other content. Don't show more than 5 at a time. */}
+            <div className="toaster-wrapper">
             {toaster.currentAlert !== null &&<div className="alert-wrapper">
                 <Alert 
                     variant={toaster.currentAlert.type ? toaster.currentAlert.type : "danger"}
                     show={toaster.showAlert}
-                    onClose={toaster.hideAlert} dismissible>
+                    onClose={toaster.hideAlert} dismissible
+                    className="toast-alert">
                     <Alert.Heading>{toaster.currentAlert.header}</Alert.Heading>
                     <p>
                     {toaster.currentAlert.message}
@@ -69,6 +71,7 @@ export function ProvideToast({children}){
                         </Toast>)}
                     </>)
                     })}
+            </div>
             </div>
             {children}
         </toastContext.Provider>

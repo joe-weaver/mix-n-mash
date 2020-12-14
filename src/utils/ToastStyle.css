@@ -1,3 +1,11 @@
+.toaster-wrapper {
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+    height: 0;
+    background-color: red;
+}
+
 .toast-wrapper {
     position: absolute;
     margin-top: 0px;
@@ -37,6 +45,7 @@
 .alert-wrapper{
     position: absolute;
     width: 100vw;
+    height: 0px;
     display: flex;
     align-items: center;
     flex-direction: column;
