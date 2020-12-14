@@ -87,8 +87,7 @@ export default function UserPage(){
 
     return (
       <div className="mm-container scroll-screen">
-        <Navbar currentPage={NavbarLinks.ACCOUNT} />
-        <h1 className="page-title">Account</h1>
+        <Navbar currentPage={null} />
         <div className="user-container">
           <div className="username">{!loading && data.user.username}</div>
           {!loading && auth.user._id !== data.user._id &&

@@ -15,7 +15,7 @@ const MixtapeResultCard = (props) => {
         </div>
       </div>
       <div className="mixtape-image">
-        <img src={"https://img.youtube.com/vi/" + props.mixtape.songs[0].youtubeId + "/0.jpg"} alt="" className="thumbnail-image"/> 
+        {props.mixtape.songs.length > 0 && <img src={"https://img.youtube.com/vi/" + props.mixtape.songs[0].youtubeId + "/0.jpg"} alt="" className="thumbnail-image"/>}
       </div>
       <div className="mixtape-details">Mixed By: <Link to={"/User/" + props.mixtape.ownerId} className="mm-link-pink">{props.mixtape.ownerName}</Link></div>
     </div>
