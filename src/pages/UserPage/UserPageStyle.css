@@ -20,3 +20,66 @@
 .users-mixtapes-container{
   height: 70%
 }
+
+.user-container{
+  position: relative;
+  width: 100%;
+  font-family: "Century Gothic";
+}
+
+.user-container .username{
+  width: 80%;
+  height: 10vh;
+  border-radius: 0px 5vh 5vh 0px;
+  background-color: var(--mm-blue);
+  padding-left: 2vw;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  color: var(--bg);
+  font-size: 3vw;
+  font-family: "Century Gothic Bold";
+}
+
+.user-container .followers{
+  padding-top: 2vh;
+  padding-left: 6vw;
+}
+
+.user-container .user-bio-container{
+  height: 20vh;
+  padding-top: 2vh;
+  padding-left: 6vw;
+  width: 70%;
+  display: flex;
+}
+
+.user-bio {
+  resize: none;
+  height: 16vh !important;
+}
+
+.user-bio:disabled {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
+.password-container{
+  padding-left: 6vw;
+}
+
+.mashmate-info-container {
+  padding: 2vh 5vw;
+  display: flex;
+  width: 90vw;
+  justify-content: space-between;
+}
+
+.mashmates{
+  width: 40%;
+}
+
+.mashmate-requests{
+  width: 40%;
+}
