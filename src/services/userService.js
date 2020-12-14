@@ -145,16 +145,26 @@ export const updateUserLikes = gql`
 mutation like(
     $id: String!
     $mixtapeId: String!
+    $mixtapeGenres: [String]!
+    $genrePreferences: [genrePreferencesInput]!
     $like: Boolean!
+    $wasDisliked: Boolean!
     ){
     setLikeMixtape(
         id: $id
         mixtapeId: $mixtapeId
+        mixtapeGenres: $mixtapeGenres
+        genrePreferences: $genrePreferences
         like: $like
+        wasDisliked: $wasDisliked
     ){
         _id
         likedMixtapes
         dislikedMixtapes
+        genrePreferences{
+            genre
+            val
+        }
     }
 }`
   
@@ -162,16 +172,26 @@ export const updateUserDislikes = gql`
   mutation dislike(
       $id: String!
       $mixtapeId: String!
+      $mixtapeGenres: [String]!
+      $genrePreferences: [genrePreferencesInput]!
       $dislike: Boolean!
+      $wasLiked: Boolean!
   ){
     setDislikeMixtape(
         id: $id
         mixtapeId: $mixtapeId
+        mixtapeGenres: $mixtapeGenres
+        genrePreferences: $genrePreferences
         dislike: $dislike
+        wasLiked: $wasLiked
     ){
         _id
         dislikedMixtapes
         likedMixtapes
+        genrePreferences{
+            genre
+            val
+        }
     }
 }`
 
@@ -325,3 +345,15 @@ mutation removeMashmate(
             }
     }
 }`;
+
+export const updateGenrePreferences = gql`
+mutation updateGenrePrefs($id: String!, $genrePreferences: [genrePreferencesInput]!){
+    updateGenrePreferences(id: $id, genrePreferences: $genrePreferences){
+        _id
+        genrePreferences{
+            genre
+            val
+        }
+    }
+}
+`

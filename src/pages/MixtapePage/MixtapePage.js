@@ -34,7 +34,7 @@ import { mixtapesClient, getMixtape,
   addListen
   } from "../../services/mixtapesService"; 
 
-import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut} from "../../services/userService";
+import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut, updateGenrePreferences as updateGenrePreferencesMut} from "../../services/userService";
 import { useAuth } from "../../utils/use-auth";
 import { useToast } from "../../utils/use-toast";
 import { usePolling } from "../../utils/use-polling";
@@ -107,6 +107,7 @@ const MixtapePage = (props) => {
   const [updateMixtapeGenresMutation] = useMutation(updateMixtapeGenresMut, {client: mixtapesClient});
   const [updateMixtapePrivateMutation] = useMutation(updateMixtapePrivateMut, {client: mixtapesClient});
 
+  const [updateGenrePreferencesMutation] = useMutation(updateGenrePreferencesMut, {client: userClient});
 
   const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: (data) => {
     auth.getUser({likedMixtapes: data.setLikeMixtape.likedMixtapes, dislikedMixtapes: data.setLikeMixtape.dislikedMixtapes});
@@ -270,16 +271,18 @@ const MixtapePage = (props) => {
     if (!polling.loading){
       if (!requestPending){
         setRequestPending(true);
+        let wasDisliked = false;
         if (auth.user.dislikedMixtapes.includes(id)){
           updateDislikesMutation({variables: {id: id, incAmount: -1}});
+          wasDisliked = true;
         }
         if (auth.user.likedMixtapes.includes(id)){
           updateLikesMutation({variables: {id: id, userId: auth.user._id, incAmount: -1}});
-          updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: false}});
+          updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, mixtapeGenres: polling.data.mixtape.genres, genrePreferences: auth.user.genrePreferences.map(x => ({genre: x.genre, val: x.val})), like: false, wasDisliked}});
         }
         else{
           updateLikesMutation({variables:{id: id, userId: auth.user._id, incAmount: 1}});
-          updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, like: true}});
+          updateUserLikesMutation({variables: {id: auth.user._id, mixtapeId: id, mixtapeGenres: polling.data.mixtape.genres, genrePreferences: auth.user.genrePreferences.map(x => ({genre: x.genre, val: x.val})), like: true, wasDisliked}});
         }
       }
     }
@@ -289,16 +292,18 @@ const MixtapePage = (props) => {
     if (!polling.loading){
       if (!requestPending){
         setRequestPending(true);
+        let wasLiked = false;
         if (auth.user.likedMixtapes.includes(id)){
           updateLikesMutation({variables: {id: id, userId: auth.user._id, incAmount: -1}});
+          wasLiked = true;
         }
         if (auth.user.dislikedMixtapes.includes(id)){
           updateDislikesMutation({variables: {id: id, incAmount: -1}});
-          updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, dislike: false}});
+          updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, mixtapeGenres: polling.data.mixtape.genres, genrePreferences: auth.user.genrePreferences.map(x => ({genre: x.genre, val: x.val})), dislike: false, wasLiked}});
         }
         else{
           updateDislikesMutation({variables:{id: id, incAmount: 1}});
-          updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, dislike: true}});
+          updateUserDislikesMutation({variables: {id: auth.user._id, mixtapeId: id, mixtapeGenres: polling.data.mixtape.genres, genrePreferences: auth.user.genrePreferences.map(x => ({genre: x.genre, val: x.val})), dislike: true, wasLiked}});
         }
       }
     }
@@ -335,6 +340,7 @@ const MixtapePage = (props) => {
     {value: "Metal"},
     {value: "Musical Theatre"}, 
     {value: "New Wave"},
+    {value: "Other"},
     {value: "Pop"},
     {value: "Reggae"},
     {value: "Rock"}, 
@@ -403,6 +409,8 @@ const MixtapePage = (props) => {
   if (!polling.loading && mixtapePrivate == null){
     setMixtapePrivate(polling.data.mixtape.private);
   }
+
+  console.log(auth.user.genrePreferences);
 
   return (
     <div className="page-container">
