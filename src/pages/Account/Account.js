@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Button, FormControl } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
-import CancelIcon from '@material-ui/icons/Cancel';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { useHistory } from "react-router-dom";
 
@@ -120,7 +120,7 @@ export default function Account(){
             )}
             {editingBio && (
               <IconButton
-                component={<CancelIcon />}
+                component={<NotInterestedIcon />}
                 callback={() => cancelUpdateBio()}
               />
             )}

@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
-import CancelIcon from '@material-ui/icons/Cancel';
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
