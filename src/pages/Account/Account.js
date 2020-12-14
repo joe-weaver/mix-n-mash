@@ -12,6 +12,7 @@ import IconButton from "../../components/IconButton/IconButton";
 import MashmateCard from "../../components/MashmateCard/MashmateCard";
 import MashmateRequestCard from "../../components/MashmateRequestCard/MashmateRequestCard";
 import { useAuth } from "../../utils/use-auth";
+import { useToast } from "../../utils/use-toast";
 import ChangePassword from "./Components/ChangePassword";
 import { useQuery, useMutation } from "@apollo/client";
 import {userClient, updateBio as updateBioMut, deactivateAccount as deactivateAccountMut, resolveMashmateRequest as resolveMMRequest, removeMashmate as removeMMMut} from "../../services/userService";
@@ -25,11 +26,12 @@ export default function Account(){
   // Hook into the auth state
   const auth = useAuth();
 
+  const toaster = useToast();
+
   const {loading, data} = useQuery(getUserMixtapes, {client: mixtapesClient, variables:{userId: auth.user._id}});
 
   const [updateOwnerActiveMutation] = useMutation(updateOwnerActiveMut, {client: mixtapesClient});
 
-  console.log(auth.user.bio);
   const [editingBio, setEditingBio] = React.useState(false);
   const [tempBio, setTempBio] = React.useState(auth.user.bio);
 
@@ -61,6 +63,7 @@ export default function Account(){
   const logOut = () => {
     auth.logout().then(success => {
       if(success !== false){
+        toaster.notify("Log Out", "You have been successfully logged out.");
         history.push("/");
       }
     });
@@ -83,14 +86,19 @@ export default function Account(){
     if(!loading){
       deactivateAccountMutation({variables: {id: auth.user._id}});
       updateMixtapesOwnerActive();
-      logOut();
+      auth.logout().then(success => {
+        if(success !== false){
+          toaster.notify("Account Deactivated", "Account successfully deactivated. We have to see you go :(");
+          history.push("/");
+        }
+      });
     }
   }
 
   return (
     <div className="mm-container scroll-screen">
       <Navbar currentPage={NavbarLinks.ACCOUNT} />
-      <h1 className="page-title">Account</h1>
+      <h1 className="page-title">Account<Button className="mm-btn-warning" onClick={logOut}>Log Out</Button></h1>
       <div className="account-container">
         <div className="username">{auth.user.username}</div>
         <h4 className="followers">{auth.user.numFollowers} Follower{auth.user.numFollowers !== 1 ? "s" : ""}</h4>
