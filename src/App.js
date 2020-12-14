@@ -9,7 +9,6 @@ import MixtapePage from "./pages/MixtapePage/MixtapePage";
 import SearchResults from "./pages/SearchResults/SearchResults";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserPage from "./pages/UserPage/UserPage";
-import ReactivateAccount from "./pages/ReactivateAccount/ReactivateAccount";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import { ProvideAuth } from "./utils/use-auth";
 import { ProvideToast } from "./utils/use-toast";
@@ -37,7 +36,6 @@ export default function App() {
               <PrivateRoute path="/Account"><Account/></PrivateRoute>
               <PrivateRoute path="/SearchResults/:criteria/:filter/:skip?"><SearchResults/></PrivateRoute>
               <PrivateRoute exact path="/User/:userId"><UserPage/></PrivateRoute>
-              <PrivateRoute path="/ReactivateAccount"><ReactivateAccount/></PrivateRoute>
             </ProvideToast>
           </ProvidePolling>
         </BrowserRouter>

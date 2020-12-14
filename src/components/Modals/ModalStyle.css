@@ -11,9 +11,15 @@
 }
 
 .modal-content{
-    background-color: rgba(0, 0, 0, 0.7) !important;
+    background-color: var(--bg-light) !important;
     color: white !important;
     height: 80vh !important;
+    font-family: "Century Gothic";
+}
+
+.modal-header {
+    border-color: var(--bg-lighter) !important;
+    font-family: "Century Gothic Bold";
 }
 
 .modal-header .close {
@@ -26,6 +32,11 @@
 
 .modal-header .close:active {
     color: white !important;
+}
+
+.modal-footer {
+    border-color: var(--bg-lighter) !important;
+    font-family: "Century Gothic";
 }
 
 .modal-search-bar {
@@ -73,7 +84,13 @@
     flex-direction: column;
     padding-left: 10vw !important;
     padding-right: 10vw !important;
-    justify-content: center;
+}
+
+.deactivate-account-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .search-bar {
@@ -96,4 +113,9 @@
 
 .create-mixtape-modal-body {
     overflow-y: scroll;
+}
+
+.mash-mixtape-body{
+    padding-left: 10vw !important;
+    padding-right: 10vw !important;
 }

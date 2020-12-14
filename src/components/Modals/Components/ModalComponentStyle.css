@@ -3,8 +3,11 @@
     flex-direction: row !important;
     justify-content: space-between !important;
     align-items: center !important;
-    border-color: var(--primary-color) !important;
-    background-color: var(--primary-color-transparent) !important;
+    border-color: var(--mm-blue) !important;
+    background-color: var(--mm-blue) !important;
+    padding: 0px 2vw;
+    color: var(--bg) !important;
+    font-family: "Century Gothic Bold";
 }
 
 .edit-permissions-card + .edit-permissions-card {

@@ -29,7 +29,7 @@ const MashMixtapeModal = (props) => {
 
     const mergeMixtape = (mixtape) => {
         if((mixtape.songs.length + props.mixtape.songs.length) > 100){
-            toaster.notify("Total Songs are over 100! Cannot Merge!");
+            toaster.alert("Mixtapes too large","Total Songs are over 100 - Cannot Merge!");
         }
         else{
             let songs = [];
@@ -75,10 +75,8 @@ const MashMixtapeModal = (props) => {
             }
     
             mashMixtape({variables: reqObj});
+            setShow(false);
         }
-        
-
-        setShow(false);
     }
 
     return (<>
@@ -86,9 +84,10 @@ const MashMixtapeModal = (props) => {
 
         <Modal show={show} onHide={() => setShow(false)}>
             <Modal.Header closeButton>
-                <Modal.Title>Merge: <br/>Select a mixtape to recieve the contents of the mixtape you are viewing.</Modal.Title>
+                <Modal.Title>Mash Mixtape</Modal.Title>
             </Modal.Header>
-            <Modal.Body className="scroll-content">
+            <Modal.Body className="scroll-content" className="mash-mixtape-body">
+                <h5 style={{paddingBottom: "2vh"}}>Select a mixtape to merge this mixtape into:</h5>
                 {!loading && data.getUserMixtapes.filter(mixtape => mixtape.ownerId === auth.user._id).map(mixtape => (
                     <MashMixtapeCard key={mixtape._id} mixtape={mixtape} mergeMixtape={() => mergeMixtape(mixtape)}></MashMixtapeCard>
                 ))}

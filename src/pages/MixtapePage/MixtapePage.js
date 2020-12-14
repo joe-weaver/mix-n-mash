@@ -67,7 +67,6 @@ export default function MixtapePage(){
 
     const [editingSongs, setEditingSongs] = React.useState(false);
     const [editList, setEditList] = React.useState([]);
-    const [editView, setEditView] = React.useState(null);
 
     // Song playing
     const [currentSongIndex, setCurrentSongIndex] = React.useState(0);
@@ -245,11 +244,12 @@ export default function MixtapePage(){
       setEditList(list);
     }
     const userCanEdit = () => {
-    if (!polling.loading){
-        if (polling.data.mixtape.ownerId === auth.user._id){ return true; }
-        if (polling.data.mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
-        return false;
-    }
+      if (!polling.loading){
+          if (polling.data.mixtape.ownerId === auth.user._id){ return true; }
+          if (polling.data.mixtape.collaborators.reduce((acc, x) => (x.userId === auth.user._id && x.privilegeLevel === "edit") || acc, false)){ return true; }
+          return false;
+      }
+      return false;
     }
 
     const incrementLikes = () => {
@@ -291,14 +291,10 @@ export default function MixtapePage(){
     }
 
     const handleListen = () => {
-    if(!hasListened){
-        addListenMutation({variables: {id: id, userId: auth.user._id}});
-        setHasListened(true);
-    }
-    }
-
-    if (!polling.loading && editView==null){
-    setEditView(userCanEdit())
+      if(!hasListened){
+          addListenMutation({variables: {id: id, userId: auth.user._id}});
+          setHasListened(true);
+      }
     }
 
     const genres=[
@@ -405,11 +401,12 @@ export default function MixtapePage(){
         <div className="mm-container scroll-screen">
       <Navbar currentPage={null} />
       <div className="mixtape-container">
-      {editView && <div className="mixtape-header">
-          <Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row"}}>
+      <div className="mixtape-header">
+          {userCanEdit() && <Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row"}}>
             <Form.Check type="checkbox" checked={polling.loading ? false : polling.data.mixtape.private} onChange={updateMixtapePrivate}/>
             <Form.Label style={{paddingLeft: "1vw"}}>Public</Form.Label>
-          </Form.Group>
+          </Form.Group>}
+          {!userCanEdit() && <div>{" "}</div>}
           <div>
           <MashMixtapeModal mixtape={!polling.loading ? polling.data.mixtape : null} />
           <IconButton component={<CallSplitIcon onClick={addMixtape}/>} />
@@ -417,10 +414,10 @@ export default function MixtapePage(){
             <AddCollaboratorModal mixtape={!polling.loading ? polling.data.mixtape : null}/>
           }
           </div>
-        </div>}
+        </div>
         <div className="title">
-            {!editView && !polling.loading && polling.data.mixtape.title}
-            {editView && <div className="title-buttons">
+            {!userCanEdit() && !polling.loading && polling.data.mixtape.title}
+            {userCanEdit() && <div className="title-buttons">
             {!editingMixtapeTitle && (
               <IconButton
                 component={<EditIcon />}
@@ -440,7 +437,7 @@ export default function MixtapePage(){
               />
             )}
             </div>}
-            {editView && <Form.Control
+            {userCanEdit() && <Form.Control
                 as="input"
                 className="title-input"
                 value={tempTitle !== null ? tempTitle : (!polling.loading && polling.data.mixtape.title)}
@@ -452,8 +449,8 @@ export default function MixtapePage(){
         <h5 className="owner">Mixed By: <Link className="mm-link-pink" to={"/User/" + (!polling.loading && polling.data.mixtape.ownerId)}>{!polling.loading && polling.data.mixtape.ownerName}</Link></h5>
         {/* DESCRIPTION STUFF */}
         <h3 style={{paddingLeft: "4vw", paddingTop: "4vh"}}>Description:</h3>
-        {!editView && <div className="description-container"><div style={{paddingLeft: "4vw"}}>{!polling.loading && polling.data.mixtape.description}</div></div>}
-        {editView && <div className="description-container">
+        {!userCanEdit() && <div className="description-container"><div style={{paddingLeft: "4vw"}}>{!polling.loading && polling.data.mixtape.description}</div></div>}
+        {userCanEdit() && <div className="description-container">
           <div className="description-buttons">
             {!editingMixtapeDescription && (
               <IconButton
@@ -488,10 +485,10 @@ export default function MixtapePage(){
         <div className="song-container">
           <div>
             <div className="song-buttons">
-              {editView && !editingSongs && <IconButton component={<EditIcon />} callback={startEditingSongs}/>}
-              {editView && !editingSongs && !polling.loading && <AddSongModal originalSongLength={polling.data.mixtape.songs.length} addSongsCallback={addSongs} disabledButton={editingSongs} />}
-              {editView && editingSongs && <IconButton component={<SaveIcon />} callback={updateSongs}/>}
-              {editView && editingSongs && <IconButton component={<NotInterestedIcon />} callback={cancelEditingSongs}/>}        
+              {userCanEdit() && !editingSongs && <IconButton component={<EditIcon />} callback={startEditingSongs}/>}
+              {userCanEdit() && !editingSongs && !polling.loading && <AddSongModal originalSongLength={polling.data.mixtape.songs.length} addSongsCallback={addSongs} disabledButton={editingSongs} />}
+              {userCanEdit() && editingSongs && <IconButton component={<SaveIcon />} callback={updateSongs}/>}
+              {userCanEdit() && editingSongs && <IconButton component={<NotInterestedIcon />} callback={cancelEditingSongs}/>}        
             </div>
             <div className="songs-list">
               {!polling.loading && !editingSongs && polling.data.mixtape.songs.map((song, index) => (
@@ -529,7 +526,7 @@ export default function MixtapePage(){
                 </div>
               </div>
               <div>
-                {editView ? 
+                {userCanEdit() ? 
                   (
                     <div>
                       Genres: <Multiselect 

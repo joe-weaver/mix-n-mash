@@ -102,7 +102,7 @@ const AddSongModal = (props) => {
                         </div>
                     </div>
                     <div>
-                        <Button className="mm-btn-alt" onClick={confirmAddSongs}>Add Songs</Button>
+                        <Button className="mm-btn" style={{marginRight: "2vw"}} onClick={confirmAddSongs}>Add Songs</Button>
                         <Button className="mm-btn-warning" onClick={cancelAddSongs}>Cancel</Button>
                     </div>
                 </div>
