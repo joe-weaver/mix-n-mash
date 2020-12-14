@@ -26,6 +26,7 @@
   
   --bg: rgb(46, 43, 49);
   --bg-light: rgb(63, 60, 66);
+  --bg-lighter: rgb(86, 82, 90);
 
   --mm-blue: rgb(0, 187, 249);
   --mm-blue-transparent: rgba(0, 187, 249, 0.1);
@@ -44,6 +45,10 @@
   --mm-red-transparent-less: rgba(234, 82, 111, 0.2);
   --mm-red-lighter: rgb(236, 106, 130);
   --mm-red-darker: rgb(207, 70, 95);
+
+  --mm-yellow: rgb(254, 233, 108);
+
+  --mm-purple: rgb(155, 93, 229);
 }
 
 @font-face {
@@ -320,7 +325,7 @@ body {
 /* ##################################################################### */
 /* Multiselect */
 #multiselectContainerReact div{
-  border-color: var(--primary-color) !important;
+  border-color: var(--mm-blue) !important;
   color: white !important;
 }
 .searchBox{
@@ -333,8 +338,9 @@ body {
   margin: 5px;
 }
 .chip{
-  background-color: var(--primary-color-transparent-more) !important;
-  border-color: var(--primary-color) !important;
+  background-color: var(--mm-blue) !important;
+  border-color: var(--mm-blue) !important;
+  color: var(--bg) !important;
   border-width: 1px;
   border-style: solid;
 }

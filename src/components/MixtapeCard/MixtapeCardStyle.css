@@ -1,4 +1,4 @@
-.mixtape-card {
+/* .mixtape-card {
   padding: 5px;
   border-radius: 10px;
   display: flex;
@@ -31,4 +31,67 @@
   display: flex;
   justify-content: center;
   align-items: center;
+} */
+
+.mixtape-card{
+  position: relative;
+  width: 100%;
+  font-family: "Century Gothic";
+}
+
+.mixtape-card .title{
+  width: 80%;
+  height: 10vh;
+  border-radius: 0px 5vh 5vh 0px;
+  padding-left: 12vw;
+  padding-right: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  color: var(--bg);
+  font-size: 1.5vw;
+  font-family: "Century Gothic Bold";
+}
+
+.mixtape-card .details{
+  font-size: 1vw;
+  font-family: "Century Gothic";
+  display: flex;
+  justify-content: space-between;
+  padding-left: 2vw;
+}
+
+.mixtape-card .details div + div{
+  padding-left: 20px;
+}
+
+.mixtape-card .title.even{
+  background-color: var(--mm-blue);
+}
+
+.mixtape-card .title.odd{
+  background-color: var(--mm-green);
+}
+
+.mixtape-card .mixtape-image{
+  position: absolute;
+  top: 0px;
+  width: 14vh;
+  height: 14vh;
+  border-radius: 7vh;
+  background-color: black;
+  margin-top: 0.5vh;
+  margin-left: 1vw;
+  overflow: hidden;
+}
+
+.mixtape-card .mixtape-image img{
+  height: 100%;
+  width: auto;
+}
+
+.mixtape-card .mixtape-details{
+  height: 8vh;
+  padding-left: 12vw;
 }

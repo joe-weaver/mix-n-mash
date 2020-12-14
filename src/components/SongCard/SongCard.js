@@ -11,8 +11,8 @@ import "./SongCardStyle.css";
 const SongCard = (props) => {
  
   return (
-    <Card key={props.song.name} className="song-card mm-card">
-      {!props.editingSongs && ((props.songIndex + 1) + ":  ")}
+    <Card key={props.song.name} className={"song-card mm-card" + (props.index%2 === 0 ? " even" : " odd")}>
+      {!props.editingSongs && <div>{(props.songIndex + 1) + ":"}</div>}
       <div>
         <img src={"https://img.youtube.com/vi/"+props.song.youtubeId+"/0.jpg"} alt="" className="thumbnail-image"/> 
       </div>

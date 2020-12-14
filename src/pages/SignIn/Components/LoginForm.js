@@ -26,7 +26,7 @@ export default function LoginForm(props){
             history.push("/HottestMixtapes");
           }
           else {
-            history.push("/ReactivateAccount");
+            props.reactivateAccount();
           }
         }
       });
@@ -34,8 +34,6 @@ export default function LoginForm(props){
       setInvalidLoginCreds(true);
     }
   }
-
-  console.log(props);
   
   return (<>
     <Card.Header>

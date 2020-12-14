@@ -14,20 +14,22 @@ import { userClient,
           unfollow as unfollowMut,
           decFollowersCount as decFollowersCountMut} from "../../services/userService";
 import { mixtapesClient, getUserPageMixtapes } from "../../services/mixtapesService";
+import { useParams } from "react-router-dom";
 
 import { useAuth } from "../../utils/use-auth";
 
 import "./UserPageStyle.css";
 
 export default function UserPage(){
-    let url = window.location.pathname.split("/");
-    let idFromUrl = url[url.length - 1];
+    
+    const {userId} = useParams();
+
     const auth = useAuth();
   
-    let {loading, data} = useQuery(getUser, {variables: {id: idFromUrl}, client: userClient});
+    let {loading, data} = useQuery(getUser, {variables: {id: userId}, client: userClient});
     let mixtapeObj = {loading: null, error: null, data: null};
     
-    mixtapeObj = useQuery(getUserPageMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, otherUserId: idFromUrl}});
+    mixtapeObj = useQuery(getUserPageMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, otherUserId: userId}});
     
     // Hook into notifications
     const toaster = useToast();
@@ -104,7 +106,7 @@ export default function UserPage(){
           }
           <h4 className="followers">
               {!loading && data.user.numFollowers} Follower{!loading && data.user.numFollowers !== 1 ? "s" : ""}
-              {!auth.user.following.includes(idFromUrl) ? 
+              {!auth.user.following.includes(userId) ? 
                   (<Button className="mm-btn" style={{marginLeft: "10vw"}} onClick={followUserFunct}>Follow</Button>) 
                   : 
                   (<Button className="mm-btn" style={{marginLeft: "10vw"}} onClick={unfollowUserFunct}>Unfollow</Button>)

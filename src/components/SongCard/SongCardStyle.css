@@ -1,16 +1,26 @@
 .song-card {
-  width: 38vw;
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
   flex-direction: row !important;
   font-size: larger;
   font-weight: light;
   padding: 5px 10px;
+  min-height: 5vh;
+  border-radius: 5vh !important;
+}
+
+.song-card.odd{
+  background-color: var(--mm-green) !important;
+  border-color: var(--mm-green) !important;
 }
 
 .song-card + .song-card {
   margin-top: 10px;
+}
+
+.song-card div + div {
+  padding-left: 1vw;
 }
 
 .thumbnail-image{

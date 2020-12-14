@@ -4,6 +4,7 @@ import AddSongCard from "../../components/AddSongCard/AddSongCard";
 import { searchSongs } from "../../services/youtubeService";
 import IconButton from "../IconButton/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
+import AddIcon from '@material-ui/icons/Add';
 import YouTube from "react-youtube";
 import { useToast } from "../../utils/use-toast";
 
@@ -67,9 +68,7 @@ const AddSongModal = (props) => {
 
     return (
         <>
-        <Button variant="primary" className="mm-btn-alt" onClick={handleShow} disabled={props.disabledButton}>
-            Add Song
-        </Button>
+        <IconButton variant="primary" onClick={handleShow} disabled={props.disabledButton} component={<AddIcon/>}></IconButton>
 
         <Modal show={show} onHide={cancelAddSongs}>
             <Modal.Header closeButton className="add-song-modal-header">
@@ -103,7 +102,7 @@ const AddSongModal = (props) => {
                         </div>
                     </div>
                     <div>
-                        <Button className="mm-btn-alt" onClick={confirmAddSongs}>Add Songs</Button>
+                        <Button className="mm-btn" style={{marginRight: "2vw"}} onClick={confirmAddSongs}>Add Songs</Button>
                         <Button className="mm-btn-warning" onClick={cancelAddSongs}>Cancel</Button>
                     </div>
                 </div>

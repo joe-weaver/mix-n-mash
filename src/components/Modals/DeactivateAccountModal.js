@@ -17,15 +17,13 @@ const DeactivateAccountModal = (props) => {
                 <Modal.Title>Confirm Account Deactivation</Modal.Title>
             </Modal.Header>
             <Modal.Body className="add-collaborator-body">
-                <div>
-                    <h2>Are you sure you would like to deactivate your Mix n' Mash account?</h2> 
-                    <h3>(Your account can be reactivated at any time by logging in)</h3>
-                    <div className="scroll-content">
-                        <Button className="mm-btn-warning" onClick={handleClose}>Cancel</Button>
-                        <Button className="mm-btn-alt" onClick={props.deactivateCallback}> Deactivate Account </Button>
-                    </div>
-                </div>
+                <h2>Are you sure you would like to deactivate your Mix n' Mash account?</h2> 
+                <h3>(Your account can be reactivated at any time by logging in)</h3>
             </Modal.Body>
+            <Modal.Footer>
+                <Button className="mm-btn-warning" onClick={handleClose}>Cancel</Button>
+                <Button className="mm-btn" onClick={props.deactivateCallback}> Deactivate Account </Button>
+            </Modal.Footer>
         </Modal>
         </>)
 }

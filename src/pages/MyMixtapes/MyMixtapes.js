@@ -14,14 +14,14 @@ import { useToast } from "../../utils/use-toast";
 import { useHistory } from "react-router-dom";
 
 const items = [
-  "All Mixtapes",
-  "Owner",
-  "Shared With Me",
-  "Can Edit",
-  "Can View"
-];
+    "All Mixtapes",
+    "Owner",
+    "Shared With Me",
+    "Can Edit",
+    "Can View"
+  ];
 
-const MyMixtapes = (props) => {
+export default function Test(props){
   // Hook into the auth
   const auth = useAuth();
 
@@ -57,16 +57,13 @@ const MyMixtapes = (props) => {
   const createMixtape = () => {
     createMixtapeMutation({variables: {ownerId: auth.user._id , ownerName: auth.user.username}});
   }
-  
-  return (
-    <div>
-      <div className="page-container">
+
+    return (
+        <div className="mm-container scroll-screen">
         <Navbar currentPage={NavbarLinks.MY_MIXTAPES} />
-        <Card className="page-content">
-          <Card.Header className="content-header">
-            <h1>My Mixtapes</h1>
-            <div>
-              <Button variant="primary" className="mm-btn-alt" onClick={createMixtape}>
+        <h1 className="page-title">My Mixtapes
+        <div>
+        <Button variant="primary" className="mm-btn" style={{marginRight: "2vw"}} onClick={createMixtape}>
                 Create Mixtape
               </Button>
               <Dropdown
@@ -74,21 +71,16 @@ const MyMixtapes = (props) => {
                 items={items}
                 selectionCallback={(key) => setFilterKey(key)}
               />
-              <IconButton
-                component={<RefreshIcon />}
-                callback={() => refetch()}
-              ></IconButton>
-            </div>
-          </Card.Header>
-          <Card.Body className="scroll-content">
-            {!loading && data.getUserMixtapes.filter(filterFunctions[filterKey]).map((mixtape) => (
-              <MixtapeCard mixtape={mixtape} key={mixtape._id} refetchMyMixtapes={refetch}/>
-            ))}
-          </Card.Body>
-        </Card>
-      </div>
+          <IconButton
+            component={<RefreshIcon />}
+            callback={() => refetch()}
+          ></IconButton>
+        </div>
+        </h1>
+        {!loading && data.getUserMixtapes.filter(filterFunctions[filterKey]).map((mixtape, index) => (
+            <MixtapeCard mixtape={mixtape} key={mixtape._id} index={index} refetchMyMixtapes={refetch}/>
+        ))}
     </div>
-  );
+    
+    )
 }
-
-export default MyMixtapes;
