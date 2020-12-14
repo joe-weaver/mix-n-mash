@@ -35,7 +35,7 @@ export default function App() {
               <PrivateRoute path="/HottestMixtapes/:criteria?/:skip?/:filter?"><HottestMixtapes/></PrivateRoute>
               <PrivateRoute exact path="/MyMixtapes"><MyMixtapes/></PrivateRoute>
               <PrivateRoute exact path="/Mixtape/:mixtapeId"><MixtapePage/></PrivateRoute>
-              <PrivateRoute path="/Account" onLeave={console.log("Leave")}><Account/></PrivateRoute>
+              <PrivateRoute path="/Account"><Account/></PrivateRoute>
               <PrivateRoute path="/SearchResults/:criteria/:filter/:skip?"><SearchResults/></PrivateRoute>
               <PrivateRoute exact path="/User/:userId"><UserPage/></PrivateRoute>
               <PrivateRoute path="/ReactivateAccount"><ReactivateAccount/></PrivateRoute>

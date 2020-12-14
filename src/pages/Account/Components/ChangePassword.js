@@ -94,7 +94,7 @@ const ChangePassword = (props) => {
                 </Col>
             </Form.Row>
         </Form.Group>
-        <Button className="mm-btn-alt" type="submit" disabled={password === "" || newPassword === ""}>Change Password</Button>
+        <Button className="mm-btn" type="submit" disabled={password === "" || newPassword === ""}>Change Password</Button>
     </Form>
     )
 }
