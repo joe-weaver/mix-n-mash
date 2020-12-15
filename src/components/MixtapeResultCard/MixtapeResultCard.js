@@ -5,7 +5,7 @@ import "./MixtapeResultCardStyle.css";
 
 const MixtapeResultCard = (props) => {
   return (
-    <div className="mixtape-result-card">
+    <div className="mixtape-result-card" key={props.mixtape.id + props.index}>
       <div className={"title" + (props.index%2 === 0 ? " even" : " odd")}>
         <Link className="mm-link-dark" to={"/Mixtape/" + props.mixtape._id}>{props.mixtape.title}</Link>
         <div className="stats">
