@@ -8,7 +8,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import { Link } from "react-router-dom";
 import { Multiselect } from 'multiselect-react-dropdown';
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import YouTube from "react-youtube";
 
 import Navbar from "../../components/Navbar/Navbar";
@@ -18,7 +18,7 @@ import AddSongModal from "../../components/Modals/AddSongModal"
 import AddCollaboratorModal from "../../components/Modals/AddCollaboratorModal"
 import MashMixtapeModal from "../../components/Modals/MashMixtapeModal";
 import Comment from "../../components/Comments/Comment";
-import { mixtapesClient, getMixtape, 
+import { mixtapesClient, 
   addSongs as addSongsMut,
   editSongs as editSongsMut,
   addComment as addCommentMut,
@@ -80,17 +80,14 @@ export default function MixtapePage(){
 
     const [hasListened, setHasListened] = React.useState(false);
 
-    /* ---------- QUERIES ---------- */
-
-
     /* ---------- MUTATIONS ---------- */
     const [addSongsMutation] = useMutation(addSongsMut, {client: mixtapesClient});
     const [addCommentMutation] = useMutation(addCommentMut, {client: mixtapesClient});
     const [addReplyMutation] = useMutation(addReplyMut, {client: mixtapesClient});
     const [editSongsMutation] = useMutation(editSongsMut, {client: mixtapesClient});
     const [createMixtapeFromBase] = useMutation(createMixtapeFromBaseMut, {client: mixtapesClient, onCompleted: (data) => {
-    // Notify the user a mixtape was created
-    toaster.notify("Mixtape Forked", <>You just forked a mixtape!</>);
+      // Notify the user a mixtape was created
+      toaster.notify("Mixtape Forked", <>You just forked a mixtape!</>);
     }});
     const [updateLikesMutation] = useMutation(updateLikesMut, {client: mixtapesClient});
     const [updateDislikesMutation] = useMutation(updateDislikesMut, {client: mixtapesClient});
@@ -336,7 +333,7 @@ export default function MixtapePage(){
         setEditingMixtapeTitle(false);
         
         // Don't update unless the description is different
-        if(tempTitle !== polling.data.mixtape.title){
+        if(tempTitle !== null && tempTitle !== polling.data.mixtape.title){
             updateMixtapeTitleMutation({variables: {id: polling.data.mixtape._id, title: tempTitle}});
         }
         setTempTitle(null);
@@ -351,7 +348,7 @@ export default function MixtapePage(){
         setEditingMixtapeDescription(false);
 
         // Don't update unless the description is different
-        if(tempDescription !== polling.data.mixtape.description){
+        if(tempDescription !== null && tempDescription !== polling.data.mixtape.description){
             updateMixtapeDescriptionMutation({variables: {id: polling.data.mixtape._id, description: tempDescription}});
         }
         setTempDescription(null);
@@ -410,7 +407,7 @@ export default function MixtapePage(){
       <div className="mixtape-header">
           {userCanEdit() && <Form.Group controlId="formBasicCheckbox" style={{display: "flex", flexDirection: "row"}}>
             <Form.Check type="checkbox" checked={polling.loading ? false : polling.data.mixtape.private} onChange={updateMixtapePrivate}/>
-            <Form.Label style={{paddingLeft: "1vw"}}>Public</Form.Label>
+            <Form.Label style={{paddingLeft: "1vw"}}>Private</Form.Label>
           </Form.Group>}
           {!userCanEdit() && <div>{" "}</div>}
           <div>
