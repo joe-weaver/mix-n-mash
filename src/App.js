@@ -17,7 +17,7 @@ import SignIn from "./pages/SignIn/SignIn.js";
 import { ProvidePolling } from "./utils/use-polling";
 
 const client = new ApolloClient({
-  uri: "http://localhost:3000",
+  uri: "https://mix-n-mash.herokuapp.com",
   cache: new InMemoryCache()
 });
 

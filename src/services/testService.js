@@ -1,7 +1,7 @@
 import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 
 export const testClient = new ApolloClient({
-    uri: "http://localhost:3000/test",
+    uri: "https://mix-n-mash.herokuapp.com/test",
     cache: new InMemoryCache()
 })
 

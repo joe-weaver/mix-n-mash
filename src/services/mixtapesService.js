@@ -1,7 +1,7 @@
 import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 
 export const mixtapesClient = new ApolloClient({
-    uri: "http://localhost:3000/Mixtapes",
+    uri: "https://mix-n-mash.herokuapp.com/Mixtapes",
     cache: new InMemoryCache()
 });
 

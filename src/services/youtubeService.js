@@ -1,5 +1,5 @@
 export async function searchSongs(searchTerm, pageToken){
-    let url = "http://localhost:3000/youtube?term=" + searchTerm;
+    let url = "https://mix-n-mash.herokuapp.com/youtube?term=" + searchTerm;
 
     if(pageToken){
         url += "&pageToken=" + pageToken;

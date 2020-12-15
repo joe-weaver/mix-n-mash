@@ -1,5 +1,5 @@
 export async function login(usernameOrEmail, password){
-    const rawResponse = fetch("http://localhost:3000/auth/login", {
+    const rawResponse = fetch("https://mix-n-mash.herokuapp.com/auth/login", {
         method: "POST",
         credentials: "include",
         headers: {
