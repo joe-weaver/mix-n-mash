@@ -77,7 +77,7 @@ export default function Test(props){
           ></IconButton>
         </div>
         </h1>
-        {!loading && data.getUserMixtapes.filter(filterFunctions[filterKey]).map((mixtape, index) => (
+        {!loading && data.getUserMixtapes.filter(filterFunctions[filterKey]).reduce((acc, x) => [x, ...acc], []).map((mixtape, index) => (
             <MixtapeCard mixtape={mixtape} key={mixtape._id} index={index} refetchMyMixtapes={refetch}/>
         ))}
     </div>

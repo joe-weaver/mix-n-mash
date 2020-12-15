@@ -118,7 +118,7 @@ export default function UserPage(){
           {/* MIXTAPES STUFF */}
           <div className="users-mixtapes-container">
               <h4 style={{paddingLeft: "2vw", paddingBottom: "2vw"}}>{!loading && data.user.username}'s Mixtapes</h4>
-              {!mixtapeObj.loading && mixtapeObj.data.getUserPageMixtapes.map((mixtape, index) => (
+              {!mixtapeObj.loading && mixtapeObj.data.getUserPageMixtapes.reduce((acc, x) => [x, ...acc], []).map((mixtape, index) => (
                   <MixtapeResultCard mixtape={mixtape} index={index} key={mixtape._id} />
               ))}
           </div>

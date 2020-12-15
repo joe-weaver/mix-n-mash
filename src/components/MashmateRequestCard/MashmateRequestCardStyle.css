@@ -7,6 +7,7 @@
   border-radius: 3vh !important;
   background-color: var(--mm-blue) !important;
   font-family: "Century Gothic Bold";
+  color: var(--bg) !important;
 }
 
 .mashmate-request-card + .mashmate-request-card {
