@@ -47,8 +47,8 @@ query getMixtape($id: String!){
 `
 
 export const getHottestMixtapes = gql`
-query getHottestMixtapesQuery($userId: String!, $criteria: String!, $skip: Int!, $limit: Int!, $following: [String]!){
-  hottestMixtapes(userId: $userId, criteria: $criteria, skip: $skip, limit: $limit, following: $following){
+query getHottestMixtapesQuery($userId: String!, $criteria: String!, $skip: Int!, $limit: Int!, $following: [String]!, $genrePreferences: [genrePreferences]!){
+  hottestMixtapes(userId: $userId, criteria: $criteria, skip: $skip, limit: $limit, following: $following, genrePreferences: $genrePreferences){
     _id,
     title,
     description,

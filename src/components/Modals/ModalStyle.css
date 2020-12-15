@@ -1,6 +1,6 @@
 .modal-dialog{
     width: 60vw !important;
-    max-width: 1000px !important;
+    max-width: 80vw !important;
     min-width: 500px;
     height: 100vh;
     display: flex;

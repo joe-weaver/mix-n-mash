@@ -44,7 +44,7 @@ const HottestMixtapes  = (props) => {
 
   const {criteria, skip} = useParams();
 
-  let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, criteria: (criteria ? criteria : "day"), skip: (skip ? parseInt(skip) : 0) * 10, limit: 10, following: auth.user.following}, pollInterval: 1000});
+  let {loading, data, refetch} = useQuery(getHottestMixtapes, {client: mixtapesClient, variables: {userId: auth.user._id, criteria: (criteria ? criteria : "day"), skip: (skip ? parseInt(skip) : 0) * 10, limit: 10, following: auth.user.following, genrePreferences: auth.user.genrePreferences.map(x=>({genre: x.genre, val: x.val}))}, pollInterval: 1000});
 
   const handleChangeCriteria = (selection) => {
     const newCriteria = sortCriteria[selection];

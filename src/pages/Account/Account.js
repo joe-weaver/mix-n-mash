@@ -65,6 +65,7 @@ export default function Account(){
       if(success !== false){
         toaster.notify("Log Out", "You have been successfully logged out.");
         history.push("/");
+        window.location.reload();
       }
     });
   }
