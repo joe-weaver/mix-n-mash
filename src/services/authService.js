@@ -22,7 +22,7 @@ export async function login(usernameOrEmail, password){
 }
 
 export async function logout(){
-    const rawResponse = fetch("http://localhost:3000/auth/logout", {
+    const rawResponse = fetch("https://mix-n-mash.herokuapp.com/auth/logout", {
         method: "GET",
         credentials: "include",
         headers: {
@@ -40,7 +40,7 @@ export async function logout(){
 }
 
 export async function signup(username, email, password){
-    const rawResponse = fetch("http://localhost:3000/auth/signup", {
+    const rawResponse = fetch("https://mix-n-mash.herokuapp.com/auth/signup", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -64,7 +64,7 @@ export async function signup(username, email, password){
 }
 
 export async function getUser(){
-    const rawResponse = fetch("http://localhost:3000/auth/user", {
+    const rawResponse = fetch("https://mix-n-mash.herokuapp.com/auth/user", {
         method: "GET",
         credentials: "include",
         headers: {
@@ -82,7 +82,7 @@ export async function getUser(){
 }
 
 export async function changePassword(username, password, newPassword){
-    const rawResponse = fetch("http://localhost:3000/auth/changePassword", {
+    const rawResponse = fetch("https://mix-n-mash.herokuapp.com/auth/changePassword", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -106,7 +106,7 @@ export async function changePassword(username, password, newPassword){
 }
 
 export async function forgotPassword(email){
-    const rawResponse = fetch("http://localhost:3000/auth/forgotPassword", {
+    const rawResponse = fetch("https://mix-n-mash.herokuapp.com/auth/forgotPassword", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -128,7 +128,7 @@ export async function forgotPassword(email){
 }
 
 export async function resetPassword(email, tempCode, newPassword){
-    const rawResponse = fetch("http://localhost:3000/auth/verifyCode", {
+    const rawResponse = fetch("https://mix-n-mash.herokuapp.com/auth/verifyCode", {
         method: "POST",
         credentials: "include",
         headers: {
