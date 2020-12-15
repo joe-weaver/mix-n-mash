@@ -430,3 +430,33 @@ mutation updateCollaboratorsOnMixtape($id: String!, $collaborators: [collaborato
   }
 }
 `
+
+export const createMixtapeAdmin = gql`
+mutation createMixtapeAdmin(
+  $ownerId: String!,
+  $ownerName: String!,
+  $title: String!,
+  $description: String!,
+  $genres: [String]!,
+  $songs: [songInput]!,
+  $listens: Int!,
+  $likes: Int!,
+  $dislikes: Int!,
+  $collaborators: [collaboratorsInput]!
+){
+  createMixtapeAdmin(
+    ownerId: $ownerId
+    ownerName: $ownerName
+    title: $title
+    description: $description
+    genres: $genres
+    songs: $songs
+    listens: $listens
+    likes: $likes
+    dislikes: $dislikes
+    collaborators: $collaborators
+  ){
+    _id
+  }
+}
+`

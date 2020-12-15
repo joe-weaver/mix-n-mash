@@ -67,7 +67,7 @@ export default function Navbar(props){
                 onClick={() => history.push("/Account")}>
                 <div>Account</div>
             </li>
-            <img src={require("../../images/navbar-logo.svg")} id="navbar-logo" className={scrollPastZero ? "scrolled" : ""}></img>
+            <img src={require("../../images/navbar-logo.svg")} alt="logo" id="navbar-logo" className={scrollPastZero ? "scrolled" : ""}></img>
         </ul>
     )
 }

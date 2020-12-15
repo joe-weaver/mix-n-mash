@@ -86,7 +86,7 @@ const MashMixtapeModal = (props) => {
             <Modal.Header closeButton>
                 <Modal.Title>Mash Mixtape</Modal.Title>
             </Modal.Header>
-            <Modal.Body className="scroll-content" className="mash-mixtape-body">
+            <Modal.Body className="mash-mixtape-body">
                 <h5 style={{paddingBottom: "2vh"}}>Select a mixtape to merge this mixtape into:</h5>
                 {!loading && data.getUserMixtapes.filter(mixtape => mixtape.ownerId === auth.user._id).map(mixtape => (
                     <MashMixtapeCard key={mixtape._id} mixtape={mixtape} mergeMixtape={() => mergeMixtape(mixtape)}></MashMixtapeCard>

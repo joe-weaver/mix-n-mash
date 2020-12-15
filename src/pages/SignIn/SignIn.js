@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 import LoginForm from "./Components/LoginForm"
 import SignUpForm from "./Components/SignUpForm";
@@ -16,7 +16,7 @@ export default function SignIn(props){
   return(
   <div className="mm-container single-screen splash-screen">
     <div className="logo-container slide-left">
-        <img src={require("../../images/headphones w rainbow w text.svg")} id="logo"/>
+        <img src={require("../../images/headphones w rainbow w text.svg")} id="logo" alt="logo"/>
     </div>
     <div className="login-container">
       <Card className="login-card fade-in">

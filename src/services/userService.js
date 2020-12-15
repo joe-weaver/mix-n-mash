@@ -103,44 +103,6 @@ query qUsers($searchTerm: String!, $skip: Int!, $limit: Int!){
     }
 }`
 
-export const addUser = gql`
-mutation AddUser(
-        $username: String!
-        $email: String!
-        $hashedPassword: String!
-        $bio: String!
-        $numFollowers: Int!
-        $following: [String]!
-        $mashmates: [mashmateInput]!
-        $mixtapes: [String]!
-        $likedMixtapes: [String]!
-        $dislikedMixtapes: [String]!
-        $genrePreferences: [genrePreferencesInput]!
-        $sentMashmateRequests: [mashmateRequestInput]!
-        $receivedMashmateRequests: [mashmateRequestInput]!
-        $active: Boolean!
-    ){
-    addUser(
-        username: $username
-        email: $email
-        hashedPassword: $hashedPassword
-        bio: $bio
-        numFollowers: $numFollowers
-        following: $following
-        mashmates: $mashmates
-        mixtapes: $mixtapes
-        likedMixtapes: $likedMixtapes
-        dislikedMixtapes: $dislikedMixtapes
-        genrePreferences: $genrePreferences
-        sentMashmateRequests: $sentMashmateRequests
-        receivedMashmateRequests: $receivedMashmateRequests
-        active: $active
-    ){
-        _id
-        username
-    }
-}`;
-
 export const updateUserLikes = gql`
 mutation like(
     $id: String!
@@ -354,6 +316,23 @@ mutation updateGenrePrefs($id: String!, $genrePreferences: [genrePreferencesInpu
             genre
             val
         }
+    }
+}
+`
+
+export const addUser = gql`
+mutation addUser(
+    $username: String!
+    $email: String!
+    $bio: String!
+){
+    addUser(
+        username: $username
+        email: $email
+        bio: $bio
+    ){
+        _id
+        username
     }
 }
 `

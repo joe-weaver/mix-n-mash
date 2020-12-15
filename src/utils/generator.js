@@ -3,20 +3,10 @@ export const generateUser = () => {
     let first = generateFirstName();
     let last = generateLastName();
 
-    user.active = true;
     user.email = generateEmail(first, last);
     user.username = generateUsername(first, last);
-    user.hashedPassword = "password";
     user.bio = generateBio();
     user.numFollowers = randomFromRangeInt(0, 10);
-    user.mashmates = [];
-    user.likedMixtapes = [];
-    user.dislikedMixtapes = [];
-    user.sentMashmateRequests = [];
-    user.receivedMashmateRequests = [];
-    user.mixtapes = [];
-    user.following = [];
-    user.genrePreferences = [];
 
     return user;
 }
@@ -25,56 +15,56 @@ export const generateMixtape = (user) => {
     let mixtape = {};
 
     mixtape.title = generateMixtapeName();
+    
+    while(mixtape.title.length > 50){
+        mixtape.title = generateMixtapeName();
+    }
+
     mixtape.description = generateBio();
-    mixtape.genres = [randomFrom(["Jazz","Ska","Rock","Pop","Classical"])];
-    mixtape.image = ["https://img.youtube.com/vi/XfR9iY5y94s/0.jpg"];
+    mixtape.genres = randomGenres();
     mixtape.songs = generateSongs();
     mixtape.ownerId = user._id;
     mixtape.ownerName = user.username;
-    mixtape.listens = randomFromRangeInt(0, 10000);
-    mixtape.likes = randomFromRangeInt(0, 1000);
-    mixtape.dislikes = randomFromRangeInt(0, 100);
-    mixtape.comments = [];
-    //     {
-    //         commentId: "1",
-    //         userId: "phony",
-    //         username: "NotARealUser",
-    //         content: "Here is some comment content",
-    //         publishingTime: 1000000,
-    //         replies: []
-    //     },
-    //     {
-    //         commentId: "2",
-    //         userId: "phony1",
-    //         username: "NotReal",
-    //         content: "Comment",
-    //         publishingTime: 1000000,
-    //         replies: [{
-    //             userId: "phony2",
-    //             username: "AnotherFakeUser",
-    //             content: "This is a comment y'all",
-    //             publishingTime: 10000001,
-    //           }]
-    //     }
-    // ];
-    mixtape.private = false;
+    mixtape.listens = randomFromRangeInt(0, 1000);
+    mixtape.likes = randomFromRangeInt(0, 100);
+    mixtape.dislikes = randomFromRangeInt(0, 50);
     mixtape.collaborators = [];
-    mixtape.timeCreated = 0;
-    mixtape.likesPerDay = [];
-    mixtape.listensPerDay = [];
-    mixtape.ownerActive = true;
-
-    for(let i = 0; i < 7; i++){
-        let likes = randomFromRangeInt(0, 100);
-        let listens = randomFromRangeInt(0, 1000);
-        mixtape.likesPerDay.push(likes);
-        mixtape.likes += likes;
-        mixtape.listensPerDay.push(listens);
-        mixtape.listens += listens;
-    }
-
 
     return mixtape;
+}
+
+export function generatePermutation(n){
+    let arr = [];
+    for(let i = 0; i < n; i++){
+        arr.push(i);
+    }
+    
+    let retVal = [];
+
+    while(arr.length > 0){
+        retVal.push(getNum(arr));
+    }
+
+    return retVal;
+}
+
+export function randomGenres(){
+    let arr = generatePermutation(genres.length);
+    let retVal = [];
+
+    let n = randomFromRangeInt(1, 3);
+
+    for(let i = 0; i < n; i++){
+        retVal.push(genres[arr[i]].value);
+    }
+
+    return retVal;
+}
+
+function getNum(arr){
+    let index = Math.floor(Math.random()*arr.length);
+
+    return arr.splice(index, 1)[0];
 }
 
 function generateMixtapeName(username){
@@ -83,7 +73,7 @@ function generateMixtapeName(username){
 
 
     if(r < 1){
-        name = randomFrom(["SKORPU DORPU", "Squeepa deep deep", "Hail the fish queen", "Songs to catJAM to"])
+        name = randomFrom(["SKORPU DORPU", "Songs to catJAM to"]);
         return name;
     }
 
@@ -133,10 +123,22 @@ const songChoices = [
     {name: "Daryl Hall & John Oates - Maneater (Official Video)", youtubeId: "yRYFKcMa_Ek"},
     {name: "Toto - Rosanna (Official Music Video)", youtubeId: "qmOLtTGvsbM"},
     {name: "Phil Collins - In The Air Tonight (Official Music Video)", youtubeId: "YkADj0TPrJA"},
+    {name:"Makzo - Anecdotes 🌅 [lofi hiphop instrumental beats]", youtubeId: "JQ15iAAX1gI"},
+    {name: "Pebbles", youtubeId: "YqivYZYykSo"},
+    {name: "Grynpyret - Boba Beach", youtubeId: "T2r8X6GaxN4"},
+    {name: "Virtual Riot - Still Kids (feat. Yosie)", youtubeId: "m3V3Z2VIrxU"},
+    {name: "Mario Kart 8 - Dolphin Shoals - Music", youtubeId: "El9ylMmOG64"},
+    {name: "Nintendo Wii - Mii Channel Theme", youtubeId: "po-0n1BKW2w"},
+    {name: "Delfino Plaza - Super Mario Sunshine [OST]", youtubeId: "E3tkgU0pQmQ"},
+    {name: "Wii Shop Channel Main Theme (HQ)", youtubeId: "yyjUmv1gJEg"},
+    {name: "Jacob Collier - The Christmas Song (Chestnuts Roasting On An Open Fire)", youtubeId: "o9CusMKhoqk"},
+    {name: "Have Yourself A Merry Little Christmas (ft. Tori Kelly) - Jacob Collier", youtubeId: "XsVy4ImgM0o"},
+    {name: "CatJAM to Spooky Scary Skeletons Dance Remix", youtubeId: "yHH_h7xLmsE"},
+    {name: "New Rocket League Intro Music Got Me Like (FULL VERSION)", youtubeId: "ar5oob5elZs"}
 ]
 
 function generateSongs(){
-    let r = randomFromRangeInt(3, 9);
+    let r = randomFromRangeInt(5, 10);
     let songs = [];
 
     for(let i = 0; i < r; i++){
@@ -255,6 +257,35 @@ export function randomFrom(arr){
 export function randomFromRangeInt(min, max){
 	return Math.floor(Math.random()*(max - min + 1) + min);
 }
+
+const genres=[
+    {value: "Alternative Rock"},
+    {value: "Ambient"},
+    {value: "Blues"},
+    {value: "Chill"},
+    {value: "Classical"},
+    {value: "Country"},
+    {value: "Drum and Bass"},
+    {value: "Dubstep"},
+    {value: "Electronic"},
+    {value: "Folk"},
+    {value: "Hip Hop"},
+    {value: "House"},
+    {value: "Indie"},
+    {value: "Instrumental"},
+    {value: "Jazz"},
+    {value: "LoFi"},
+    {value: "Metal"},
+    {value: "Musical Theatre"}, 
+    {value: "New Wave"},
+    {value: "Other"},
+    {value: "Pop"},
+    {value: "Reggae"},
+    {value: "Rock"}, 
+    {value: "Ska"},
+    {value: "Soundtrack"},
+    {value: "Swing"}
+];
 
 const catName = [
     "Fluffy",

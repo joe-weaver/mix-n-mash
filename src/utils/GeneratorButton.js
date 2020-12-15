@@ -1,20 +1,20 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { generateMixtape, generateUser, randomFrom, randomFromRangeInt } from "./generator";
+import { generateMixtape, generateUser, randomFrom } from "./generator";
 import { userClient, addUser } from "../services/userService";
-import { mixtapesClient, addMixtape } from "../services/mixtapesService";
+import { mixtapesClient, createMixtapeAdmin } from "../services/mixtapesService";
 import { useMutation } from "@apollo/client";
 
 let users;
 let mixtapes;
 let index;
-const n = 10;
-const m = 40;
+const n = 50;
+const m = 200;
 
 const GeneratorButton = (props) => {
 
-    const [addMixtapeToDatabase] = useMutation(addMixtape, {client: mixtapesClient, onCompleted: (data) => {
-        mixtapes[index-1]._id = data.addMixtape._id;
+    const [addMixtapeToDatabase] = useMutation(createMixtapeAdmin, {client: mixtapesClient, onCompleted: (data) => {
+        mixtapes[index-1]._id = data.createMixtapeAdmin._id;
 
         if(index >= m){
             return
@@ -22,12 +22,19 @@ const GeneratorButton = (props) => {
 
         let mixtape = mixtapes[index];
 
+        let numCollabs = 0;
 
         for(let i = 0; i < n; i++){
+            if(numCollabs > 5){
+                break;
+            }
+            
             // Decide whether or not to add this person
             if(Math.random() < 0.8){
                 continue;
             }
+
+            numCollabs += 1;
 
             let user = users[i];
 
@@ -68,30 +75,6 @@ const GeneratorButton = (props) => {
 
         let user = users[index];
 
-        // Get random number of users to be mashmates
-        let r = randomFromRangeInt(0, index);
-
-        for(let i = 0; i < r; i++){
-            // Generate a mashmate object or request
-            if(Math.random() < 0.5){
-                // Mashmates
-                user.mashmates.push({
-                    id: users[i]._id,
-                    username: users[i].username
-                });
-            
-            } else {
-                // Mashmate request
-                let mmr = {
-                    senderId: users[i]._id,
-                    recipientId: "NotYetImplemented",
-                    username: users[i].username,
-                    seen: false
-                }
-                user.receivedMashmateRequests.push(mmr);
-            }
-        }
-
         index += 1;
         addUserToDatabase({variables: user});
     }});
@@ -103,9 +86,6 @@ const GeneratorButton = (props) => {
         for(let i = 0; i < n; i++){
             users.push(generateUser());
         }
-
-        // Print a random user for login
-        console.log("Here's a sample user to log in with: " + users[n-1].username);
 
         addUserToDatabase({variables: users[0]});
     }

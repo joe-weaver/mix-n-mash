@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Form, Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
@@ -33,7 +33,7 @@ import { mixtapesClient,
   addListen
   } from "../../services/mixtapesService"; 
 
-import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut, updateGenrePreferences as updateGenrePreferencesMut} from "../../services/userService";
+import {userClient, updateUserLikes as updateUserLikesMut, updateUserDislikes as updateUserDislikesMut } from "../../services/userService";
 import { useAuth } from "../../utils/use-auth";
 import { useToast } from "../../utils/use-toast";
 import { usePolling } from "../../utils/use-polling";
@@ -95,8 +95,6 @@ export default function MixtapePage(){
     const [updateMixtapeDescriptionMutation] = useMutation(updateMixtapeDescriptionMut, {client: mixtapesClient});
     const [updateMixtapeGenresMutation] = useMutation(updateMixtapeGenresMut, {client: mixtapesClient});
     const [updateMixtapePrivateMutation] = useMutation(updateMixtapePrivateMut, {client: mixtapesClient});
-
-    const [updateGenrePreferencesMutation] = useMutation(updateGenrePreferencesMut, {client: userClient});
 
     const [updateUserLikesMutation] = useMutation(updateUserLikesMut, {client: userClient, onCompleted: (data) => {
     auth.getUser({likedMixtapes: data.setLikeMixtape.likedMixtapes, dislikedMixtapes: data.setLikeMixtape.dislikedMixtapes});

@@ -4,7 +4,7 @@ import EditPermissionsCard from "./Components/EditPermissionsCard";
 import AddCollaboratorCard from "./Components/AddCollaboratorCard";
 import IconButton from "../../components/IconButton/IconButton";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import "./ModalStyle.css";
 import "../../pages/Page.css";

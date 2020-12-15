@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, FormControl } from "react-bootstrap";
+import { Button, FormControl } from "react-bootstrap";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import NotInterestedIcon from '@material-ui/icons/NotInterested';

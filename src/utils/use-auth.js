@@ -85,7 +85,6 @@ function useProvideAuth(){
                     user[key] = userFields[key];
                 }
             }
-            console.log("Optimistic User:", user);
             setUser(user);
         }
     }

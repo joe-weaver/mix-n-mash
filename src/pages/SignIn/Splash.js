@@ -9,7 +9,7 @@ export default function Splash(props){
     return(
     <div className="mm-container single-screen splash-screen">
         <div className="logo-container">
-            <img src={require("../../images/headphones w rainbow w text.svg")} id="logo"/>
+            <img src={require("../../images/headphones w rainbow w text.svg")} id="logo" alt="logo"/>
         </div>
         <div className="splash-btn-container">
             <div className="splash-btn" onClick={() => history.push("/login")}>Get Mashing</div>
