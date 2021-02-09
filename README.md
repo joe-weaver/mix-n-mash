@@ -1,4 +1,4 @@
-This is the backend side of the Mix n Mash project by Joe Henry Weaver, Daniel Bacal, and Bernie Yu during Fall 2020. 
+This is the frontend side of the Mix n Mash project by Joe Henry Weaver, Daniel Bacal, and Bernie Yu during Fall 2020. 
 Mix-n-Mash was designed for users to be able to create, edit, and share their own mixtapes with the integration of the Youtube API.
 
 The technologies used for this project are as followed:
